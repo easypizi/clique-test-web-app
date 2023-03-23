@@ -1,11 +1,10 @@
-import { useEffect } from "react";
-import { useTelegram } from "./hooks/useTelegram";
-import { Route, Routes } from "react-router-dom";
-
-import Header from "./components/Header/Header";
-import UserList from "./components/userList/UserList";
-import ChatList from "./components/ChatList/ChatList";
-import "./App.css";
+import React, { useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useTelegram } from './hooks/useTelegram';
+import Header from './components/Header/Header';
+import UserList from './components/userList/UserList';
+import ChatList from './components/ChatList/ChatList';
+import './App.css';
 
 function App() {
   const { tg } = useTelegram();
