@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers } from '../../../store/actions';
+import { fetchUsers } from '../../store/actions';
 
 import './UserList.css';
 
