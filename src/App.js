@@ -22,8 +22,8 @@ function App() {
       <Header />
       <TabNavigation />
       <Routes>
-        <Route index element={<ChatList />}></Route>
-        <Route path="/groups" element={<UserList />}></Route>
+        <Route index element={<UserList />}></Route>
+        <Route path="/groups" element={<ChatList />}></Route>
         <Route path="/profile" element={<UserProfile />}></Route>
       </Routes>
     </div>

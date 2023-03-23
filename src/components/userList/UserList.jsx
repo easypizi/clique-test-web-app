@@ -15,6 +15,7 @@ const UserList = () => {
 
     useEffect(() => {
         dispatch(fetchUsers);
+        console.log('yo')
     }, [dispatch]);
 
     if (isFetching) {

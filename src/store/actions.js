@@ -23,7 +23,9 @@ export const fetchUsers = () => async (dispatch) => {
 
   //TODO: Update after uploading backend to server
   try {
-    const response = await axios.get('https://api.example.com/users');
+    const response = await axios.get(
+      'https://clique-mvp-backend.herokuapp.com/'
+    );
     const users = response.data;
     dispatch(receiveUsers(users));
   } catch (error) {

@@ -1,4 +1,4 @@
-import { REQUEST_USERS, RECEIVE_USERS, ERROR_USERS } from './userActions';
+import { REQUEST_USERS, RECEIVE_USERS, ERROR_USERS } from './actions';
 
 const initialState = {
   users: [],
