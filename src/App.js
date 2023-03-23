@@ -1,11 +1,14 @@
 import { useEffect } from "react";
-
-import "./App.css";
-import Header from "./components/Header/Header";
 import { useTelegram } from "./hooks/useTelegram";
+import { Route, Routes } from "react-router-dom";
+
+import Header from "./components/Header/Header";
+import UserList from "./components/userList/UserList";
+import ChatList from "./components/ChatList/ChatList";
+import "./App.css";
 
 function App() {
-  const { tg, onToggleButton } = useTelegram();
+  const { tg } = useTelegram();
 
   useEffect(() => {
     tg.ready();
@@ -14,7 +17,10 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <button onClick={onToggleButton}>Test Button</button>
+      <Routes>
+        <Route index element={<UserList />}></Route>
+        <Route path="/chat-list" element={<ChatList />}></Route>
+      </Routes>
     </div>
   );
 }
