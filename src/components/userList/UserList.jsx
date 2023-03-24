@@ -33,17 +33,12 @@ const UserList = () => {
         return <div>{error}</div>;
     }
 
-
-    console.log(memoizedUsers)
-
-    return (<div className="user-list">
-        {memoizedUsers && memoizedUsers.map((user) => {
-
-            console.log(user)
-            return <UserCard key={user.id} {...user} />
-        }
-        )}
-    </div>);
+    return (
+        <div className={'userlist'}>
+            {memoizedUsers && memoizedUsers.map((user) => (
+                <UserCard key={user.id} {...user} />
+            ))}
+        </div>);
 }
 
 export default UserList;
