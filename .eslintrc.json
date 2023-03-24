@@ -24,6 +24,8 @@
     "react/require-default-props": "off",
     "react/jsx-wrap-multilines": "off",
     "implicit-arrow-linebreak": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "comma-dangle": "off",
+    "function-paren-newline": "off"
   }
 }
