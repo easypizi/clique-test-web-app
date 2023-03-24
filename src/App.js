@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import Header from './components/Header/Header';
 // import UserList from './components/UserList/UserList';
-// import ChatList from './components/ChatList/ChatList';
+import ChatList from './components/ChatList/ChatList';
 import UserProfile from './components/UserProfile/UserProfile';
 import TabNavigation from './components/TabNavigation/TabNavigation';
 import { useTelegram } from './hooks/useTelegram';
@@ -23,7 +23,7 @@ function App() {
       <TabNavigation />
       <Routes>
         {/* <Route index element={<UserList />} /> */}
-        {/* <Route path="/groups" element={<ChatList />} /> */}
+        <Route path="/groups" element={<ChatList />} />
         <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </div>
