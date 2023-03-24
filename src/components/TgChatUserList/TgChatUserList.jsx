@@ -1,12 +1,10 @@
 import React, { useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUsers } from '../../store/actions/userActions';
-import UserCard from '../UserCard/UserCard';
+import UserCard from './UserCard/UserCard';
 import prepareUserData from './helpers';
 
-import './UserList.css';
-
-function UserList() {
+function TgChatUserList() {
   const dispatch = useDispatch();
   const userData = useSelector(({ users }) => ({
     data: users.data,
@@ -40,4 +38,4 @@ function UserList() {
   );
 }
 
-export default UserList;
+export default TgChatUserList;
