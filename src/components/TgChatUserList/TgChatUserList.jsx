@@ -50,8 +50,6 @@ function TgChatUserList() {
     return <div>{error}</div>;
   }
 
-  console.log(filteredUsers);
-
   return (
     <div className="userlist">
       <Search onSearch={onSearchHandler} />
