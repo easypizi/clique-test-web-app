@@ -3,10 +3,10 @@ import React, { useEffect } from 'react';
 import { useTelegram } from './hooks/useTelegram';
 
 import Header from './components/Header/Header';
-// import UserList from './components/UserList/UserList';
+import UserList from './components/UserList/UserList';
 // import ChatList from './components/ChatList/ChatList';
 // import UserProfile from './components/UserProfile/UserProfile';
-// import TabNavigation from './components/TabNavigation/TabNavigation';
+import TabNavigation from './components/TabNavigation/TabNavigation';
 
 import './App.css';
 
@@ -20,8 +20,9 @@ function App() {
   return (
     <div className="App">
       <Header />
-      {/* <TabNavigation />
-      <Routes>
+      <TabNavigation />
+      <UserList />
+      {/* <Routes>
         <Route index element={<UserList />}></Route>
         <Route path="/groups" element={<ChatList />}></Route>
         <Route path="/profile" element={<UserProfile />}></Route>
