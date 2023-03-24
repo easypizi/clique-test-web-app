@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-// import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useTelegram } from './hooks/useTelegram';
 
 import Header from './components/Header/Header';
 import UserList from './components/UserList/UserList';
-// import ChatList from './components/ChatList/ChatList';
-// import UserProfile from './components/UserProfile/UserProfile';
+import ChatList from './components/ChatList/ChatList';
+import UserProfile from './components/UserProfile/UserProfile';
 import TabNavigation from './components/TabNavigation/TabNavigation';
 
 import './App.css';
@@ -21,12 +21,11 @@ function App() {
     <div className="App">
       <Header />
       <TabNavigation />
-      <UserList />
-      {/* <Routes>
-        <Route index element={<UserList />}></Route>
-        <Route path="/groups" element={<ChatList />}></Route>
-        <Route path="/profile" element={<UserProfile />}></Route>
-      </Routes> */}
+      <Routes>
+        <Route index element={<UserList />} />
+        <Route path="/groups" element={<ChatList />} />
+        <Route path="/profile" element={<UserProfile />} />
+      </Routes>
     </div>
   );
 }

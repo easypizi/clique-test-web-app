@@ -1,20 +1,28 @@
 {
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-     "react-app"
+    "plugin:react-hooks/recommended",
+    "plugin:import/recommended",
+    "plugin:react/jsx-runtime",
+    "prettier",
+    "airbnb"
   ],
+  "overrides": [],
   "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
-    "react/prop-types": "warn"
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react/jsx-wrap-multilines": "off",
+    "implicit-arrow-linebreak": "off"
   }
 }

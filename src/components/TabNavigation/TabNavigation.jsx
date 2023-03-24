@@ -1,10 +1,8 @@
 import React from 'react';
 import './TabNavigation.css';
 
-
-
-const TabNavigation = () => {
-    return (<div></div>);
+function TabNavigation() {
+  return <div>TabNav</div>;
 }
 
 export default TabNavigation;

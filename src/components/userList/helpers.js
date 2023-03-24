@@ -1,25 +1,14 @@
-export const prepareUserData = (userData) => {
+export default function prepareUserData(userData) {
   if (!userData) {
     return null;
   }
 
-  return userData.map((user) => {
-    const {
-      user_description,
-      user_id,
-      user_image,
-      user_last_name,
-      user_name,
-      user_telegram_link,
-    } = user;
-
-    return {
-      id: user_id,
-      avatarSrc: user_image,
-      firstName: user_name,
-      lastName: user_last_name,
-      telegramUsername: user_telegram_link,
-      description: user_description,
-    };
-  });
-};
+  return userData.map((user) => ({
+    id: user.user_description,
+    avatarSrc: user.user_image,
+    firstName: user.user_name,
+    lastName: user.user_last_name,
+    telegramUsername: user.user_telegram_link,
+    description: user.user_description,
+  }));
+}
