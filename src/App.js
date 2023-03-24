@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTelegram } from './hooks/useTelegram';
 
-import Header from './components/Header/Header';
-import UserList from './components/UserList/UserList';
-import ChatList from './components/ChatList/ChatList';
-import UserProfile from './components/UserProfile/UserProfile';
+import Header from './components/Header/Header.js';
+import UserList from './components/UserList/UserList.js';
+import ChatList from './components/ChatList/ChatList.js';
+import UserProfile from './components/UserProfile/UserProfile.js';
 
 import './App.css';
 import TabNavigation from './components/TabNavigation/TabNavigation';
