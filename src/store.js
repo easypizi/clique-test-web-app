@@ -1,13 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
-import rootReducer from './store/reducers';
+import usersReducer from './store/reducers/UsersSlice';
 
-const loggerMiddleware = createLogger();
-
-const store = configureStore({
-  reducer: rootReducer,
-  middleware: [thunkMiddleware, loggerMiddleware],
+export default configureStore({
+  reducer: {
+    users: usersReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
-
-export default store;

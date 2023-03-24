@@ -1,7 +1,9 @@
-import React from 'react';
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers } from '../../store/actions';
+import React, { useMemo } from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUsers } from '../../store/actions/userActions';
+import UserCard from '../UserCard/UserCard';
+import { prepareUserData } from './helpers';
 
 import './UserList.css';
 
@@ -9,26 +11,39 @@ import './UserList.css';
 
 const UserList = () => {
     const dispatch = useDispatch();
-    const users = useSelector((state) => state.users);
-    const isFetching = useSelector((state) => state.isFetching);
-    const error = useSelector((state) => state.error);
+    const userData = useSelector(({ users }) => ({ data: users.data, isLoading: users.isLoading, error: users.error }));
+    const { data: users, isLoading, error } = userData;
+
 
     useEffect(() => {
-        dispatch(fetchUsers);
-        console.log('yo')
-    }, [dispatch]);
+        if (!users.length) {
+            dispatch(getUsers());
+        }
+    }, [dispatch, users.length]);
 
-    if (isFetching) {
-        return <p>Loading...</p>;
+
+    const memoizedUsers = useMemo(() => prepareUserData(users), [users]);
+
+
+    if (isLoading) {
+        return <div>Loading...</div>;
     }
 
     if (error) {
-        return <p>Error: {error.message}</p>;
+        return <div>{error}</div>;
     }
 
-    console.log(users)
 
-    return (<div>UserList</div>);
+    console.log(memoizedUsers)
+
+    return (<div className="user-list">
+        {memoizedUsers && memoizedUsers.map((user) => {
+
+            console.log(user)
+            return <UserCard key={user.id} {...user} />
+        }
+        )}
+    </div>);
 }
 
 export default UserList;
