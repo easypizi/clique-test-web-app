@@ -26,6 +26,7 @@
     "implicit-arrow-linebreak": "off",
     "object-curly-newline": "off",
     "comma-dangle": "off",
-    "function-paren-newline": "off"
+    "function-paren-newline": "off",
+    "operator-linebreak": "off"
   }
 }
