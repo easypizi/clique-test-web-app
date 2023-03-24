@@ -23,6 +23,7 @@
     "react/jsx-props-no-spreading": "off",
     "react/require-default-props": "off",
     "react/jsx-wrap-multilines": "off",
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "object-curly-newline": "off"
   }
 }

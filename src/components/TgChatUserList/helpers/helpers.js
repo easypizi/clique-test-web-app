@@ -4,7 +4,7 @@ export default function prepareUserData(userData) {
   }
 
   return userData.map((user) => ({
-    id: user.user_description,
+    id: user.user_id,
     avatarSrc: user.user_image,
     firstName: user.user_name,
     lastName: user.user_last_name,
