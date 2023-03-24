@@ -16,7 +16,7 @@ function UserCard({
 
   // TODO: Max amount of symbols is 140 symbols such as in Telegram bio.
   const emptyDescription =
-    '32 y.o. Front-end Engineer | Currently in Asia |32 y.o. Front-end Engineer | Currently in Asia |32 y.o. Front-end Engineer | Currently in As';
+    'User doesnt add any information about himself in bio';
 
   return (
     <div className="cardHolder">
