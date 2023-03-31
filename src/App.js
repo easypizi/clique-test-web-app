@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-// import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useTelegram } from './hooks/useTelegram';
-import TabNavigation from './components/TabNavigation/TabNavigation';
 
+import Authorization from './view/AuthorizationPage/AuthorizationPage';
+import ContentPage from './view/ContentPage/ContentPage';
 import './App.css';
 
 function App() {
@@ -14,12 +15,12 @@ function App() {
 
   return (
     <div className="App">
-      <TabNavigation />
-      {/* <Routes>
-        <Route index element={<TgChatUserList />} />
-        <Route path="/groups" element={<ChatList />} />
-        <Route path="/profile" element={<UserProfile />} />
-      </Routes> */}
+      <Routes>
+        <Route index element={<Authorization />} />
+        <Route path="/space" element={<ContentPage />} />
+        {/* <Route path="/store" element={<StorePage />} /> */}
+        {/* <Route path="/settings" element={<SettingsPage />} /> */}
+      </Routes>
     </div>
   );
 }

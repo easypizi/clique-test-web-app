@@ -7,9 +7,9 @@ import Search from '../Search/Search';
 import UserCard from './elements/UserCard/UserCard';
 import prepareUserData from './helpers/helpers';
 
-import './TgChatUser.css';
+import './UserList.css';
 
-function TgChatUserList() {
+function UserList() {
   const [searchTerm, setSearchTerm] = useState('');
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ function TgChatUserList() {
     if (!users.length) {
       dispatch(getUsers());
     }
-  }, [dispatch, users.length]);
+  }, [dispatch, users]);
 
   const memoizedUsers = useMemo(() => prepareUserData(users), [users]);
 
@@ -62,4 +62,4 @@ function TgChatUserList() {
   );
 }
 
-export default TgChatUserList;
+export default UserList;

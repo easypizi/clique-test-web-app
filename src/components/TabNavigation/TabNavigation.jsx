@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import TabPanel from './elements/TabPanel/TabPanel';
 
 import './TabNavigation.css';
-import TgChatUserList from '../TgChatUserList/TgChatUserList';
+import UserList from '../UserList/UserList';
 import UserProfile from '../UserProfile/UserProfile';
 import ChatList from '../ChatList/ChatList';
 
@@ -23,7 +23,7 @@ function TabNavigation() {
         <Tab label="Chats" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <TgChatUserList />
+        <UserList />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <UserProfile />

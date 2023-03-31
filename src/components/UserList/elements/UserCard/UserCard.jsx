@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Typography, IconButton } from '@mui/material';
 import TelegramIcon from '@mui/icons-material/Telegram';
@@ -12,11 +12,20 @@ function UserCard({
   telegramUsername,
   description,
 }) {
-  const userCredentials = `${firstName ?? ''} ${lastName ?? ''}`;
+  const userCredentials = useMemo(
+    () => `${firstName ?? ''} ${lastName ?? ''}`,
+    [firstName, lastName]
+  );
 
-  // TODO: Max amount of symbols is 140 symbols such as in Telegram bio.
   const emptyDescription =
     'User doesnt add any information about himself in bio';
+
+  // TODO: Max amount of symbols is 140 symbols such as in Telegram bio.
+  const userDescription = useMemo(
+    () =>
+      description && description.length > 0 ? description : emptyDescription,
+    [description]
+  );
 
   return (
     <div className="cardHolder">
@@ -29,7 +38,7 @@ function UserCard({
             {userCredentials}
           </Typography>
           <Typography className="userDataDescription" variant="body2">
-            {description.length ? description : emptyDescription}
+            {userDescription}
           </Typography>
         </div>
       </div>
