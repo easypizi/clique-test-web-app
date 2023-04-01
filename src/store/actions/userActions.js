@@ -1,10 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import {
-  fetchUsersStart,
-  fetchUsersSuccess,
-  fetchUsersFailure,
-} from '../reducers/UsersSlice';
-import { fetchUsers } from '../../api';
+import { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } from '../reducers/UsersSlice';
+import { fetchUsers } from '../../api/api';
 
 export const getUsers = () => async (dispatch) => {
   dispatch(fetchUsersStart());

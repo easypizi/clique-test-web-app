@@ -1,4 +1,3 @@
-/* eslint-disable operator-linebreak */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -7,7 +6,7 @@ export const usersSlice = createSlice({
   initialState: {
     data: [],
     isLoading: false,
-    error: null,
+    error: null
   },
   reducers: {
     fetchUsersStart: (state) => {
@@ -21,11 +20,10 @@ export const usersSlice = createSlice({
     fetchUsersFailure: (state, { payload }) => {
       state.isLoading = false;
       state.error = payload;
-    },
-  },
+    }
+  }
 });
 
-export const { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } =
-  usersSlice.actions;
+export const { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } = usersSlice.actions;
 
 export default usersSlice.reducer;
