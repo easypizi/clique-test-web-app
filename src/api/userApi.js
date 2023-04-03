@@ -11,9 +11,7 @@ export const fetchUser = (id) => {
       .catch((error) => {
         throw error;
       });
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    throw Error(error);
   }
-
-  return null;
 };

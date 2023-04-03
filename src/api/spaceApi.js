@@ -11,9 +11,8 @@ export const fetchSpace = (id) => {
         throw error;
       });
   } catch (error) {
-    console.error(error);
+    throw Error(error);
   }
-  return null;
 };
 
 export const fetchUserSpaces = (id) => {
@@ -28,7 +27,7 @@ export const fetchUserSpaces = (id) => {
           throw error;
         });
     } catch (error) {
-      console.error(error);
+      throw Error(error);
     }
   }
 
