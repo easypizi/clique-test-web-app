@@ -4,11 +4,12 @@ export default function prepareUserData(userData) {
   }
 
   return userData.map((user) => ({
-    id: user.user_id,
-    avatarSrc: user.user_image,
-    firstName: user.user_name,
-    lastName: user.user_last_name,
-    telegramUsername: user.user_telegram_link,
-    description: user.user_description,
+    id: user.userId,
+    avatarSrc: user.userImage ?? '',
+    firstName: user.userName,
+    lastName: user.userLastName ?? '',
+    telegramUsername: user.userLink,
+    description: user.userDescription ?? '',
+    isVisible: user.isVisible
   }));
 }

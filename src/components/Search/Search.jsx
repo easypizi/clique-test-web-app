@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import TextField from '@mui/material/TextField';
 import './Search.css';
 
 function Search({ onSearch }) {
   const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      onSearch(searchText);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText, onSearch]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -13,7 +20,6 @@ function Search({ onSearch }) {
 
   const handleInputChange = (e) => {
     setSearchText(e.target.value);
-    onSearch(searchText);
   };
 
   return (
@@ -39,7 +45,7 @@ function Search({ onSearch }) {
 }
 
 Search.propTypes = {
-  onSearch: PropTypes.func,
+  onSearch: PropTypes.func
 };
 
 export default Search;

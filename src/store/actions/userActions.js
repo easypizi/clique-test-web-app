@@ -1,14 +1,17 @@
 /* eslint-disable import/prefer-default-export */
-import { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } from '../reducers/UsersSlice';
-import { fetchUsers } from '../../api/api';
+import {
+  fetchCurrentUserStart,
+  fetchCurrentUserSuccess,
+  fetchCurrentUserFailure
+} from '../reducers/UsersSlice';
+import { fetchUser } from '../../api/userApi';
 
-export const getUsers = () => async (dispatch) => {
-  dispatch(fetchUsersStart());
-
+export const getUser = (id, privateId) => async (dispatch) => {
+  dispatch(fetchCurrentUserStart());
   try {
-    const users = await fetchUsers();
-    dispatch(fetchUsersSuccess(users));
+    const user = await fetchUser(id);
+    dispatch(fetchCurrentUserSuccess({ userData: user, privateId }));
   } catch (error) {
-    dispatch(fetchUsersFailure(error.message));
+    dispatch(fetchCurrentUserFailure(error.message));
   }
 };

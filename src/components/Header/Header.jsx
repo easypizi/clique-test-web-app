@@ -1,15 +1,28 @@
-import React from 'react';
-import Button from '../Button/Button';
-import { useTelegram } from '../../hooks/useTelegram';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import './Header.css';
+import LinkButton from '../LinkButton/LinkButton';
 
 function Header() {
-  const { user, onClose } = useTelegram();
+  const { currentUser, isUserDataLoading } = useSelector(
+    (state) => state.currentUser
+  );
+
+  const backToMainLink = useMemo(
+    () =>
+      currentUser
+        ? `/?user_id=${currentUser.user_id}&private_id=${currentUser.user_bot_chat_id}`
+        : '/',
+    [currentUser]
+  );
 
   return (
-    <div className=".header">
-      <Button onClick={onClose}>Закрыть</Button>
-      <span className=".username">{user?.username}</span>
+    <div>
+      {!isUserDataLoading && (
+        <div className=".header">
+          <LinkButton to={backToMainLink}>Back</LinkButton>
+        </div>
+      )}
     </div>
   );
 }

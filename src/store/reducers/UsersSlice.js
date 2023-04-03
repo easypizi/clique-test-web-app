@@ -1,29 +1,39 @@
 /* eslint-disable no-param-reassign */
+import md5 from 'md5';
 import { createSlice } from '@reduxjs/toolkit';
 
-export const usersSlice = createSlice({
-  name: 'users',
+export const currentUserSlice = createSlice({
+  name: 'currentUser',
   initialState: {
-    data: [],
-    isLoading: false,
+    isAuthorized: false,
+    currentUser: null,
+    isUserDataLoading: false,
     error: null
   },
   reducers: {
-    fetchUsersStart: (state) => {
-      state.isLoading = true;
+    fetchCurrentUserStart: (state) => {
+      state.isUserDataLoading = true;
       state.error = null;
     },
-    fetchUsersSuccess: (state, { payload }) => {
-      state.data = payload;
-      state.isLoading = false;
+    fetchCurrentUserSuccess: (state, { payload }) => {
+      state.currentUser = payload.userData;
+      state.isAuthorized =
+        payload.userData &&
+        payload.userData.user_id &&
+        md5(payload.userData.user_id) === payload.privateId;
+      state.isUserDataLoading = false;
     },
-    fetchUsersFailure: (state, { payload }) => {
-      state.isLoading = false;
+    fetchCurrentUserFailure: (state, { payload }) => {
+      state.isUserDataLoading = false;
       state.error = payload;
     }
   }
 });
 
-export const { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } = usersSlice.actions;
+export const {
+  fetchCurrentUserStart,
+  fetchCurrentUserSuccess,
+  fetchCurrentUserFailure
+} = currentUserSlice.actions;
 
-export default usersSlice.reducer;
+export default currentUserSlice.reducer;

@@ -1,2 +1,14 @@
-.view {
+.container {
+    height: 100%;
+    padding: 20px;
+}
+
+.linkBlock {
+    margin-top: 200px;
+}
+
+.buttonHolder {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
