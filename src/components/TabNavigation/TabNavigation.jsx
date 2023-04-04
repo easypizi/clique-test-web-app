@@ -18,18 +18,18 @@ function TabNavigation() {
   return (
     <div>
       <Tabs className="tabNavigation" value={value} onChange={handleChange}>
-        <Tab label="User" />
-        <Tab label="Profile" />
         <Tab label="Chats" />
+        <Tab label="Users" />
+        <Tab label="Profile" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <UserList />
+        <ChatList />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <UserProfile />
+        <UserList />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ChatList />
+        <UserProfile />
       </TabPanel>
     </div>
   );

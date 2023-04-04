@@ -33,7 +33,7 @@ function Search({ onSearch }) {
         <TextField
           className="inputSearch"
           id="outlined-search"
-          label="Type Name"
+          label="Search..."
           type="search"
           variant="outlined"
           value={searchText}

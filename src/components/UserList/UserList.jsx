@@ -9,21 +9,21 @@ import './UserList.css';
 
 function UserList() {
   const [searchTerm, setSearchTerm] = useState('');
-  const { currentSpace, isUserDataLoading } = useSelector(
-    (state) => state.spaces
-  );
-
-  const isLoading = isUserDataLoading;
+  const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
 
   const users = prepareUserData(currentSpace?.spaceUsers || []);
 
-  const filteredUsers = useMemo(() => users.filter((user) =>
-    user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-  ), [searchTerm, users]);
+  const filteredUsers = useMemo(
+    () =>
+      users.filter((user) =>
+        user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [searchTerm, users]
+  );
 
   return (
     <div className="userlist">
-      {isLoading ? (
+      {isSpacesLoading ? (
         <CircularProgress />
       ) : (
         <>

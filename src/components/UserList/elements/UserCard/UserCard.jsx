@@ -2,25 +2,72 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Typography, IconButton } from '@mui/material';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import styled from '@emotion/styled';
 
-import './UserCard.css';
+const CardHolder = styled.div`
+  max-width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+  background: #ffffff;
+`;
 
+const CardBody = styled.div`
+  display: flex;
+  overflow: hidden;
+`;
+
+const UserProfilePhoto = styled.div`
+  margin-right: 20px;
+`;
+
+const UserPhoto = styled(Avatar)`
+  width: 80px !important;
+  height: 80px !important;
+`;
+
+const UserInfo = styled.div`
+  width: 75%;
+`;
+
+const UserDataTitle = styled(Typography)`
+  color: #094067;
+  width: 75%;
+`;
+
+const UserDataDescription = styled(Typography)`
+  color: #5f6c7b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-height: 1.2em !important;
+  max-height: calc(1.2em * 3);
+`;
+
+const CardFooter = styled.div`
+  margin-top: 5px;
+`;
+
+const LinkGroup = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const emptyDescription = 'User doesnt add any information about himself in bio';
 function UserCard({
   avatarSrc,
   firstName,
   lastName,
   telegramUsername,
-  description,
+  description
 }) {
   const userCredentials = useMemo(
     () => `${firstName ?? ''} ${lastName ?? ''}`,
     [firstName, lastName]
   );
 
-  const emptyDescription =
-    'User doesnt add any information about himself in bio';
-
-  // TODO: Max amount of symbols is 140 symbols such as in Telegram bio.
   const userDescription = useMemo(
     () =>
       description && description.length > 0 ? description : emptyDescription,
@@ -28,22 +75,20 @@ function UserCard({
   );
 
   return (
-    <div className="cardHolder">
-      <div className="cardBody">
-        <div className="userProfilePhoto">
-          <Avatar className="userPhoto" src={avatarSrc} />
-        </div>
-        <div className="userInfo">
-          <Typography className="userDataTitle" variant="h6">
-            {userCredentials}
-          </Typography>
-          <Typography className="userDataDescription" variant="body2">
+    <CardHolder>
+      <CardBody>
+        <UserProfilePhoto>
+          <UserPhoto src={avatarSrc} />
+        </UserProfilePhoto>
+        <UserInfo>
+          <UserDataTitle variant="h6">{userCredentials}</UserDataTitle>
+          <UserDataDescription variant="body2">
             {userDescription}
-          </Typography>
-        </div>
-      </div>
-      <div className="cardFooter">
-        <div className="linkGroup">
+          </UserDataDescription>
+        </UserInfo>
+      </CardBody>
+      <CardFooter>
+        <LinkGroup>
           <IconButton
             href={`https://t.me/${telegramUsername}`}
             target="_blank"
@@ -51,9 +96,9 @@ function UserCard({
           >
             <TelegramIcon />
           </IconButton>
-        </div>
-      </div>
-    </div>
+        </LinkGroup>
+      </CardFooter>
+    </CardHolder>
   );
 }
 
@@ -62,7 +107,7 @@ UserCard.propTypes = {
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   telegramUsername: PropTypes.string,
-  description: PropTypes.string,
+  description: PropTypes.string
 };
 
 export default UserCard;

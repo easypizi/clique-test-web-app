@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
+import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Typography, CircularProgress } from '@mui/material';
@@ -12,8 +13,10 @@ function AuthorizationPage() {
   const dispatch = useDispatch();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const userId = queryParams.get('user_id');
-  const privateId = queryParams.get('private_id');
+  const storedUserId = store.session.get('userId');
+  const storedPrivateId = store.session.get('privateId');
+  const userId = queryParams.get('user_id') ?? storedUserId;
+  const privateId = queryParams.get('private_id') ?? storedPrivateId;
   const { currentUser, isUserDataLoading } = useSelector(
     (state) => state.currentUser
   );
@@ -32,14 +35,26 @@ function AuthorizationPage() {
   const memoizedSpaces = useMemo(() => userSpaces, [userSpaces]);
 
   useEffect(() => {
+    if (!storedUserId && userId) {
+      store.session.set('userId', userId);
+    }
+
+    if (!storedPrivateId && privateId) {
+      store.session.set('privateId', privateId);
+    }
+  }, [privateId, storedPrivateId, storedUserId, userId]);
+
+  useEffect(() => {
     if (!currentUser) {
       dispatch(getUser(userId, privateId));
     }
+  }, [currentUser, dispatch, privateId, userId]);
 
+  useEffect(() => {
     if (userSpacesIds && userSpacesIds.length > 0 && !memoizedSpaces) {
       dispatch(getUserSpaces(userSpacesIds));
     }
-  }, [privateId, userId, dispatch, currentUser, userSpacesIds, memoizedSpaces]);
+  }, [dispatch, memoizedSpaces, userSpacesIds]);
 
   const renderLoginButtons = useCallback(() => {
     if (!isLoading && !memoizedSpaces) {
