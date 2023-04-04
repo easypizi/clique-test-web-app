@@ -1,11 +1,24 @@
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Typography, CircularProgress } from '@mui/material';
+import { CircularProgress, Typography } from '@mui/material';
+import styled from '@emotion/styled';
 import Search from '../Search/Search';
 import UserCard from './elements/UserCard/UserCard';
 import prepareUserData from './helpers/helpers';
 
-import './UserList.css';
+const StyledUserListContainer = styled.div`
+  height: 100%;
+`;
+
+const StyledUserList = styled.div`
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 2px;
+  margin-top: 20px;
+`;
 
 function UserList() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,20 +35,22 @@ function UserList() {
   );
 
   return (
-    <div className="userlist">
+    <StyledUserListContainer>
       {isSpacesLoading ? (
         <CircularProgress />
       ) : (
         <>
           <Search onSearch={setSearchTerm} />
-          {filteredUsers && filteredUsers.length ? (
-            filteredUsers.map((user) => <UserCard key={user.id} {...user} />)
-          ) : (
-            <Typography variant="body1">No users with this name</Typography>
-          )}
+          <StyledUserList>
+            {filteredUsers && filteredUsers.length ? (
+              filteredUsers.map((user) => <UserCard key={user.id} {...user} />)
+            ) : (
+              <Typography variant="body1">No users with this name</Typography>
+            )}
+          </StyledUserList>
         </>
       )}
-    </div>
+    </StyledUserListContainer>
   );
 }
 

@@ -16,7 +16,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 3, height: '100%' }}>{children}</Box>}
     </div>
   );
 }
@@ -24,7 +24,7 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   value: PropTypes.number,
-  index: PropTypes.number,
+  index: PropTypes.number
 };
 
 export default TabPanel;

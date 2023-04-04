@@ -15,6 +15,17 @@ function TabNavigation() {
     setValue(newValue);
   };
 
+  const mockedUser = {
+    userName: 'Igor',
+    userSurName: 'Nikolaev',
+    userDescription: 'Good singer, good person',
+    userLinks: ['vk.com', 'google.com', 'tolstov.me'],
+    userVisibility: true,
+    userAvatar:
+      'https://c-cl.cdn.smule.com/rs-s49/arr/30/cb/58fb7ca6-43fc-450b-95fe-b9138bd01ded.jpg',
+    userBadges: ['songs', 'poems', 'pure love']
+  };
+
   return (
     <div>
       <Tabs className="tabNavigation" value={value} onChange={handleChange}>
@@ -29,7 +40,7 @@ function TabNavigation() {
         <UserList />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <UserProfile />
+        <UserProfile {...mockedUser} />
       </TabPanel>
     </div>
   );
