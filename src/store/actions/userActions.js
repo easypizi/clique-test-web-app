@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import {
   fetchCurrentUserStart,
   fetchCurrentUserSuccess,
@@ -14,4 +13,9 @@ export const getUser = (id, privateId) => async (dispatch) => {
   } catch (error) {
     dispatch(fetchCurrentUserFailure(error.message));
   }
+};
+
+// TODO: make current user updateble
+export const updateUserData = (user) => async (dispatch) => {
+  dispatch(user);
 };

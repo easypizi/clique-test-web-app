@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Typography, CircularProgress } from '@mui/material';
+import { Typography, CircularProgress, Container } from '@mui/material';
 import { getUser } from '../../store/actions/userActions';
 import { getUserSpaces, getSpace } from '../../store/actions/spaceActions';
 
@@ -86,7 +86,7 @@ function AuthorizationPage() {
   }, [dispatch, isLoading, memoizedSpaces, userSpaces]);
 
   return (
-    <div className="container">
+    <Container>
       {isLoading ? (
         <CircularProgress />
       ) : (
@@ -98,7 +98,7 @@ function AuthorizationPage() {
           {renderLoginButtons()}
         </>
       )}
-    </div>
+    </Container>
   );
 }
 

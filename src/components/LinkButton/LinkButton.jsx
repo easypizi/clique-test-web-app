@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
-function LinkButton({ to = '/', children, color = 'primary', ...rest }) {
+function LinkButton({
+  children,
+  to = '/',
+  color = 'primary',
+  variant = 'contained',
+  ...rest
+}) {
   return (
-    <Button
-      {...rest}
-      component={Link}
-      to={to}
-      color={color}
-      variant="contained"
-    >
+    <Button {...rest} component={Link} to={to} color={color} variant={variant}>
       {children}
     </Button>
   );
@@ -20,6 +20,7 @@ function LinkButton({ to = '/', children, color = 'primary', ...rest }) {
 LinkButton.propTypes = {
   color: PropTypes.string,
   to: PropTypes.string,
+  variant: PropTypes.string,
   children: PropTypes.node
 };
 

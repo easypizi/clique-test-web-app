@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import './Header.css';
+import { Box, Divider } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LinkButton from '../LinkButton/LinkButton';
 
 function Header() {
@@ -19,9 +20,12 @@ function Header() {
   return (
     <div>
       {!isUserDataLoading && (
-        <div className=".header">
-          <LinkButton to={backToMainLink}>Back</LinkButton>
-        </div>
+        <Box sx={{ width: '100%', margin: '5px 0 10px 0' }}>
+          <LinkButton variant="outlined" to={backToMainLink}>
+            <ArrowBackIcon />
+          </LinkButton>
+          <Divider sx={{ marginTop: '5px' }} />
+        </Box>
       )}
     </div>
   );

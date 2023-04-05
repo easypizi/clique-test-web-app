@@ -37,7 +37,13 @@ function ChatList() {
   return (
     <ChatListWrapper>
       {isSpacesLoading ? (
-        <CircularProgress />
+        <CircularProgress
+          sx={{
+            position: 'absolute',
+            top: 'calc(50% - 20px)',
+            left: 'calc(50% - 20px)'
+          }}
+        />
       ) : (
         <>
           <Search onSearch={setSearchTerm} />

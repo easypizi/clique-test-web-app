@@ -31,10 +31,12 @@ function Search({ onSearch }) {
     >
       <div>
         <TextField
+          sx={{ width: '100%' }}
           className="inputSearch"
-          id="outlined-search"
+          id="searchBox"
           label="Search..."
           type="search"
+          size="small"
           variant="outlined"
           value={searchText}
           onChange={handleInputChange}
