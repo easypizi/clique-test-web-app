@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CircularProgress, Typography, Box } from '@mui/material';
@@ -49,7 +50,7 @@ function UserList() {
           }}
         />
       ) : (
-        <Box sx={{ maxHeight: '100vh' }}>
+        <Box sx={{ height: '100%', maxHeight: 'calc(100vh - 120px)' }}>
           <Search onSearch={setSearchTerm} />
           <StyledUserList>
             {filteredUsers && filteredUsers.length ? (
