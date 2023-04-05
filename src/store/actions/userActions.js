@@ -1,9 +1,12 @@
 import {
   fetchCurrentUserStart,
   fetchCurrentUserSuccess,
-  fetchCurrentUserFailure
+  fetchCurrentUserFailure,
+  fetchCurrentUserUpdateStart,
+  fetchCurrentUserUpdateSuccess,
+  fetchCurrentUserUpdateFailure
 } from '../reducers/UsersSlice';
-import { fetchUser } from '../../api/userApi';
+import { fetchUser, updateUser } from '../../api/userApi';
 
 export const getUser = (id, privateId) => async (dispatch) => {
   dispatch(fetchCurrentUserStart());
@@ -15,7 +18,12 @@ export const getUser = (id, privateId) => async (dispatch) => {
   }
 };
 
-// TODO: make current user updateble
-export const updateUserData = (user) => async (dispatch) => {
-  dispatch(user);
+export const updateUserData = (userData) => async (dispatch) => {
+  dispatch(fetchCurrentUserUpdateStart());
+  try {
+    await updateUser(userData);
+    dispatch(fetchCurrentUserUpdateSuccess());
+  } catch (error) {
+    dispatch(fetchCurrentUserUpdateFailure(error.message));
+  }
 };

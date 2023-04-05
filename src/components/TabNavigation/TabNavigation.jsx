@@ -25,7 +25,7 @@ function TabNavigation({ user }) {
     userVisibility: user.is_visible,
     userAvatar: user.user_image,
     userLinks: user.user_links,
-    userBadges: user.user_skills,
+    userBadges: user.user_badges,
     isAuthorized: user.is_authorized
   };
 
@@ -57,7 +57,7 @@ TabNavigation.propTypes = {
     user_image: PropTypes.string,
     user_description: PropTypes.string,
     user_links: PropTypes.arrayOf(PropTypes.string),
-    user_skills: PropTypes.arrayOf(PropTypes.string),
+    user_badges: PropTypes.arrayOf(PropTypes.string),
     is_visible: PropTypes.bool,
     is_authorized: PropTypes.bool
   })

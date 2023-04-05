@@ -8,9 +8,26 @@ export const currentUserSlice = createSlice({
     isAuthorized: false,
     currentUser: null,
     isUserDataLoading: false,
+    isUserDataUpdating: false,
+    isUserDataUpdated: false,
     error: null
   },
   reducers: {
+    fetchCurrentUserUpdateStart: (state) => {
+      state.isUserDataUpdating = true;
+      state.isUserDataUpdated = false;
+      state.error = null;
+    },
+    fetchCurrentUserUpdateSuccess: (state) => {
+      state.isUserDataUpdating = false;
+      state.isUserDataUpdated = true;
+      state.error = null;
+    },
+    fetchCurrentUserUpdateFailure: (state, { payload }) => {
+      state.isUserDataUpdating = false;
+      state.isUserDataUpdated = false;
+      state.error = payload;
+    },
     fetchCurrentUserStart: (state) => {
       state.isUserDataLoading = true;
       state.error = null;
@@ -33,7 +50,10 @@ export const currentUserSlice = createSlice({
 export const {
   fetchCurrentUserStart,
   fetchCurrentUserSuccess,
-  fetchCurrentUserFailure
+  fetchCurrentUserFailure,
+  fetchCurrentUserUpdateStart,
+  fetchCurrentUserUpdateSuccess,
+  fetchCurrentUserUpdateFailure
 } = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;

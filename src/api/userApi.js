@@ -1,17 +1,21 @@
-/* eslint-disable import/prefer-default-export */
 import axios from 'axios';
 
 const baseURL = 'https://clique-mvp-backend.herokuapp.com/api';
 
-export const fetchUser = (id) => {
+export const fetchUser = async (id) => {
   try {
-    return axios
-      .get(`${baseURL}/user/${id}`)
-      .then((response) => response && response.data && response.data[0])
-      .catch((error) => {
-        throw error;
-      });
+    const response = await axios.get(`${baseURL}/user/${id}`);
+    return response && response.data && response.data[0];
   } catch (error) {
-    throw Error(error);
+    throw new Error(error);
+  }
+};
+
+export const updateUser = async (data) => {
+  try {
+    const response = await axios.patch(`${baseURL}/update-user`, data);
+    return response?.data?.data;
+  } catch (error) {
+    throw new Error(error);
   }
 };

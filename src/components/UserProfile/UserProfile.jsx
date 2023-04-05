@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Avatar,
   Stack,
@@ -12,8 +12,8 @@ import {
   Chip,
   Container
 } from '@mui/material';
-
 import LinkIcon from '@mui/icons-material/Link';
+import { updateUserData } from '../../store/actions/userActions';
 
 function UserProfile({
   userId,
@@ -26,6 +26,13 @@ function UserProfile({
   userAvatar,
   userBadges = []
 }) {
+  const dispatch = useDispatch();
+  const { isUserDataUpdated, error } = useSelector((state) => state.currentUser);
+  const [updateButtonColor, setUpdateButtonColor] = useState('primary');
+  const [updateButtonText, setUpdateButtonText] = useState('Update');
+  const [updateButtonDisabled, setUpdateButtonDisabled] = useState(
+    !isAuthorized
+  );
   const [name, setName] = useState(userName ?? '');
   const [surname, setSurname] = useState(userSurname ?? '');
   const [description, setDescription] = useState(userDescription ?? '');
@@ -65,7 +72,10 @@ function UserProfile({
   const handleBadgeChange = useCallback(
     (event) => {
       const inputValue = event.target.value;
-      const badgesFromString = inputValue.length ? inputValue.split(',') : [];
+      const badgesFromString = inputValue.length
+        ? inputValue.replace(' ', '').split(',')
+        : [];
+
       const newValues = [...new Set([...badges, ...badgesFromString])];
 
       setNewBadges(newValues);
@@ -82,30 +92,49 @@ function UserProfile({
   );
 
   const handleUpdateClick = useCallback(() => {
-    const updatedUser = {
-      name,
-      surname,
-      description,
-      links,
-      isVisible,
-      badges
+    if (updateButtonDisabled) {
+      return;
+    }
+
+    const updateData = {
+      user_id: userId,
+      user_name: name,
+      user_last_name: surname,
+      user_description: description,
+      is_visible: isVisible,
+      user_links: links,
+      user_badges: badges
     };
 
-    console.log(userId);
-    console.log(isAuthorized);
-    console.log(updatedUser);
-
-    // TODO: call update User action.
+    dispatch(updateUserData(updateData));
+    setUpdateButtonDisabled(true);
   }, [
     badges,
     description,
-    isAuthorized,
+    dispatch,
     isVisible,
     links,
     name,
     surname,
+    updateButtonDisabled,
     userId
   ]);
+
+  useEffect(() => {
+    if (isUserDataUpdated) {
+      setUpdateButtonColor('success');
+      setUpdateButtonText('User data Updated');
+    } else if (error) {
+      setUpdateButtonColor('error');
+      setUpdateButtonText('Update Failure!');
+    }
+
+    setTimeout(() => {
+      setUpdateButtonDisabled(false);
+      setUpdateButtonColor('primary');
+      setUpdateButtonText('Update');
+    }, 3000);
+  }, [error, isUserDataUpdated, isAuthorized]);
 
   return (
     <Container sx={{ p: 0 }}>
@@ -148,10 +177,12 @@ function UserProfile({
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <LinkIcon />
             <TextField
+              id="userLink1"
               sx={{ marginLeft: '10px' }}
               fullWidth
               size="small"
               label="Link"
+              placeholder="https://..."
               value={links[0]}
               onChange={(event) => handleLinkChange(event, 0)}
             />
@@ -159,10 +190,12 @@ function UserProfile({
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <LinkIcon />
             <TextField
+              id="userLink2"
               sx={{ marginLeft: '10px' }}
               fullWidth
               size="small"
               label="Link"
+              placeholder="https://..."
               value={links[1]}
               onChange={(event) => handleLinkChange(event, 1)}
             />
@@ -170,10 +203,12 @@ function UserProfile({
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <LinkIcon />
             <TextField
+              id="userLink3"
               sx={{ marginLeft: '10px' }}
               fullWidth
               size="small"
               label="Link"
+              placeholder="https://..."
               value={links[2]}
               onChange={(event) => handleLinkChange(event, 2)}
             />
@@ -226,12 +261,13 @@ function UserProfile({
         </Box>
       </Box>
       <Button
-        disabled={!isAuthorized}
-        variant="contained"
         fullWidth
+        variant="contained"
+        color={updateButtonColor}
+        disabled={!isAuthorized}
         onClick={handleUpdateClick}
       >
-        Update
+        {updateButtonText}
       </Button>
     </Container>
   );
