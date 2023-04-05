@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Typography, CircularProgress } from '@mui/material';
+import { Typography, CircularProgress, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ChatCard from './elements/ChatCard/ChatCard';
 import Search from '../Search/Search';
 
 const ChatListWrapper = styled('div')({
-  height: '100%'
+  height: '100%',
+  overflow: 'hidden'
 });
 
 const ChatListContainer = styled('div')({
@@ -45,7 +46,7 @@ function ChatList() {
           }}
         />
       ) : (
-        <>
+        <Box sx={{ height: '100%', maxHeight: 'calc(100vh - 120px)' }}>
           <Search onSearch={setSearchTerm} />
           <ChatListContainer>
             {filteredGroups && filteredGroups.length ? (
@@ -58,7 +59,7 @@ function ChatList() {
               </Typography>
             )}
           </ChatListContainer>
-        </>
+        </Box>
       )}
     </ChatListWrapper>
   );
