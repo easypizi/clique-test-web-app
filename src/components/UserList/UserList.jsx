@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Typography, Box } from '@mui/material';
 import styled from '@emotion/styled';
 import Search from '../Search/Search';
 import UserCard from './elements/UserCard/UserCard';
@@ -8,6 +8,7 @@ import prepareUserData from './helpers/helpers';
 
 const StyledUserListContainer = styled.div`
   height: 100%;
+  overflow: hidden;
 `;
 
 const StyledUserList = styled.div`
@@ -24,7 +25,10 @@ function UserList() {
   const [searchTerm, setSearchTerm] = useState('');
   const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
 
-  const users = prepareUserData(currentSpace?.spaceUsers || []);
+  const users = prepareUserData(
+    currentSpace?.spaceUsers,
+    currentSpace?.spaceOwner
+  );
 
   const filteredUsers = useMemo(
     () =>
@@ -45,7 +49,7 @@ function UserList() {
           }}
         />
       ) : (
-        <>
+        <Box sx={{ maxHeight: '100vh' }}>
           <Search onSearch={setSearchTerm} />
           <StyledUserList>
             {filteredUsers && filteredUsers.length ? (
@@ -53,8 +57,9 @@ function UserList() {
             ) : (
               <Typography variant="body1">No users with this name</Typography>
             )}
+            <div style={{ width: '100%', height: '300px', flexShrink: 0 }} />
           </StyledUserList>
-        </>
+        </Box>
       )}
     </StyledUserListContainer>
   );

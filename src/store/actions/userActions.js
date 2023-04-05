@@ -4,7 +4,8 @@ import {
   fetchCurrentUserFailure,
   fetchCurrentUserUpdateStart,
   fetchCurrentUserUpdateSuccess,
-  fetchCurrentUserUpdateFailure
+  fetchCurrentUserUpdateFailure,
+  resetUserDataStateUpdate
 } from '../reducers/UsersSlice';
 import { fetchUser, updateUser } from '../../api/userApi';
 
@@ -26,4 +27,8 @@ export const updateUserData = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch(fetchCurrentUserUpdateFailure(error.message));
   }
+};
+
+export const resetUserDataUpdate = () => (dispatch) => {
+  dispatch(resetUserDataStateUpdate());
 };

@@ -13,6 +13,11 @@ export const currentUserSlice = createSlice({
     error: null
   },
   reducers: {
+    resetUserDataStateUpdate: (state) => {
+      state.isUserDataUpdating = false;
+      state.isUserDataUpdated = false;
+      state.error = null;
+    },
     fetchCurrentUserUpdateStart: (state) => {
       state.isUserDataUpdating = true;
       state.isUserDataUpdated = false;
@@ -53,7 +58,8 @@ export const {
   fetchCurrentUserFailure,
   fetchCurrentUserUpdateStart,
   fetchCurrentUserUpdateSuccess,
-  fetchCurrentUserUpdateFailure
+  fetchCurrentUserUpdateFailure,
+  resetUserDataStateUpdate
 } = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;

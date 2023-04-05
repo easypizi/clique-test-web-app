@@ -4,8 +4,6 @@ import { Container } from '@mui/material';
 import TabNavigation from '../../components/TabNavigation/TabNavigation';
 import Header from '../../components/Header/Header';
 
-import './ContentPage.css';
-
 function ContentPage() {
   const { currentUser, isUserDataLoading, isAuthorized } = useSelector(
     (state) => state.currentUser

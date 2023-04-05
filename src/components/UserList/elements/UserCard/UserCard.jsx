@@ -1,10 +1,21 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Typography, IconButton } from '@mui/material';
+import {
+  Avatar,
+  Typography,
+  IconButton,
+  Chip,
+  Box,
+  Divider
+} from '@mui/material';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import LinkIcon from '@mui/icons-material/Link';
 import styled from '@emotion/styled';
 
-const CardHolder = styled.div`
+const CardHolder = styled(Box)`
   max-width: 100%;
   padding: 10px;
   border-radius: 4px;
@@ -19,6 +30,7 @@ const CardBody = styled.div`
 
 const UserProfilePhoto = styled.div`
   margin-right: 20px;
+  position: relative;
 `;
 
 const UserPhoto = styled(Avatar)`
@@ -61,7 +73,11 @@ function UserCard({
   firstName,
   lastName,
   telegramUsername,
-  description
+  description,
+  userBadges,
+  userLinks,
+  isVisible,
+  isSpaceOwner
 }) {
   const userCredentials = useMemo(
     () => `${firstName ?? ''} ${lastName ?? ''}`,
@@ -74,11 +90,32 @@ function UserCard({
     [description]
   );
 
+  const selectedUserBadges = useMemo(
+    () => userBadges && userBadges.slice(0, 5),
+    [userBadges]
+  );
+
+  const getIconForLink = useCallback((item) => {
+    switch (true) {
+      case item.includes('instagram'):
+        return <InstagramIcon />;
+      case item.includes('linkedin'):
+        return <LinkedInIcon />;
+      default:
+        return <LinkIcon />;
+    }
+  }, []);
+
   return (
-    <CardHolder>
+    <CardHolder sx={{ display: isVisible ? 'block' : 'none' }}>
       <CardBody>
         <UserProfilePhoto>
           <UserPhoto src={avatarSrc} />
+          {isSpaceOwner && (
+            <Box sx={{ position: 'absolute', right: '-5px', bottom: '-5px' }}>
+              <LocalActivityIcon color="secondary" />
+            </Box>
+          )}
         </UserProfilePhoto>
         <UserInfo>
           <UserDataTitle variant="h6">{userCredentials}</UserDataTitle>
@@ -87,15 +124,41 @@ function UserCard({
           </UserDataDescription>
         </UserInfo>
       </CardBody>
+
       <CardFooter>
+        {selectedUserBadges && selectedUserBadges.length > 0 && (
+          <>
+            <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
+            <Box
+              sx={{
+                display: 'flex',
+                width: '100%',
+                flexWrap: 'wrap',
+                gap: '10px'
+              }}
+            >
+              {selectedUserBadges.map((item) => (
+                <Chip key={item} label={item} size="small" variant="outlined" />
+              ))}
+            </Box>
+          </>
+        )}
+        <Divider sx={{ marginTop: '10px' }} />
         <LinkGroup>
           <IconButton
+            color="primary"
             href={`https://t.me/${telegramUsername}`}
             target="_blank"
             rel="noopener noreferrer"
           >
             <TelegramIcon />
           </IconButton>
+          {userLinks &&
+            userLinks.map((link) => (
+              <IconButton href={link} target="_blank" rel="noopener noreferrer">
+                {getIconForLink(link)}
+              </IconButton>
+            ))}
         </LinkGroup>
       </CardFooter>
     </CardHolder>
@@ -107,7 +170,11 @@ UserCard.propTypes = {
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   telegramUsername: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
+  isVisible: PropTypes.bool,
+  isSpaceOwner: PropTypes.bool,
+  userBadges: PropTypes.arrayOf(PropTypes.string),
+  userLinks: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default UserCard;

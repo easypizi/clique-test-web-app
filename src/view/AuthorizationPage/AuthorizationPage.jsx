@@ -3,11 +3,13 @@ import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Typography, CircularProgress, Container } from '@mui/material';
+
 import { getUser } from '../../store/actions/userActions';
 import { getUserSpaces, getSpace } from '../../store/actions/spaceActions';
 
-import './AuthorizationPage.css';
 import LinkButton from '../../components/LinkButton/LinkButton';
+
+import './AuthorizationPage.css';
 
 function AuthorizationPage() {
   const dispatch = useDispatch();
@@ -87,8 +89,14 @@ function AuthorizationPage() {
 
   return (
     <Container>
-      {isLoading ? (
-        <CircularProgress />
+      {isLoading && !userSpaces ? (
+        <CircularProgress
+          sx={{
+            position: 'absolute',
+            top: 'calc(50% - 20px)',
+            left: 'calc(50% - 20px)'
+          }}
+        />
       ) : (
         <>
           <Typography variant="h2">Welcome!</Typography>

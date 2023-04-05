@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
-import './TabPanel.css';
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Box
+      sx={{
+        background: '#fffffe',
+        maxWidth: '500px',
+        height: '100vh',
+        maxHeight: 'calc(100vh - 120px)'
+      }}
       className="tabPanel"
       role="tabpanel"
       hidden={value !== index}
@@ -19,7 +23,7 @@ function TabPanel(props) {
       {value === index && (
         <Box sx={{ p: 0, height: '100%', paddingTop: '10px' }}>{children}</Box>
       )}
-    </div>
+    </Box>
   );
 }
 

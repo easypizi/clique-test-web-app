@@ -1,4 +1,4 @@
-export default function prepareUserData(userData) {
+export default function prepareUserData(userData, spaceOwner) {
   if (!userData) {
     return null;
   }
@@ -10,6 +10,9 @@ export default function prepareUserData(userData) {
     lastName: user.userLastName ?? '',
     telegramUsername: user.userLink,
     description: user.userDescription ?? '',
-    isVisible: user.isVisible
+    isVisible: user.isVisible,
+    isSpaceOwner: user.userId === spaceOwner,
+    userBadges: user.userBadges,
+    userLinks: user.userLinks
   }));
 }

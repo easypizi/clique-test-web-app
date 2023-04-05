@@ -13,7 +13,12 @@ import {
   Container
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
-import { updateUserData } from '../../store/actions/userActions';
+import {
+  getUser,
+  updateUserData,
+  resetUserDataUpdate
+} from '../../store/actions/userActions';
+import { getSpace } from '../../store/actions/spaceActions';
 
 function UserProfile({
   userId,
@@ -27,7 +32,11 @@ function UserProfile({
   userBadges = []
 }) {
   const dispatch = useDispatch();
-  const { isUserDataUpdated, error } = useSelector((state) => state.currentUser);
+  const { isUserDataUpdated, error, currentUser } = useSelector(
+    (state) => state.currentUser
+  );
+  const { currentSpace } = useSelector((state) => state.spaces);
+
   const [updateButtonColor, setUpdateButtonColor] = useState('primary');
   const [updateButtonText, setUpdateButtonText] = useState('Update');
   const [updateButtonDisabled, setUpdateButtonDisabled] = useState(
@@ -124,9 +133,13 @@ function UserProfile({
     if (isUserDataUpdated) {
       setUpdateButtonColor('success');
       setUpdateButtonText('User data Updated');
+      dispatch(resetUserDataUpdate());
+      dispatch(getSpace(currentSpace.spaceId));
+      dispatch(getUser(userId, currentUser.user_bot_chat_id));
     } else if (error) {
       setUpdateButtonColor('error');
       setUpdateButtonText('Update Failure!');
+      dispatch(resetUserDataUpdate());
     }
 
     setTimeout(() => {
@@ -134,7 +147,15 @@ function UserProfile({
       setUpdateButtonColor('primary');
       setUpdateButtonText('Update');
     }, 3000);
-  }, [error, isUserDataUpdated, isAuthorized]);
+  }, [
+    error,
+    isUserDataUpdated,
+    isAuthorized,
+    dispatch,
+    currentSpace.spaceId,
+    userId,
+    currentUser.user_bot_chat_id
+  ]);
 
   return (
     <Container sx={{ p: 0 }}>
