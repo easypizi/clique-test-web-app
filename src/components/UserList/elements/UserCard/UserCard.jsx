@@ -143,7 +143,7 @@ function UserCard({
             </Box>
           </>
         )}
-        <Divider sx={{ marginTop: '10px' }} />
+        <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
         <LinkGroup>
           <IconButton
             color="primary"
