@@ -57,12 +57,36 @@ function AuthorizationPage() {
     [dispatch]
   );
 
-  const handleChangeSpace = (event) => {
+  useEffect(() => {
+    if (!storedUserId && userId) {
+      store.session.set('userId', userId);
+    }
+
+    if (!storedPrivateId && privateId) {
+      store.session.set('privateId', privateId);
+    }
+  }, [privateId, storedPrivateId, storedUserId, userId]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      dispatch(getUser(userId, privateId));
+    }
+  }, [currentUser, dispatch, privateId, userId]);
+
+  useEffect(() => {
+    if (userSpacesIds && userSpacesIds.length > 0 && !memoizedSpaces) {
+      dispatch(getUserSpaces(userSpacesIds));
+    }
+  }, [dispatch, memoizedSpaces, userSpacesIds]);
+
+  const handleChangeSpace = useCallback((event) => {
     setSpaceButton(event.target.value);
-  };
+  }, []);
 
   const selectedSpace = useMemo(
-    () => memoizedSpaces.filter((item) => item.space_id === space),
+    () =>
+      memoizedSpaces &&
+      memoizedSpaces.filter((item) => item.space_id === space),
     [memoizedSpaces, space]
   );
 
@@ -116,7 +140,7 @@ function AuthorizationPage() {
               <em>None</em>
             </MenuItem>
             {memoizedSpaces.map((spaceItem) => (
-              <MenuItem value={spaceItem.space_id}>
+              <MenuItem key={spaceItem.space_id} value={spaceItem.space_id}>
                 {spaceItem.space_name}
               </MenuItem>
             ))}
@@ -125,7 +149,7 @@ function AuthorizationPage() {
         </FormControl>
         {choosenSpace && (
           <Box sx={{ marginTop: '20px' }}>
-            <Grow in={choosenSpace}>
+            <Grow in={!!choosenSpace}>
               <Typography
                 sx={{ textAlign: 'center', marginBottom: '10px' }}
                 variant="body2"
@@ -134,7 +158,7 @@ function AuthorizationPage() {
               </Typography>
             </Grow>
             <Grow
-              in={choosenSpace}
+              in={!!choosenSpace}
               style={{ transformOrigin: '0.5 0.5 0' }}
               {...(choosenSpace ? { timeout: 1000 } : {})}
             >
@@ -152,29 +176,14 @@ function AuthorizationPage() {
         )}
       </Box>
     );
-  }, [clickHandler, isLoading, memoizedSpaces, selectedSpace, space]);
-
-  useEffect(() => {
-    if (!storedUserId && userId) {
-      store.session.set('userId', userId);
-    }
-
-    if (!storedPrivateId && privateId) {
-      store.session.set('privateId', privateId);
-    }
-  }, [privateId, storedPrivateId, storedUserId, userId]);
-
-  useEffect(() => {
-    if (!currentUser) {
-      dispatch(getUser(userId, privateId));
-    }
-  }, [currentUser, dispatch, privateId, userId]);
-
-  useEffect(() => {
-    if (userSpacesIds && userSpacesIds.length > 0 && !memoizedSpaces) {
-      dispatch(getUserSpaces(userSpacesIds));
-    }
-  }, [dispatch, memoizedSpaces, userSpacesIds]);
+  }, [
+    clickHandler,
+    handleChangeSpace,
+    isLoading,
+    memoizedSpaces,
+    selectedSpace,
+    space
+  ]);
 
   return (
     <Container sx={{ height: '100%' }}>
