@@ -2,23 +2,24 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Avatar,
   Stack,
   Checkbox,
   Button,
   Box,
   TextField,
   Typography,
-  Chip,
-  Container
+  Chip
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
+
 import {
   getUser,
   updateUserData,
   resetUserDataUpdate
 } from '../../store/actions/userActions';
 import { getSpace } from '../../store/actions/spaceActions';
+import LazyAvatar from '../LazyAvatar/LazyAvatar';
+import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
 function UserProfile({
   userId,
@@ -158,9 +159,11 @@ function UserProfile({
   ]);
 
   return (
-    <Container sx={{ p: 0 }}>
+    <ScrollableContainer
+      style={{ padding: '20px 0 20px 0', height: '100%', boxShadow: 'none' }}
+    >
       <Stack direction="row" sx={{ width: '100%' }}>
-        <Avatar sx={{ width: 100, height: 100 }} src={userAvatar ?? ''} />
+        <LazyAvatar sx={{ width: 100, height: 100 }} src={userAvatar} />
         <Stack sx={{ marginLeft: '10px', width: '100%' }} spacing={2}>
           <TextField
             fullWidth
@@ -290,7 +293,7 @@ function UserProfile({
       >
         {updateButtonText}
       </Button>
-    </Container>
+    </ScrollableContainer>
   );
 }
 

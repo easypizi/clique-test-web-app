@@ -2,32 +2,33 @@ import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Divider } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import store from 'store2';
+
 import LinkButton from '../LinkButton/LinkButton';
 
 function Header() {
-  const { currentUser, isUserDataLoading } = useSelector(
-    (state) => state.currentUser
-  );
+  const { isUserDataLoading } = useSelector((state) => state.currentUser);
+
+  const storedUserId = store.session.get('userId');
+  const storedPrivateId = store.session.get('privateId');
 
   const backToMainLink = useMemo(
     () =>
-      currentUser
-        ? `/?user_id=${currentUser.user_id}&private_id=${currentUser.user_bot_chat_id}`
+      storedUserId && storedPrivateId
+        ? `/?user_id=${storedUserId}&private_id=${storedPrivateId}`
         : '/',
-    [currentUser]
+    [storedPrivateId, storedUserId]
   );
 
   return (
-    <div>
-      {!isUserDataLoading && (
-        <Box sx={{ width: '100%', margin: '5px 0 10px 0' }}>
-          <LinkButton variant="outlined" to={backToMainLink}>
-            <ArrowBackIcon />
-          </LinkButton>
-          <Divider sx={{ marginTop: '5px' }} />
-        </Box>
-      )}
-    </div>
+    !isUserDataLoading && (
+      <Box sx={{ width: '100%', margin: '5px 0 10px 0' }}>
+        <LinkButton variant="outlined" to={backToMainLink}>
+          <ArrowBackIcon />
+        </LinkButton>
+        <Divider sx={{ marginTop: '5px' }} />
+      </Box>
+    )
   );
 }
 

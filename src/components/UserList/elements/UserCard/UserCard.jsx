@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Avatar,
   Typography,
   IconButton,
   Chip,
   Box,
-  Divider
+  Divider,
+  Stack
 } from '@mui/material';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -14,37 +14,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import LinkIcon from '@mui/icons-material/Link';
 import styled from '@emotion/styled';
-
-const CardHolder = styled(Box)`
-  max-width: 100%;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.1);
-`;
-
-const CardBody = styled.div`
-  display: flex;
-  overflow: hidden;
-`;
-
-const UserProfilePhoto = styled.div`
-  margin-right: 20px;
-  position: relative;
-`;
-
-const UserPhoto = styled(Avatar)`
-  width: 80px !important;
-  height: 80px !important;
-`;
-
-const UserInfo = styled.div`
-  width: 75%;
-`;
-
-const UserDataTitle = styled(Typography)`
-  color: #094067;
-  width: 75%;
-`;
+import LazyAvatar from '../../../LazyAvatar/LazyAvatar';
 
 const UserDataDescription = styled(Typography)`
   color: #5f6c7b;
@@ -55,15 +25,6 @@ const UserDataDescription = styled(Typography)`
   -webkit-box-orient: vertical;
   line-height: 1.2em !important;
   max-height: calc(1.2em * 3);
-`;
-
-const CardFooter = styled.div`
-  margin-top: 5px;
-`;
-
-const LinkGroup = styled.div`
-  display: flex;
-  gap: 10px;
 `;
 
 const emptyDescription = 'User doesnt add any information about himself in bio';
@@ -106,25 +67,39 @@ function UserCard({
   }, []);
 
   return (
-    <CardHolder sx={{ display: isVisible ? 'block' : 'none' }}>
-      <CardBody>
-        <UserProfilePhoto>
-          <UserPhoto src={avatarSrc} />
+    <Box
+      sx={{
+        display: isVisible ? 'block' : 'none',
+        maxWidth: '100%',
+        padding: '10px',
+        borderRadius: '4px',
+        boxShadow: '1px 1px 2px 2px rgba(0, 0, 0, 0.1)'
+      }}
+    >
+      <Box sx={{ display: 'flex', overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', marginRight: '20px' }}>
+          <LazyAvatar
+            src={avatarSrc}
+            alt="userPhoto"
+            sx={{ width: 80, height: 80 }}
+          />
           {isSpaceOwner && (
             <Box sx={{ position: 'absolute', right: '-5px', bottom: '-5px' }}>
               <LocalActivityIcon color="secondary" />
             </Box>
           )}
-        </UserProfilePhoto>
-        <UserInfo>
-          <UserDataTitle variant="h6">{userCredentials}</UserDataTitle>
+        </Box>
+        <Box sx={{ width: '100%', maxWidth: '75%' }}>
+          <Typography variant="h6" sx={{ color: '#094067', maxWidth: '75%' }}>
+            {userCredentials}
+          </Typography>
           <UserDataDescription variant="body2">
             {userDescription}
           </UserDataDescription>
-        </UserInfo>
-      </CardBody>
+        </Box>
+      </Box>
 
-      <CardFooter>
+      <Box sx={{ marginTop: '5px' }}>
         {selectedUserBadges && selectedUserBadges.length > 0 && (
           <>
             <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
@@ -143,7 +118,7 @@ function UserCard({
           </>
         )}
         <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
-        <LinkGroup>
+        <Stack direction="row" spacing={2}>
           <IconButton
             color="primary"
             href={`https://t.me/${telegramUsername}`}
@@ -154,13 +129,18 @@ function UserCard({
           </IconButton>
           {userLinks &&
             userLinks.map((link) => (
-              <IconButton href={link} target="_blank" rel="noopener noreferrer">
+              <IconButton
+                key={link}
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {getIconForLink(link)}
               </IconButton>
             ))}
-        </LinkGroup>
-      </CardFooter>
-    </CardHolder>
+        </Stack>
+      </Box>
+    </Box>
   );
 }
 

@@ -13,10 +13,6 @@ const ChatItem = styled(Link)`
   color: inherit;
 `;
 
-const IconWrapper = styled.div`
-  margin-right: 10px;
-`;
-
 const color = () => {
   const values = [green, pink, blue, orange];
   const randomIndex = Math.floor(Math.random() * values.length);
@@ -30,11 +26,16 @@ function ChatCard({ groupName, groupLink, groupType = 'chat' }) {
 
   return (
     <ChatItem to={groupLink}>
-      <IconWrapper>
-        <Avatar sx={{ background: color()[500], width: 60, height: 60 }}>
-          {letters}
-        </Avatar>
-      </IconWrapper>
+      <Avatar
+        sx={{
+          background: color()[500],
+          width: 60,
+          height: 60,
+          marginRight: '10px'
+        }}
+      >
+        {letters}
+      </Avatar>
       <Box>
         <Typography variant="h6" sx={{ fontWeight: 500 }}>
           {groupName}

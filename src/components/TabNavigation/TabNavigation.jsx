@@ -5,7 +5,6 @@ import Tab from '@mui/material/Tab';
 import { Box } from '@mui/material';
 import TabPanel from './elements/TabPanel/TabPanel';
 
-import './TabNavigation.css';
 import UserList from '../UserList/UserList';
 import UserProfile from '../UserProfile/UserProfile';
 import ChatList from '../ChatList/ChatList';
@@ -31,7 +30,12 @@ function TabNavigation({ user }) {
 
   return (
     <Box>
-      <Tabs className="tabNavigation" value={value} onChange={handleChange}>
+      <Tabs
+        sx={{ width: '100%', padding: '0' }}
+        className="tabNavigation"
+        value={value}
+        onChange={handleChange}
+      >
         <Tab label="Chats" />
         <Tab label="Users" />
         <Tab label="Profile" />

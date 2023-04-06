@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
-import './Search.css';
 
 function Search({ onSearch }) {
   const [searchText, setSearchText] = useState('');
@@ -28,6 +27,7 @@ function Search({ onSearch }) {
       noValidate
       autoComplete="off"
       onSubmit={handleSearch}
+      style={{ width: '100%' }}
     >
       <div>
         <TextField
