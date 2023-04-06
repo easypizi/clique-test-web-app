@@ -33,6 +33,8 @@ function AuthorizationPage() {
   const userId = queryParams.get('user_id') ?? storedUserId;
   const privateId = queryParams.get('private_id') ?? storedPrivateId;
 
+  const [space, setSpaceButton] = React.useState('');
+
   const { currentUser, isUserDataLoading } = useSelector(
     (state) => state.currentUser
   );
@@ -47,8 +49,6 @@ function AuthorizationPage() {
     [currentUser]
   );
   const memoizedSpaces = useMemo(() => userSpaces, [userSpaces]);
-
-  const [space, setSpaceButton] = React.useState('');
 
   const clickHandler = useCallback(
     (id) => {
