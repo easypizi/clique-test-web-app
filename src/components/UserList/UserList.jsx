@@ -15,13 +15,30 @@ function UserList() {
     currentSpace?.spaceOwner
   );
 
-  const filteredUsers = useMemo(
-    () =>
-      users.filter((user) =>
-        user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-    [searchTerm, users]
-  );
+  const filteredUsers = useMemo(() => {
+    const normalizedSearchTerm = searchTerm.toLowerCase();
+    return users.filter((user) => {
+      const { firstName, lastName, description, userBadges } = user;
+      const normalizedFirstName = firstName.toLowerCase();
+      const normalizedLastName = lastName.toLowerCase();
+      const normalizedDescription = description.toLowerCase();
+
+      const nameMatch =
+        normalizedFirstName.includes(normalizedSearchTerm) ||
+        normalizedLastName.includes(normalizedSearchTerm);
+
+      const descriptionMatch =
+        normalizedDescription.includes(normalizedSearchTerm);
+
+      const badgesMatch =
+        userBadges &&
+        userBadges.some((item) =>
+          item.toLowerCase().includes(normalizedSearchTerm)
+        );
+
+      return nameMatch || descriptionMatch || badgesMatch;
+    });
+  }, [searchTerm, users]);
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>

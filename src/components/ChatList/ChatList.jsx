@@ -11,14 +11,14 @@ function ChatList() {
 
   const groups = currentSpace?.spaceGroups;
 
-  const filteredGroups = useMemo(
-    () =>
-      groups &&
-      groups.filter((group) =>
-        group.groupName.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-    [groups, searchTerm]
-  );
+  const filteredGroups = useMemo(() => {
+    if (!groups) return [];
+    return groups.filter(({ groupName, groupType }) =>
+      [groupName, groupType].some((item) =>
+        item.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [groups, searchTerm]);
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>

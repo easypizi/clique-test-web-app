@@ -106,9 +106,15 @@ function AuthorizationPage() {
               transitionDelay: !isLoading && !memoizedSpaces ? '300ms' : '0ms'
             }}
           >
-            <Typography variant="body1">
-              You dont have any have any space to join
-            </Typography>
+            <div>
+              <Typography align="center" variant="body1">
+                You dont have any space to join...
+              </Typography>
+              <Typography align="center" variant="body1">
+                Check your authorization in any chat of community or send /login
+                command to the bot
+              </Typography>
+            </div>
           </Fade>
         </Box>
       );
