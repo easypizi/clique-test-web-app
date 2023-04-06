@@ -73,7 +73,7 @@ function UserCard({
         maxWidth: '100%',
         padding: '10px',
         borderRadius: '4px',
-        boxShadow: '1px 1px 2px 2px rgba(0, 0, 0, 0.1)'
+        boxShadow: '0.5px 0.5px 1px 1px rgba(0, 0, 0, 0.1)'
       }}
     >
       <Box sx={{ display: 'flex', overflow: 'hidden' }}>

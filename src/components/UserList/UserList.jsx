@@ -39,7 +39,7 @@ function UserList() {
           {filteredUsers && filteredUsers.length ? (
             <ScrollableContainer
               style={{
-                padding: '10px 2px 0 2px',
+                padding: '20px 2px 0 2px',
                 height: 'calc(100% - 60px)',
                 gap: '10px',
                 marginTop: '20px'

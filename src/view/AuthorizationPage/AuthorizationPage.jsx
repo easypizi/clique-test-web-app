@@ -2,7 +2,19 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Typography, CircularProgress, Container } from '@mui/material';
+import {
+  Typography,
+  CircularProgress,
+  Container,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+  Fade,
+  Grow
+} from '@mui/material';
 
 import { getUser } from '../../store/actions/userActions';
 import { getUserSpaces, getSpace } from '../../store/actions/spaceActions';
@@ -14,11 +26,13 @@ import './AuthorizationPage.css';
 function AuthorizationPage() {
   const dispatch = useDispatch();
   const location = useLocation();
+
   const queryParams = new URLSearchParams(location.search);
   const storedUserId = store.session.get('userId');
   const storedPrivateId = store.session.get('privateId');
   const userId = queryParams.get('user_id') ?? storedUserId;
   const privateId = queryParams.get('private_id') ?? storedPrivateId;
+
   const { currentUser, isUserDataLoading } = useSelector(
     (state) => state.currentUser
   );
@@ -28,13 +42,117 @@ function AuthorizationPage() {
     () => isUserDataLoading || isSpacesLoading,
     [isSpacesLoading, isUserDataLoading]
   );
-
   const userSpacesIds = useMemo(
     () => currentUser && currentUser.user_spaces,
     [currentUser]
   );
-
   const memoizedSpaces = useMemo(() => userSpaces, [userSpaces]);
+
+  const [space, setSpaceButton] = React.useState('');
+
+  const clickHandler = useCallback(
+    (id) => {
+      dispatch(getSpace(id));
+    },
+    [dispatch]
+  );
+
+  const handleChangeSpace = (event) => {
+    setSpaceButton(event.target.value);
+  };
+
+  const selectedSpace = useMemo(
+    () => memoizedSpaces.filter((item) => item.space_id === space),
+    [memoizedSpaces, space]
+  );
+
+  const renderControlGroup = useCallback(() => {
+    if (!isLoading && !memoizedSpaces) {
+      return (
+        <Box
+          sx={{
+            alignSelf: 'center',
+            justifySelf: 'center',
+            margin: 'auto 0'
+          }}
+        >
+          <Fade
+            in={!isLoading && !memoizedSpaces}
+            style={{
+              transitionDelay: !isLoading && !memoizedSpaces ? '300ms' : '0ms'
+            }}
+          >
+            <Typography variant="body1">
+              You dont have any have any space to join
+            </Typography>
+          </Fade>
+        </Box>
+      );
+    }
+
+    const choosenSpace = selectedSpace ? selectedSpace[0] : null;
+
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '300px',
+          alignSelf: 'center',
+          justifySelf: 'center',
+          margin: 'auto 0'
+        }}
+      >
+        <FormControl sx={{ m: 1, width: '100%' }}>
+          <InputLabel id="space-choose-select-label">Space</InputLabel>
+          <Select
+            fullWidth
+            labelId="space-choose-select-label"
+            id="space-choose-select"
+            value={space}
+            label="Space"
+            onChange={handleChangeSpace}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {memoizedSpaces.map((spaceItem) => (
+              <MenuItem value={spaceItem.space_id}>
+                {spaceItem.space_name}
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>Choose any space</FormHelperText>
+        </FormControl>
+        {choosenSpace && (
+          <Box sx={{ marginTop: '20px' }}>
+            <Grow in={choosenSpace}>
+              <Typography
+                sx={{ textAlign: 'center', marginBottom: '10px' }}
+                variant="body2"
+              >
+                {choosenSpace.space_description}
+              </Typography>
+            </Grow>
+            <Grow
+              in={choosenSpace}
+              style={{ transformOrigin: '0.5 0.5 0' }}
+              {...(choosenSpace ? { timeout: 1000 } : {})}
+            >
+              <div>
+                <LinkButton
+                  fullWidth
+                  to="/space"
+                  onClick={() => clickHandler(choosenSpace.space_id)}
+                >
+                  Enter
+                </LinkButton>
+              </div>
+            </Grow>
+          </Box>
+        )}
+      </Box>
+    );
+  }, [clickHandler, isLoading, memoizedSpaces, selectedSpace, space]);
 
   useEffect(() => {
     if (!storedUserId && userId) {
@@ -58,37 +176,8 @@ function AuthorizationPage() {
     }
   }, [dispatch, memoizedSpaces, userSpacesIds]);
 
-  const renderLoginButtons = useCallback(() => {
-    if (!isLoading && !memoizedSpaces) {
-      return (
-        <Typography variant="body2">
-          You dont have any have any space to join
-        </Typography>
-      );
-    }
-    const buttons = userSpaces.map((space) => {
-      const clickHandler = (id) => {
-        dispatch(getSpace(id));
-      };
-      return (
-        <LinkButton
-          key={space.space_id}
-          to="/space"
-          onClick={() => clickHandler(space.space_id)}
-        >
-          {space.space_name}
-        </LinkButton>
-      );
-    });
-    return (
-      <div className="linkBlock">
-        <div className="buttonHolder">{buttons}</div>
-      </div>
-    );
-  }, [dispatch, isLoading, memoizedSpaces, userSpaces]);
-
   return (
-    <Container>
+    <Container sx={{ height: '100%' }}>
       {isLoading && !userSpaces ? (
         <CircularProgress
           sx={{
@@ -98,13 +187,28 @@ function AuthorizationPage() {
           }}
         />
       ) : (
-        <>
-          <Typography variant="h2">Welcome!</Typography>
-          <Typography variant="h5">
+        <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <Typography
+            sx={{ fontWeight: '400', textAlign: 'center' }}
+            variant="h2"
+          >
+            Welcome!
+          </Typography>
+          <Typography
+            sx={{ fontWeight: '300', textAlign: 'center' }}
+            variant="h5"
+          >
             Please, choose any community below to join:
           </Typography>
-          {renderLoginButtons()}
-        </>
+          {renderControlGroup()}
+        </Box>
       )}
     </Container>
   );
