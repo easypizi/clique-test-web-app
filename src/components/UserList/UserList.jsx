@@ -1,26 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CircularProgress, Typography, Box } from '@mui/material';
-import styled from '@emotion/styled';
 import Search from '../Search/Search';
 import UserCard from './elements/UserCard/UserCard';
 import prepareUserData from './helpers/helpers';
-
-const StyledUserListContainer = styled.div`
-  height: 100%;
-  overflow: hidden;
-`;
-
-const StyledUserList = styled.div`
-  height: 100%;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 2px;
-  margin-top: 20px;
-`;
+import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
 function UserList() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,7 +24,7 @@ function UserList() {
   );
 
   return (
-    <StyledUserListContainer>
+    <Box sx={{ height: '100%', width: '100%' }}>
       {isSpacesLoading ? (
         <CircularProgress
           sx={{
@@ -52,17 +36,35 @@ function UserList() {
       ) : (
         <Box sx={{ height: '100%', maxHeight: 'calc(100vh - 120px)' }}>
           <Search onSearch={setSearchTerm} />
-          <StyledUserList>
-            {filteredUsers && filteredUsers.length ? (
-              filteredUsers.map((user) => <UserCard key={user.id} {...user} />)
-            ) : (
-              <Typography variant="body1">No users with this name</Typography>
-            )}
-            <div style={{ width: '100%', height: '300px', flexShrink: 0 }} />
-          </StyledUserList>
+          {filteredUsers && filteredUsers.length ? (
+            <ScrollableContainer
+              style={{
+                padding: '10px 2px 0 2px',
+                height: 'calc(100% - 60px)',
+                gap: '10px',
+                marginTop: '20px'
+              }}
+            >
+              {filteredUsers.map((user) => (
+                <UserCard key={user.id} {...user} />
+              ))}
+              {filteredUsers && filteredUsers.length > 2 && (
+                <div
+                  style={{ width: '100%', height: '300px', flexShrink: 0 }}
+                />
+              )}
+            </ScrollableContainer>
+          ) : (
+            <Typography
+              variant="body1"
+              sx={{ marginTop: '20px', textAlign: 'center' }}
+            >
+              No users has been found
+            </Typography>
+          )}
         </Box>
       )}
-    </StyledUserListContainer>
+    </Box>
   );
 }
 

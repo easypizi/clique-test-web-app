@@ -9,7 +9,6 @@ function TabPanel(props) {
     <Box
       sx={{
         background: '#fffffe',
-        maxWidth: '500px',
         height: '100vh',
         maxHeight: 'calc(100vh - 120px)'
       }}
