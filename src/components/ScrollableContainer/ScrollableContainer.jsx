@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
 
 function ScrollableContainer({ children, style }) {
+  const preventPropagation = useCallback((event) => {
+    event.stopPropagation();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -19,6 +23,13 @@ function ScrollableContainer({ children, style }) {
         },
         ...style
       }}
+      onTouchStart={preventPropagation}
+      onTouchMove={preventPropagation}
+      onTouchEnd={preventPropagation}
+      onTouchCancel={preventPropagation}
+      onWheel={preventPropagation}
+      onMouseWheel={preventPropagation}
+      onDOMMouseScroll={preventPropagation}
     >
       {children}
     </Box>
