@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTelegram } from './hooks/useTelegram';
 
@@ -15,24 +15,24 @@ function App() {
 
   // TODO: https://core.telegram.org/bots/webapps#events-available-for-web-apps
   // Prevent accident closing of the window. Probably we should use height Change event and track this changes.
-  const thereAreUnsavedChanges = () => true;
+  // const thereAreUnsavedChanges = () => true;
 
-  const onBeforeUnload = useCallback((e) => {
-    if (thereAreUnsavedChanges()) {
-      e.preventDefault();
-      e.returnValue = '';
-      return;
-    }
+  // const onBeforeUnload = useCallback((e) => {
+  //   if (thereAreUnsavedChanges()) {
+  //     e.preventDefault();
+  //     e.returnValue = '';
+  //     return;
+  //   }
 
-    delete e.returnValue;
-  }, []);
+  //   delete e.returnValue;
+  // }, []);
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', onBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', onBeforeUnload);
-    };
-  }, [onBeforeUnload]);
+  // useEffect(() => {
+  //   window.addEventListener('beforeunload', onBeforeUnload);
+  //   return () => {
+  //     window.removeEventListener('beforeunload', onBeforeUnload);
+  //   };
+  // }, [onBeforeUnload]);
 
   return (
     <div className="App">
