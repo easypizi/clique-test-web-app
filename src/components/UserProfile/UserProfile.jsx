@@ -285,6 +285,7 @@ function UserProfile({
         </Box>
       </Box>
       <Button
+        sx={{ marginTop: 'auto' }}
         fullWidth
         variant="contained"
         color={updateButtonColor}

@@ -14,7 +14,7 @@ function ContentPage() {
   }
 
   return (
-    <Container>
+    <Container sx={{ height: '100%' }}>
       <Header />
       <TabNavigation user={{ ...currentUser, is_authorized: isAuthorized }} />
     </Container>

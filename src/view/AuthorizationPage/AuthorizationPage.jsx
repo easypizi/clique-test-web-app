@@ -21,8 +21,6 @@ import { getUserSpaces, getSpace } from '../../store/actions/spaceActions';
 
 import LinkButton from '../../components/LinkButton/LinkButton';
 
-import './AuthorizationPage.css';
-
 function AuthorizationPage() {
   const dispatch = useDispatch();
   const location = useLocation();

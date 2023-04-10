@@ -31,7 +31,7 @@ function ChatList() {
           }}
         />
       ) : (
-        <Box sx={{ height: '100%', maxHeight: 'calc(100vh - 120px)' }}>
+        <Box sx={{ height: '100%' }}>
           <Search onSearch={setSearchTerm} />
           {filteredGroups && filteredGroups.length ? (
             <ScrollableContainer
