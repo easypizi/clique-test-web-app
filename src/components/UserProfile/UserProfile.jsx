@@ -40,6 +40,12 @@ function UserProfile({
   );
   const { currentSpace } = useSelector((state) => state.spaces);
 
+  const avatarLinkNoCached = useCallback(() => {
+    const currentTime = Date.now();
+    const isFromTelegram = userAvatar.charAt(userAvatar.length - 1) === 'g';
+    return `${userAvatar}${isFromTelegram ? '?' : '&'}time=${currentTime}`;
+  }, [userAvatar]);
+
   const [updateButtonColor, setUpdateButtonColor] = useState('primary');
   const [updateButtonText, setUpdateButtonText] = useState('Update');
   const [updateButtonDisabled, setUpdateButtonDisabled] = useState(
@@ -185,7 +191,7 @@ function UserProfile({
       }}
     >
       <Stack direction="row" sx={{ width: '100%', position: 'relative' }}>
-        <LazyAvatar sx={{ width: 100, height: 100 }} src={userAvatar} />
+        <LazyAvatar sx={{ width: 100, height: 100 }} src={avatarLinkNoCached} />
         {isAuthorized && (
           <IconButton
             color="primary"

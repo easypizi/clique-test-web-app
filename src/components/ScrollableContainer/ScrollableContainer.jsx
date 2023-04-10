@@ -28,8 +28,6 @@ function ScrollableContainer({ children, style }) {
       onTouchEnd={preventPropagation}
       onTouchCancel={preventPropagation}
       onWheel={preventPropagation}
-      onMouseWheel={preventPropagation}
-      onDOMMouseScroll={preventPropagation}
     >
       {children}
     </Box>
