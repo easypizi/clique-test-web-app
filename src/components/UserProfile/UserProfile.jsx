@@ -50,7 +50,6 @@ function UserProfile({
   const [links, setLinks] = useState(userLinks ?? []);
   const [isVisible, setIsVisible] = useState(userVisibility ?? true);
   const [badges, setNewBadges] = useState(userBadges ?? []);
-  const [userAvatarUpdated, setAvatarUpdated] = useState(null);
 
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
@@ -119,12 +118,6 @@ function UserProfile({
     [dispatch, userId]
   );
 
-  const avatarLinkNoCached = useCallback(() => {
-    const currentTime = Date.now();
-    const isFromTelegram = userAvatar.charAt(userAvatar.length - 1) === 'g';
-    return `${userAvatar}${isFromTelegram ? '?' : '&'}time=${currentTime}`;
-  }, [userAvatar]);
-
   const handleUpdateClick = useCallback(() => {
     if (updateButtonDisabled || !isAuthorized) {
       return;
@@ -163,7 +156,6 @@ function UserProfile({
       dispatch(resetUserDataUpdate());
       dispatch(getSpace(currentSpace.spaceId));
       dispatch(getUser(userId, currentUser.user_bot_chat_id));
-      setAvatarUpdated(() => avatarLinkNoCached());
     } else if (error) {
       setUpdateButtonColor('error');
       setUpdateButtonText('Update Failure!');
@@ -182,8 +174,7 @@ function UserProfile({
     dispatch,
     currentSpace.spaceId,
     userId,
-    currentUser.user_bot_chat_id,
-    avatarLinkNoCached
+    currentUser.user_bot_chat_id
   ]);
 
   return (
@@ -195,10 +186,7 @@ function UserProfile({
       }}
     >
       <Stack direction="row" sx={{ width: '100%', position: 'relative' }}>
-        <LazyAvatar
-          sx={{ width: 100, height: 100 }}
-          src={userAvatarUpdated ?? userAvatar}
-        />
+        <LazyAvatar sx={{ width: 100, height: 100 }} src={userAvatar} />
         {isAuthorized && (
           <IconButton
             color="primary"

@@ -66,12 +66,6 @@ function UserCard({
     }
   }, []);
 
-  // const avatarLinkNoCached = useCallback(() => {
-  //   const currentTime = Date.now();
-  //   const isFromTelegram = avatarSrc.charAt(avatarSrc.length - 1) === 'g';
-  //   return `${avatarSrc}${isFromTelegram ? '?' : '&'}time=${currentTime}`;
-  // }, [avatarSrc]);
-
   return (
     <Box
       sx={{
