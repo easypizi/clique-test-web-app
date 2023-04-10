@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
 import TabPanel from './elements/TabPanel/TabPanel';
-
 import UserList from '../UserList/UserList';
 import UserProfile from '../UserProfile/UserProfile';
 import ChatList from '../ChatList/ChatList';
 
 function TabNavigation({ user }) {
+  const { isSpacesLoading } = useSelector((state) => state.spaces);
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -36,9 +37,9 @@ function TabNavigation({ user }) {
         value={value}
         onChange={handleChange}
       >
-        <Tab label="Chats" />
-        <Tab label="Users" />
-        <Tab label="Profile" />
+        <Tab disabled={isSpacesLoading} label="Chats" />
+        <Tab disabled={isSpacesLoading} label="Users" />
+        <Tab disabled={isSpacesLoading} label="Profile" />
       </Tabs>
       <TabPanel value={value} index={0}>
         <ChatList />
