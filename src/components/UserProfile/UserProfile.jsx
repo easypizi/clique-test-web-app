@@ -35,16 +35,9 @@ function UserProfile({
   userBadges = []
 }) {
   const dispatch = useDispatch();
-  const { isUserDataUpdated, error, currentUser } = useSelector(
-    (state) => state.currentUser
-  );
+  const { isUserDataUpdating, isUserDataUpdated, error, currentUser } =
+    useSelector((state) => state.currentUser);
   const { currentSpace } = useSelector((state) => state.spaces);
-
-  const avatarLinkNoCached = useCallback(() => {
-    const currentTime = Date.now();
-    const isFromTelegram = userAvatar.charAt(userAvatar.length - 1) === 'g';
-    return `${userAvatar}${isFromTelegram ? '?' : '&'}time=${currentTime}`;
-  }, [userAvatar]);
 
   const [updateButtonColor, setUpdateButtonColor] = useState('primary');
   const [updateButtonText, setUpdateButtonText] = useState('Update');
@@ -57,6 +50,14 @@ function UserProfile({
   const [links, setLinks] = useState(userLinks ?? []);
   const [isVisible, setIsVisible] = useState(userVisibility ?? true);
   const [badges, setNewBadges] = useState(userBadges ?? []);
+
+  const avatarLinkNoCached = useCallback(() => {
+    const currentTime = Date.now();
+    const isFromTelegram = userAvatar.charAt(userAvatar.length - 1) === 'g';
+    return `${userAvatar}${isFromTelegram ? '?' : '&'}time=${currentTime}`;
+  }, [userAvatar]);
+
+  const [userAvatarUpdated, setAvatarUpdated] = useState(avatarLinkNoCached());
 
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
@@ -119,6 +120,7 @@ function UserProfile({
         formData.append('picture', file);
 
         dispatch(uploadNewUserPhotoAction(formData));
+        setUpdateButtonText('Updating...');
       }
     },
     [dispatch, userId]
@@ -141,6 +143,7 @@ function UserProfile({
 
     dispatch(updateUserData(updateData));
     setUpdateButtonDisabled(true);
+    setUpdateButtonText('Updating...');
   }, [
     badges,
     description,
@@ -161,6 +164,7 @@ function UserProfile({
       dispatch(resetUserDataUpdate());
       dispatch(getSpace(currentSpace.spaceId));
       dispatch(getUser(userId, currentUser.user_bot_chat_id));
+      setAvatarUpdated(() => avatarLinkNoCached());
     } else if (error) {
       setUpdateButtonColor('error');
       setUpdateButtonText('Update Failure!');
@@ -179,7 +183,8 @@ function UserProfile({
     dispatch,
     currentSpace.spaceId,
     userId,
-    currentUser.user_bot_chat_id
+    currentUser.user_bot_chat_id,
+    avatarLinkNoCached
   ]);
 
   return (
@@ -191,7 +196,7 @@ function UserProfile({
       }}
     >
       <Stack direction="row" sx={{ width: '100%', position: 'relative' }}>
-        <LazyAvatar sx={{ width: 100, height: 100 }} src={avatarLinkNoCached} />
+        <LazyAvatar sx={{ width: 100, height: 100 }} src={userAvatarUpdated} />
         {isAuthorized && (
           <IconButton
             color="primary"
@@ -339,7 +344,7 @@ function UserProfile({
         fullWidth
         variant="contained"
         color={updateButtonColor}
-        disabled={!isAuthorized}
+        disabled={!isAuthorized || isUserDataUpdating}
         onClick={handleUpdateClick}
       >
         {updateButtonText}
