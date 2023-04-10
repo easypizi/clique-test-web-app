@@ -15,18 +15,9 @@ function App() {
     tg.ready();
   }, [tg]);
 
-  //
-
-  document.body.addEventListener('touchmove', (e) => {
-    if (e.touches[0].clientY < 50) {
-      // если свайп начинается вверху страницы
-      e.preventDefault(); // отменяем скролл
-      // показываем модальное окно с подтверждением
-      if (confirm('Вы уверены, что хотите закрыть приложение?')) {
-        tg.close();
-      }
-    }
-  });
+  window.onbeforeunload = function () {
+    return 'Что-нибудь сообщить пользователю';
+  };
 
   return (
     <div className="App">
