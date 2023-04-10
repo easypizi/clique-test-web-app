@@ -13,7 +13,7 @@ function LazyAvatar({ src, alt, ...restProps }) {
   return src && src.length ? (
     <Fade
       in={imageLoaded}
-      style={{ transitionDelay: imageLoaded ? '0ms' : '300ms' }}
+      style={{ transitionDelay: imageLoaded ? '300ms' : '0ms' }}
     >
       <Avatar src={src} alt={alt} onLoad={handleImageLoad} {...restProps} />
     </Fade>

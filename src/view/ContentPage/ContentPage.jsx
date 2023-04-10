@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Container } from '@mui/material';
+import { Container, Fade } from '@mui/material';
 import TabNavigation from '../../components/TabNavigation/TabNavigation';
 import Header from '../../components/Header/Header';
 
@@ -16,7 +16,16 @@ function ContentPage() {
   return (
     <Container>
       <Header />
-      <TabNavigation user={{ ...currentUser, is_authorized: isAuthorized }} />
+      <Fade
+        in={!isUserDataLoading}
+        style={{ transitionDelay: isUserDataLoading ? '0ms' : '300ms' }}
+      >
+        <div>
+          <TabNavigation
+            user={{ ...currentUser, is_authorized: isAuthorized }}
+          />
+        </div>
+      </Fade>
     </Container>
   );
 }
