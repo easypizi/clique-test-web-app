@@ -8,14 +8,16 @@ import {
   Box,
   TextField,
   Typography,
-  Chip
+  Chip,
+  IconButton
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
-
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {
   getUser,
   updateUserData,
-  resetUserDataUpdate
+  resetUserDataUpdate,
+  uploadNewUserPhotoAction
 } from '../../store/actions/userActions';
 import { getSpace } from '../../store/actions/spaceActions';
 import LazyAvatar from '../LazyAvatar/LazyAvatar';
@@ -101,8 +103,23 @@ function UserProfile({
     [badges]
   );
 
+  const handlePhotoUpload = useCallback(
+    (event) => {
+      if (event?.target?.files && event?.target?.files[0]) {
+        const file = event.target.files[0];
+
+        const formData = new FormData();
+        formData.append('user_id', userId);
+        formData.append('picture', file);
+
+        dispatch(uploadNewUserPhotoAction(formData));
+      }
+    },
+    [dispatch, userId]
+  );
+
   const handleUpdateClick = useCallback(() => {
-    if (updateButtonDisabled) {
+    if (updateButtonDisabled || !isAuthorized) {
       return;
     }
 
@@ -127,7 +144,8 @@ function UserProfile({
     name,
     surname,
     updateButtonDisabled,
-    userId
+    userId,
+    isAuthorized
   ]);
 
   useEffect(() => {
@@ -160,10 +178,36 @@ function UserProfile({
 
   return (
     <ScrollableContainer
-      style={{ padding: '20px 0 20px 0', height: '100%', boxShadow: 'none' }}
+      style={{
+        padding: '20px 0 20px 0',
+        height: '100%',
+        boxShadow: 'none'
+      }}
     >
-      <Stack direction="row" sx={{ width: '100%' }}>
+      <Stack direction="row" sx={{ width: '100%', position: 'relative' }}>
         <LazyAvatar sx={{ width: 100, height: 100 }} src={userAvatar} />
+        {isAuthorized && (
+          <IconButton
+            color="primary"
+            aria-label="upload picture"
+            component="label"
+            sx={{
+              background: 'lightBlue',
+              position: 'absolute',
+              bottom: '0',
+              left: '60px'
+            }}
+          >
+            <input
+              onChange={handlePhotoUpload}
+              hidden
+              accept="image/*"
+              multiple
+              type="file"
+            />
+            <PhotoCamera />
+          </IconButton>
+        )}
         <Stack sx={{ marginLeft: '10px', width: '100%' }} spacing={2}>
           <TextField
             fullWidth

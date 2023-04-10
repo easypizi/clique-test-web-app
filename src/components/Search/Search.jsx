@@ -23,7 +23,6 @@ function Search({ onSearch }) {
 
   return (
     <form
-      className="search"
       noValidate
       autoComplete="off"
       onSubmit={handleSearch}
@@ -32,7 +31,6 @@ function Search({ onSearch }) {
       <div>
         <TextField
           sx={{ width: '100%' }}
-          className="inputSearch"
           id="searchBox"
           label="Search..."
           type="search"

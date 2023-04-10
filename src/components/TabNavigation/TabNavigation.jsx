@@ -42,10 +42,15 @@ function TabNavigation({ user }) {
   };
 
   return (
-    <Box sx={{ height: '100%' }}>
+    <Box
+      sx={{
+        height: 'calc(100% - 50px)',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
       <Tabs
         sx={{ width: '100%', padding: '0' }}
-        className="tabNavigation"
         value={value}
         onChange={handleChange}
       >

@@ -7,7 +7,17 @@ import {
   fetchCurrentUserUpdateFailure,
   resetUserDataStateUpdate
 } from '../reducers/UsersSlice';
-import { fetchUser, updateUser } from '../../api/userApi';
+import { fetchUser, updateUser, uploadNewUserPhoto } from '../../api/userApi';
+
+export const uploadNewUserPhotoAction = (formData) => async (dispatch) => {
+  dispatch(fetchCurrentUserUpdateStart());
+  try {
+    await uploadNewUserPhoto(formData);
+    dispatch(fetchCurrentUserUpdateSuccess());
+  } catch (error) {
+    dispatch(fetchCurrentUserUpdateFailure(error.message));
+  }
+};
 
 export const getUser = (id, privateId) => async (dispatch) => {
   dispatch(fetchCurrentUserStart());

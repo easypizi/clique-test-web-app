@@ -19,3 +19,12 @@ export const updateUser = async (data) => {
     throw new Error(error);
   }
 };
+
+export const uploadNewUserPhoto = async (formData) => {
+  try {
+    await axios.post(`${baseURL}/upload-photo`, formData);
+    return true;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

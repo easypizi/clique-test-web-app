@@ -8,6 +8,7 @@ function ScrollableContainer({ children, style }) {
       sx={{
         width: '100%',
         overflow: 'overlay',
+        boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
         boxShadow:

@@ -8,11 +8,10 @@ function TabPanel(props) {
   return (
     <Box
       sx={{
+        maxHeight: 'calc(100% - 50px)',
         background: '#fffffe',
-        height: '100%',
-        maxHeight: 'calc(100% - 120px)'
+        flexGrow: 1
       }}
-      className="tabPanel"
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
@@ -20,7 +19,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 0, height: '100%', paddingTop: '10px' }}>{children}</Box>
+        <Box sx={{ height: '100%', padding: '10px 0 0 0' }}>{children}</Box>
       )}
     </Box>
   );

@@ -51,15 +51,16 @@ function UserList() {
           }}
         />
       ) : (
-        <Box sx={{ height: '100%' }}>
+        <Box sx={{ height: '100%', paddingBottom: '10px' }}>
           <Search onSearch={setSearchTerm} />
+
           {filteredUsers && filteredUsers.length ? (
             <ScrollableContainer
               style={{
                 padding: '20px 2px 0 2px',
-                height: 'calc(100% - 60px)',
+                height: 'calc(100% - 40px)',
                 gap: '10px',
-                marginTop: '20px'
+                marginTop: '5px'
               }}
             >
               {filteredUsers.map((user) => (

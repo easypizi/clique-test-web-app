@@ -2,14 +2,10 @@ import axios from 'axios';
 
 const baseURL = 'https://clique-mvp-backend.herokuapp.com/api';
 
-export const fetchSpace = (id) => {
+export const fetchSpace = async (id) => {
   try {
-    return axios
-      .get(`${baseURL}/space/${id}`)
-      .then((response) => response && response.data)
-      .catch((error) => {
-        throw error;
-      });
+    const response = await axios.get(`${baseURL}/space/${id}`);
+    return response && response.data;
   } catch (error) {
     throw Error(error);
   }
