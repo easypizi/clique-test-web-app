@@ -66,11 +66,11 @@ function UserCard({
     }
   }, []);
 
-  const avatarLinkNoCached = useCallback(() => {
-    const currentTime = Date.now();
-    const isFromTelegram = avatarSrc.charAt(avatarSrc.length - 1) === 'g';
-    return `${avatarSrc}${isFromTelegram ? '?' : '&'}time=${currentTime}`;
-  }, [avatarSrc]);
+  // const avatarLinkNoCached = useCallback(() => {
+  //   const currentTime = Date.now();
+  //   const isFromTelegram = avatarSrc.charAt(avatarSrc.length - 1) === 'g';
+  //   return `${avatarSrc}${isFromTelegram ? '?' : '&'}time=${currentTime}`;
+  // }, [avatarSrc]);
 
   return (
     <Box
@@ -85,7 +85,7 @@ function UserCard({
       <Box sx={{ display: 'flex', overflow: 'hidden' }}>
         <Box sx={{ position: 'relative', marginRight: '20px' }}>
           <LazyAvatar
-            src={avatarLinkNoCached()}
+            src={avatarSrc}
             alt="userPhoto"
             sx={{ width: 80, height: 80 }}
           />
