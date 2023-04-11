@@ -29,9 +29,9 @@ function App() {
 
   // useEffect(() => {
   //   window.addEventListener('beforeunload', onBeforeUnload);
-  //   return () => {
-  //     window.removeEventListener('beforeunload', onBeforeUnload);
-  //   };
+  // return () => {
+  //   window.removeEventListener('beforeunload', onBeforeUnload);
+  // };
   // }, [onBeforeUnload]);
 
   return (
