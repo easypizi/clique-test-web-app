@@ -17,6 +17,8 @@ function UserList() {
 
   const filteredUsers = useMemo(() => {
     const normalizedSearchTerm = searchTerm.toLowerCase();
+    if (!users) return [];
+
     return users.filter((user) => {
       const { firstName, lastName, description, userBadges } = user;
       const normalizedFirstName = firstName.toLowerCase();
@@ -77,7 +79,7 @@ function UserList() {
               variant="body1"
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
-              No users has been found
+              No users has been found. Please try to choose other space
             </Typography>
           )}
         </Box>

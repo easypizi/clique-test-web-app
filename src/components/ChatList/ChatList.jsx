@@ -61,7 +61,8 @@ function ChatList() {
               variant="body1"
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
-              No users has been found
+              No groups or channels has been found. Please try to choose other
+              space
             </Typography>
           )}
         </Box>

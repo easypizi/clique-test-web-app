@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import { Fade } from '@mui/material';
 
 function LazyAvatar({ src, alt, ...restProps }) {
-  const [imageLoaded, setImageLoaded] = React.useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);
