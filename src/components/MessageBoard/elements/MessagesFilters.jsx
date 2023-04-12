@@ -34,8 +34,8 @@ function MessagesFilters() {
     [selectedFilters]
   );
 
-  const handleDeleteChip = useCallback((tag) => {
-    console.log(`Delete chip${tag}`);
+  const handleDeleteChip = useCallback(() => {
+    // TODO: Add function for deleting chip from the space
   }, []);
 
   const renderFilterGroup = useCallback(
