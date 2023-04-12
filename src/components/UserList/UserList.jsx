@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CircularProgress, Typography, Box } from '@mui/material';
 import Search from '../Search/Search';
-import UserCard from './elements/UserCard/UserCard';
+import UserCard from './elements/UserCard';
 import prepareUserData from './helpers/helpers';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
@@ -55,7 +55,6 @@ function UserList() {
       ) : (
         <Box sx={{ height: '100%', paddingBottom: '10px' }}>
           <Search onSearch={setSearchTerm} />
-
           {filteredUsers && filteredUsers.length ? (
             <ScrollableContainer
               style={{

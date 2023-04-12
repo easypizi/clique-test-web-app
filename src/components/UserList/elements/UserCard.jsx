@@ -14,7 +14,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import LinkIcon from '@mui/icons-material/Link';
 import styled from '@emotion/styled';
-import LazyAvatar from '../../../LazyAvatar/LazyAvatar';
+import LazyAvatar from '../../LazyAvatar/LazyAvatar';
 
 const UserDataDescription = styled(Typography)`
   color: #5f6c7b;
@@ -70,7 +70,7 @@ function UserCard({
     <Box
       sx={{
         display: isVisible ? 'block' : 'none',
-        maxWidth: '100%',
+        width: '100%',
         padding: '10px',
         borderRadius: '4px',
         boxShadow: '0.5px 0.5px 1px 1px rgba(0, 0, 0, 0.1)'

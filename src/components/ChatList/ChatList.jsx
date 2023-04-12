@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Typography, CircularProgress, Box } from '@mui/material';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
-import ChatCard from './elements/ChatCard/ChatCard';
+import ChatCard from './elements/ChatCard';
 import Search from '../Search/Search';
 
 function ChatList() {
