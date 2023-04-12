@@ -1,6 +1,15 @@
-/* eslint-disable import/prefer-default-export */
 import { setActiveFilters } from '../reducers/MessagesSlice';
 
-export const setActiveFiltersAction = (active) => (dispatch) => {
-  dispatch(setActiveFilters(active));
+import { updateMessage, deleteMessage } from '../../api/messagesApi';
+
+export const setActiveFiltersAction = (filter) => (dispatch) => {
+  dispatch(setActiveFilters(filter));
+};
+
+export const deleteMessageAction = async (groupId, id) => {
+  await deleteMessage(groupId, id);
+};
+
+export const updateMessageAction = async (data) => {
+  await updateMessage(data);
 };

@@ -2,6 +2,7 @@
 /* eslint-disable react/no-array-index-key */
 
 import React, { useCallback, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Typography, IconButton, Box } from '@mui/material';
@@ -9,6 +10,11 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import LazyAvatar from '../../LazyAvatar/LazyAvatar';
+import {
+  deleteMessageAction,
+  updateMessageAction
+} from '../../../store/actions/messagesActions';
+import { getSpace } from '../../../store/actions/spaceActions';
 
 function MessageCard({
   canBeDeleted,
@@ -19,8 +25,11 @@ function MessageCard({
   text,
   userName,
   userPhoto,
-  selectedFilters
+  selectedFilters,
+  spaces
 }) {
+  const dispatch = useDispatch();
+
   const timestampToDateTime = useCallback(
     (timestamp, timezone) =>
       moment(timestamp * 1000)
@@ -34,9 +43,29 @@ function MessageCard({
     []
   );
 
+  const { currentSpace } = useSelector((state) => state.spaces);
+
   const handleDeleteMessage = useCallback(() => {
-    // TODO: Удаление сообщений только для админа
-  }, []);
+    if (currentSpace) {
+      const filteredSpacesForUpdate = spaces.filter(
+        (space) => space !== currentSpace?.spaceId
+      );
+
+      if (!filteredSpacesForUpdate.length) {
+        deleteMessageAction(groupId, id);
+      } else {
+        const updatedData = {
+          message_id: id,
+          message_group_id: groupId,
+          message_space: filteredSpacesForUpdate
+        };
+        updateMessageAction(updatedData);
+      }
+      if (currentSpace?.spaceId) {
+        dispatch(getSpace(currentSpace?.spaceId));
+      }
+    }
+  }, [currentSpace, spaces, groupId, id, dispatch]);
 
   const preparedMessageText = useMemo(() => {
     const hashtaggedFiltersSet = new Set(
@@ -111,10 +140,7 @@ function MessageCard({
         }}
       >
         {canBeDeleted && (
-          <IconButton
-            color="primary"
-            onClick={() => handleDeleteMessage(groupId, id)}
-          >
+          <IconButton color="primary" onClick={handleDeleteMessage}>
             <DeleteIcon />
           </IconButton>
         )}
@@ -146,7 +172,8 @@ MessageCard.propTypes = {
   text: PropTypes.string,
   userName: PropTypes.string,
   userPhoto: PropTypes.string,
-  selectedFilters: PropTypes.arrayOf(PropTypes.string)
+  selectedFilters: PropTypes.arrayOf(PropTypes.string),
+  spaces: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default MessageCard;
