@@ -23,12 +23,12 @@ function MessagesFilters() {
   const { currentSpace } = useSelector((state) => state.spaces);
   const { activeFilters } = useSelector((state) => state.messages);
   const { currentUser } = useSelector((state) => state.currentUser);
-
   const [selectedFilters, setSelectedFilters] = useState(activeFilters);
   const [isModalOpen, setModalOpen] = useState(false);
   const [newTag, setNewTag] = useState('');
+  const { spaceHashtags, spaceOwner, spaceId } = currentSpace ?? {};
+  const [currenthashTags, setCurrentHashtags] = useState(spaceHashtags);
 
-  const { spaceHashtags, spaceOwner, spaceId } = currentSpace;
   const { user_id: userId } = currentUser;
 
   const isSpaceOwner = useMemo(
@@ -50,15 +50,16 @@ function MessagesFilters() {
   };
 
   const handleNewTagSend = useCallback(() => {
-    const tagsArray = [...spaceHashtags, newTag];
+    const tagsArray = [...new Set([...currenthashTags, newTag.toLowerCase()])];
     const updateData = {
       space_id: spaceId,
       space_message_hashtags: tagsArray
     };
     dispatch(updateSpaceAction(updateData));
+    setCurrentHashtags(tagsArray);
     setModalOpen(false);
     setNewTag('');
-  }, [dispatch, newTag, spaceHashtags, spaceId]);
+  }, [currenthashTags, dispatch, newTag, spaceId]);
 
   const handleSelectFilter = useCallback(
     (filter) => {
@@ -73,20 +74,25 @@ function MessagesFilters() {
 
   const handleDeleteChip = useCallback(
     (tag) => {
-      const tagsArray = spaceHashtags.filter((item) => item !== tag);
+      const tagsArray = currenthashTags.filter((item) => item !== tag);
       const updateData = {
         space_id: spaceId,
         space_message_hashtags: tagsArray
       };
 
+      setCurrentHashtags(tagsArray);
+      if (selectedFilters.includes(tag)) {
+        setSelectedFilters(selectedFilters.filter((f) => f !== tag));
+      }
       dispatch(updateSpaceAction(updateData));
     },
-    [dispatch, spaceHashtags, spaceId]
+    [currenthashTags, dispatch, selectedFilters, spaceId]
   );
 
   const renderFilterGroup = useCallback(
     () =>
-      spaceHashtags.map((tag, index) =>
+      currenthashTags &&
+      currenthashTags.map((tag, index) =>
         isSpaceOwner ? (
           <Chip
             key={`${tag}_${index}`}
@@ -113,11 +119,11 @@ function MessagesFilters() {
         )
       ),
     [
+      currenthashTags,
       handleDeleteChip,
       handleSelectFilter,
       isSpaceOwner,
-      selectedFilters,
-      spaceHashtags
+      selectedFilters
     ]
   );
 

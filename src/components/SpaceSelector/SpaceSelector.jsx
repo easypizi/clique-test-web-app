@@ -4,25 +4,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 
 import { getSpace } from '../../store/actions/spaceActions';
+import { updateUserData } from '../../store/actions/userActions';
 
 function SpaceSelector() {
   const dispatch = useDispatch();
   const { userSpaces, currentSpace } = useSelector((state) => state.spaces);
+  const { currentUser } = useSelector((state) => state.currentUser);
   const storedLastChosenCommunity = store.session.get('last_opened_space');
-
-  // TODO: add default prechoosen community space
   const [choosenSpace, setChoosenSpace] = useState(
-    storedLastChosenCommunity ?? (userSpaces && userSpaces[0]?.space_id) ?? ''
+    storedLastChosenCommunity ??
+      currentUser?.user_last_chosen_space ??
+      (userSpaces && userSpaces[0]?.space_id) ??
+      ''
   );
   const handleChangeSpace = useCallback(
     (event) => {
-      setChoosenSpace(event.target.value);
-      dispatch(getSpace(event.target.value));
-      if (event.target.value !== '') {
-        store.session.set('last_opened_space', event.target.value);
+      const chosenSpace = event.target.value;
+      setChoosenSpace(chosenSpace);
+      dispatch(getSpace(chosenSpace));
+      if (chosenSpace !== '') {
+        store.session.set('last_opened_space', chosenSpace);
+      }
+
+      if (currentUser && chosenSpace !== '') {
+        const updateData = {
+          user_id: currentUser.user_id,
+          user_last_chosen_space: chosenSpace
+        };
+
+        dispatch(updateUserData(updateData));
       }
     },
-    [dispatch]
+    [currentUser, dispatch]
   );
 
   useEffect(() => {

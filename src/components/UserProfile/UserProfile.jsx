@@ -172,9 +172,9 @@ function UserProfile({
     isUserDataUpdated,
     isAuthorized,
     dispatch,
-    currentSpace.spaceId,
+    currentSpace,
     userId,
-    currentUser.user_bot_chat_id
+    currentUser
   ]);
 
   return (

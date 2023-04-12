@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { CircularProgress, Typography, Box } from '@mui/material';
@@ -11,12 +10,18 @@ import prepareMessages from './helpers/prepareMessages';
 import MessageCard from './elements/MessageCard';
 
 function MessageBoard() {
+  const filtersRef = useRef(null);
+
   const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
   const { currentUser } = useSelector((state) => state.currentUser);
   const { activeFilters } = useSelector((state) => state.messages);
 
-  const { spaceMessages, spaceOwner } = currentSpace;
+  const { spaceMessages, spaceOwner } = currentSpace ?? {};
   const { user_id: userId } = currentUser;
+
+  const [offsetHeight, setOffset] = useState(0);
+
+  const isLoading = useMemo(() => isSpacesLoading, [isSpacesLoading]);
 
   const preparedMessages = useMemo(
     () => prepareMessages(spaceMessages, spaceOwner === userId),
@@ -35,9 +40,16 @@ function MessageBoard() {
     );
   }, [activeFilters, preparedMessages]);
 
+  useLayoutEffect(() => {
+    if (filtersRef.current) {
+      const height = filtersRef.current.offsetHeight;
+      setOffset(height);
+    }
+  }, [currentSpace]);
+
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {isSpacesLoading ? (
+      {isLoading ? (
         <CircularProgress
           sx={{
             position: 'absolute',
@@ -47,12 +59,14 @@ function MessageBoard() {
         />
       ) : (
         <Box sx={{ height: '100%', paddingBottom: '10px' }}>
-          <MessagesFilters />
+          <div ref={filtersRef}>
+            <MessagesFilters />
+          </div>
           {spaceMessages && spaceMessages.length ? (
             <ScrollableContainer
               style={{
                 padding: '20px 2px 0 2px',
-                height: 'calc(100% - 40px)',
+                height: `calc(100% - ${offsetHeight + 5}px)`,
                 gap: '10px',
                 marginTop: '5px'
               }}

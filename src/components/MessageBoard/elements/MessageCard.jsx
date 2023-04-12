@@ -66,7 +66,7 @@ function MessageCard({
     }
 
     return result.reduce((acc, item, index) => {
-      if (hashtaggedFiltersSet.has(item)) {
+      if (hashtaggedFiltersSet.has(item.toLowerCase())) {
         return acc.concat(
           <span key={`${item}_${index}`} style={{ background: 'lightBlue' }}>
             {item}
@@ -97,7 +97,7 @@ function MessageCard({
           sx={{ width: 40, height: 40 }}
         />
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>
         <Typography variant="body1">{userName}</Typography>
         <Typography variant="body2">{preparedMessageText}</Typography>
       </Box>
