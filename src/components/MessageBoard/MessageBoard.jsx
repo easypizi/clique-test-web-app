@@ -65,7 +65,11 @@ function MessageBoard() {
                   />
                 ))}
 
-              {/* TODO: Add fake element */}
+              {filteredMessages && filteredMessages.length > 2 && (
+                <div
+                  style={{ width: '100%', height: '300px', flexShrink: 0 }}
+                />
+              )}
             </ScrollableContainer>
           ) : (
             <Typography

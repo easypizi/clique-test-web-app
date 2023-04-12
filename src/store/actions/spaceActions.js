@@ -1,10 +1,31 @@
+/* eslint-disable no-unused-vars */
 import {
   fetchSpacesStart,
   fetchSpaceSuccess,
   fetchUserSpacesSuccess,
-  fetchSpacesFailure
+  fetchSpacesFailure,
+  fetchSpaceUpdateStart,
+  fetchSpaceUpdateSuccess,
+  fetchSpaceUpdateFailure
 } from '../reducers/SpaceSlice';
-import { fetchSpace, fetchUserSpaces } from '../../api/spaceApi';
+import {
+  fetchSpace,
+  fetchUserSpaces,
+  fetchUpdateSpace
+} from '../../api/spaceApi';
+
+export const updateSpaceAction = (data) => async (dispatch) => {
+  dispatch(fetchSpaceUpdateStart());
+  try {
+    const updatedSpace = await fetchUpdateSpace(data);
+    if (updatedSpace.space_id) {
+      const space = await fetchSpace(updatedSpace.space_id);
+      dispatch(fetchSpaceUpdateSuccess({ spaceData: space }));
+    }
+  } catch (error) {
+    dispatch(fetchSpaceUpdateFailure(error.message));
+  }
+};
 
 export const getUserSpaces = (ids) => async (dispatch) => {
   dispatch(fetchSpacesStart());

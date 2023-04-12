@@ -2,9 +2,20 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Chip, Box } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Chip,
+  Box
+} from '@mui/material';
 
+import AddIcon from '@mui/icons-material/Add';
 import { setActiveFiltersAction } from '../../../store/actions/messagesActions';
+import { updateSpaceAction } from '../../../store/actions/spaceActions';
 import compareFilterArrays from '../helpers/compareFilters';
 
 function MessagesFilters() {
@@ -14,14 +25,40 @@ function MessagesFilters() {
   const { currentUser } = useSelector((state) => state.currentUser);
 
   const [selectedFilters, setSelectedFilters] = useState(activeFilters);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [newTag, setNewTag] = useState('');
 
-  const { spaceHashtags, spaceOwner } = currentSpace;
+  const { spaceHashtags, spaceOwner, spaceId } = currentSpace;
   const { user_id: userId } = currentUser;
 
   const isSpaceOwner = useMemo(
     () => spaceOwner === userId,
     [spaceOwner, userId]
   );
+
+  const handleModalClose = useCallback(() => {
+    setModalOpen(false);
+    setNewTag('');
+  }, []);
+
+  const handleModalOpen = useCallback(() => {
+    setModalOpen(true);
+  }, []);
+
+  const handleSettingNewTag = (event) => {
+    setNewTag(event.target.value);
+  };
+
+  const handleNewTagSend = useCallback(() => {
+    const tagsArray = [...spaceHashtags, newTag];
+    const updateData = {
+      space_id: spaceId,
+      space_message_hashtags: tagsArray
+    };
+    dispatch(updateSpaceAction(updateData));
+    setModalOpen(false);
+    setNewTag('');
+  }, [dispatch, newTag, spaceHashtags, spaceId]);
 
   const handleSelectFilter = useCallback(
     (filter) => {
@@ -34,9 +71,18 @@ function MessagesFilters() {
     [selectedFilters]
   );
 
-  const handleDeleteChip = useCallback(() => {
-    // TODO: Add function for deleting chip from the space
-  }, []);
+  const handleDeleteChip = useCallback(
+    (tag) => {
+      const tagsArray = spaceHashtags.filter((item) => item !== tag);
+      const updateData = {
+        space_id: spaceId,
+        space_message_hashtags: tagsArray
+      };
+
+      dispatch(updateSpaceAction(updateData));
+    },
+    [dispatch, spaceHashtags, spaceId]
+  );
 
   const renderFilterGroup = useCallback(
     () =>
@@ -75,9 +121,33 @@ function MessagesFilters() {
     ]
   );
 
-  // TODO: add control selector for space admin for adding new chips and deleting it
-
-  // TODO: until it less than 10 chips add fake chip for adding data for space owner/ Make portal element for adding new chip;
+  const renderModal = useCallback(
+    () => (
+      <Dialog open={isModalOpen} onClose={handleModalClose}>
+        <DialogTitle>Add new hashtag for parsing</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="new-tag-input-field"
+            label="New tag: "
+            fullWidth
+            value={newTag}
+            onChange={handleSettingNewTag}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleModalClose}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleNewTagSend}>
+            Send
+          </Button>
+        </DialogActions>
+      </Dialog>
+    ),
+    [handleModalClose, handleNewTagSend, isModalOpen, newTag]
+  );
 
   useEffect(() => {
     if (!compareFilterArrays(selectedFilters, activeFilters)) {
@@ -88,6 +158,16 @@ function MessagesFilters() {
   return (
     <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
       {renderFilterGroup()}
+      {isSpaceOwner && spaceHashtags.length < 10 ? (
+        <Chip
+          icon={<AddIcon />}
+          label="Add new hashtag"
+          variant="outlined"
+          size="small"
+          onClick={handleModalOpen}
+        />
+      ) : null}
+      {isSpaceOwner && renderModal()}
     </Box>
   );
 }

@@ -7,9 +7,23 @@ export const spaceSlice = createSlice({
     userSpaces: null,
     currentSpace: null,
     isSpacesLoading: false,
+    isSpaceUpdating: false,
     error: null
   },
   reducers: {
+    fetchSpaceUpdateStart: (state) => {
+      state.isSpaceUpdating = true;
+      state.error = null;
+    },
+    fetchSpaceUpdateSuccess: (state, { payload }) => {
+      state.currentSpace = payload.spaceData;
+      state.isSpaceUpdating = false;
+    },
+    fetchSpaceUpdateFailure: (state, { payload }) => {
+      state.isSpaceUpdating = false;
+      state.error = payload;
+    },
+
     fetchSpacesStart: (state) => {
       state.isSpacesLoading = true;
       state.error = null;
@@ -35,7 +49,10 @@ export const {
   fetchSpacesStart,
   fetchUserSpacesSuccess,
   fetchSpaceSuccess,
-  fetchSpacesFailure
+  fetchSpacesFailure,
+  fetchSpaceUpdateStart,
+  fetchSpaceUpdateSuccess,
+  fetchSpaceUpdateFailure
 } = spaceSlice.actions;
 
 export default spaceSlice.reducer;
