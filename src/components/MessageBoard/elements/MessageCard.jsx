@@ -1,21 +1,23 @@
-/* eslint-disable no-cond-assign */
-/* eslint-disable react/no-array-index-key */
-
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Typography, IconButton, Box } from '@mui/material';
+import { Typography, IconButton, Box, Avatar } from '@mui/material';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import { green, pink, blue, orange } from '@mui/material/colors';
 import LazyAvatar from '../../LazyAvatar/LazyAvatar';
 import {
   deleteMessageAction,
   updateMessageAction
 } from '../../../store/actions/messagesActions';
-import { getSpace } from '../../../store/actions/spaceActions';
 
+const color = () => {
+  const values = [green, pink, blue, orange];
+  const randomIndex = Math.floor(Math.random() * values.length);
+  return values[randomIndex];
+};
 function MessageCard({
   canBeDeleted,
   date,
@@ -29,6 +31,20 @@ function MessageCard({
   spaces
 }) {
   const dispatch = useDispatch();
+
+  const letters = useMemo(() => {
+    const groupNameArray = userName && userName.length && userName.split(' ');
+
+    const result = groupNameArray.map((part, index) => {
+      if (index <= 1) {
+        return part[0].toUpperCase();
+      }
+
+      return '';
+    });
+
+    return result.join('');
+  }, [userName]);
 
   const timestampToDateTime = useCallback(
     (timestamp, timezone) =>
@@ -52,20 +68,19 @@ function MessageCard({
       );
 
       if (!filteredSpacesForUpdate.length) {
-        deleteMessageAction(groupId, id);
-      } else {
+        if (currentSpace?.spaceId) {
+          dispatch(deleteMessageAction(groupId, id, currentSpace?.spaceId));
+        }
+      } else if (currentSpace?.spaceId) {
         const updatedData = {
           message_id: id,
           message_group_id: groupId,
           message_space: filteredSpacesForUpdate
         };
-        updateMessageAction(updatedData);
-      }
-      if (currentSpace?.spaceId) {
-        dispatch(getSpace(currentSpace?.spaceId));
+        dispatch(updateMessageAction(updatedData, currentSpace?.spaceId));
       }
     }
-  }, [currentSpace, spaces, groupId, id, dispatch]);
+  }, [currentSpace, spaces, dispatch, groupId, id]);
 
   const preparedMessageText = useMemo(() => {
     const hashtaggedFiltersSet = new Set(
@@ -76,6 +91,7 @@ function MessageCard({
     let lastIndex = 0;
     const result = [];
 
+    // eslint-disable-next-line no-cond-assign
     while ((match = regex.exec(text))) {
       const { index } = match;
       const hashtag = match[0];
@@ -120,11 +136,23 @@ function MessageCard({
       }}
     >
       <Box sx={{ marginRight: '10px' }}>
-        <LazyAvatar
-          src={userPhoto}
-          alt="MessageUserPhoto"
-          sx={{ width: 40, height: 40 }}
-        />
+        {userPhoto ? (
+          <LazyAvatar
+            src={userPhoto}
+            alt="MessageUserPhoto"
+            sx={{ width: 40, height: 40 }}
+          />
+        ) : (
+          <Avatar
+            sx={{
+              background: color()[500],
+              width: 40,
+              height: 40
+            }}
+          >
+            {letters}
+          </Avatar>
+        )}
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>
         <Typography variant="body1">{userName}</Typography>

@@ -29,6 +29,8 @@
     "comma-dangle": "off",
     "function-paren-newline": "off",
     "operator-linebreak": "off",
-    "no-confusing-arrow": "off"
+    "no-confusing-arrow": "off",
+    "react/no-array-index-key": "off",
+    "no-plusplus": "off"
   }
 }

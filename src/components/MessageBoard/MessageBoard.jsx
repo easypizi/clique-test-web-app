@@ -17,7 +17,7 @@ function MessageBoard() {
   const { activeFilters } = useSelector((state) => state.messages);
 
   const { spaceMessages, spaceOwner } = currentSpace ?? {};
-  const { user_id: userId } = currentUser;
+  const { user_id: userId } = currentUser ?? {};
 
   const [offsetHeight, setOffset] = useState(0);
 

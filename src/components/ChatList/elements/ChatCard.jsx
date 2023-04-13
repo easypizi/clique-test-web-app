@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
@@ -20,9 +20,19 @@ const color = () => {
 };
 
 function ChatCard({ groupName, groupLink, groupType = 'chat' }) {
-  const letters = `${groupName.split(' ')[0][0].toUpperCase()}${groupName
-    .split(' ')[1][0]
-    .toUpperCase()}`;
+  const letters = useMemo(() => {
+    const groupNameArray = groupName && groupName.length && groupName.split(' ');
+
+    const result = groupNameArray.map((part, index) => {
+      if (index <= 1) {
+        return part[0].toUpperCase();
+      }
+
+      return '';
+    });
+
+    return result.join('');
+  }, [groupName]);
 
   return (
     <ChatItem to={groupLink}>
