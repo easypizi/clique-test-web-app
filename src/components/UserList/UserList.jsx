@@ -109,11 +109,13 @@ function UserList() {
             }}
           >
             <Search onSearch={setSearchTerm} />
-            <Checkbox
-              onChange={handleToggleVisibility}
-              icon={<VisibilityIcon />}
-              checkedIcon={<VisibilityOffIcon />}
-            />
+            {isAdmin && (
+              <Checkbox
+                onChange={handleToggleVisibility}
+                icon={<VisibilityIcon />}
+                checkedIcon={<VisibilityOffIcon />}
+              />
+            )}
           </Box>
           {filteredUsers && filteredUsers.length ? (
             <ScrollableContainer
