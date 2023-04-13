@@ -7,12 +7,22 @@ import prepareUserData from './helpers/helpers';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
 function UserList() {
-  const [searchTerm, setSearchTerm] = useState('');
   const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
+  const { currentUser } = useSelector((state) => state.currentUser);
+  const { user_id: currentUserId } = currentUser ?? {};
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const canBeDeleted = useMemo(
+    () => currentUserId === currentSpace?.spaceOwner,
+    [currentSpace?.spaceOwner, currentUserId]
+  );
 
   const users = prepareUserData(
     currentSpace?.spaceUsers,
-    currentSpace?.spaceOwner
+    currentSpace?.spaceOwner,
+    canBeDeleted,
+    currentSpace?.spaceId
   );
 
   const filteredUsers = useMemo(() => {

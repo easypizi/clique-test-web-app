@@ -1,4 +1,9 @@
-export default function prepareUserData(userData, spaceOwner) {
+export default function prepareUserData(
+  userData,
+  spaceOwner,
+  canBeDeleted,
+  spaceId
+) {
   if (!userData) {
     return null;
   }
@@ -13,6 +18,8 @@ export default function prepareUserData(userData, spaceOwner) {
     isVisible: user.isVisible,
     isSpaceOwner: user.userId === spaceOwner,
     userBadges: user.userBadges,
-    userLinks: user.userLinks
+    userLinks: user.userLinks,
+    canBeDeleted,
+    spaceId
   }));
 }

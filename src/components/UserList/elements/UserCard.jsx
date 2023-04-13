@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -8,12 +9,14 @@ import {
   Divider,
   Stack
 } from '@mui/material';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import LinkIcon from '@mui/icons-material/Link';
 import styled from '@emotion/styled';
+import { useDispatch } from 'react-redux';
 import LazyAvatar from '../../LazyAvatar/LazyAvatar';
 
 const UserDataDescription = styled(Typography)`
@@ -37,8 +40,12 @@ function UserCard({
   userBadges,
   userLinks,
   isVisible,
-  isSpaceOwner
+  isSpaceOwner,
+  canBeDeleted,
+  spaceId
 }) {
+  const dispatch = useDispatch();
+
   const userCredentials = useMemo(
     () => `${firstName ?? ''} ${lastName ?? ''}`,
     [firstName, lastName]
@@ -65,6 +72,17 @@ function UserCard({
         return <LinkIcon />;
     }
   }, []);
+
+  const handleHideUser = useCallback(() => {
+    console.log(`hide user from ${spaceId}`);
+
+    if (spaceId) {
+      // const updateData = {
+      //   user_id:
+      // }
+      // dispatch()
+    }
+  }, [spaceId]);
 
   return (
     <Box
@@ -118,7 +136,11 @@ function UserCard({
           </>
         )}
         <Divider sx={{ marginTop: '10px', marginBottom: '10px' }} />
-        <Stack direction="row" spacing={2}>
+        <Stack
+          sx={{ width: '100%', position: 'relative' }}
+          direction="row"
+          spacing={2}
+        >
           <IconButton
             color="primary"
             href={`https://t.me/${telegramUsername}`}
@@ -138,6 +160,15 @@ function UserCard({
                 {getIconForLink(link)}
               </IconButton>
             ))}
+          {canBeDeleted && !isSpaceOwner && (
+            <IconButton
+              sx={{ position: 'absolute', right: 0 }}
+              color="primary"
+              onClick={handleHideUser}
+            >
+              <VisibilityOffIcon />
+            </IconButton>
+          )}
         </Stack>
       </Box>
     </Box>
@@ -150,8 +181,10 @@ UserCard.propTypes = {
   lastName: PropTypes.string,
   telegramUsername: PropTypes.string,
   description: PropTypes.string,
+  spaceId: PropTypes.string,
   isVisible: PropTypes.bool,
   isSpaceOwner: PropTypes.bool,
+  canBeDeleted: PropTypes.bool,
   userBadges: PropTypes.arrayOf(PropTypes.string),
   userLinks: PropTypes.arrayOf(PropTypes.string)
 };
