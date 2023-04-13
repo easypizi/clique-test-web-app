@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import {
   Typography,
   IconButton,
@@ -9,6 +10,7 @@ import {
   Divider,
   Stack
 } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -16,8 +18,9 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import LinkIcon from '@mui/icons-material/Link';
 import styled from '@emotion/styled';
-import { useDispatch } from 'react-redux';
 import LazyAvatar from '../../LazyAvatar/LazyAvatar';
+import { updateUserData } from '../../../store/actions/userActions';
+import { getSpace } from '../../../store/actions/spaceActions';
 
 const UserDataDescription = styled(Typography)`
   color: #5f6c7b;
@@ -32,6 +35,7 @@ const UserDataDescription = styled(Typography)`
 
 const emptyDescription = 'User doesnt add any information about himself in bio';
 function UserCard({
+  id,
   avatarSrc,
   firstName,
   lastName,
@@ -42,6 +46,8 @@ function UserCard({
   isVisible,
   isSpaceOwner,
   canBeDeleted,
+  userHiddenSpaces,
+  isHiddenByAdmin,
   spaceId
 }) {
   const dispatch = useDispatch();
@@ -74,15 +80,38 @@ function UserCard({
   }, []);
 
   const handleHideUser = useCallback(() => {
-    console.log(`hide user from ${spaceId}`);
-
     if (spaceId) {
-      // const updateData = {
-      //   user_id:
-      // }
-      // dispatch()
+      const updatedArray = new Set(userHiddenSpaces);
+      updatedArray.add(spaceId);
+
+      const updateData = {
+        user_id: id,
+        user_hidden_spaces: [...updatedArray],
+        user_last_chosen_space: ''
+      };
+
+      dispatch(updateUserData(updateData)).then(() => {
+        dispatch(getSpace(spaceId));
+      });
     }
-  }, [spaceId]);
+  }, [dispatch, id, spaceId, userHiddenSpaces]);
+
+  const handleUnhideUser = useCallback(() => {
+    if (spaceId) {
+      const updatedHiddenSpace = userHiddenSpaces.filter(
+        (space) => space !== spaceId
+      );
+
+      const updateData = {
+        user_id: id,
+        user_hidden_spaces: updatedHiddenSpace
+      };
+
+      dispatch(updateUserData(updateData)).then(() => {
+        dispatch(getSpace(spaceId));
+      });
+    }
+  }, [dispatch, id, spaceId, userHiddenSpaces]);
 
   return (
     <Box
@@ -164,9 +193,9 @@ function UserCard({
             <IconButton
               sx={{ position: 'absolute', right: 0 }}
               color="primary"
-              onClick={handleHideUser}
+              onClick={isHiddenByAdmin ? handleUnhideUser : handleHideUser}
             >
-              <VisibilityOffIcon />
+              {isHiddenByAdmin ? <VisibilityIcon /> : <VisibilityOffIcon />}
             </IconButton>
           )}
         </Stack>
@@ -176,15 +205,18 @@ function UserCard({
 }
 
 UserCard.propTypes = {
+  id: PropTypes.string,
   avatarSrc: PropTypes.string,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   telegramUsername: PropTypes.string,
   description: PropTypes.string,
   spaceId: PropTypes.string,
+  isHiddenByAdmin: PropTypes.bool,
   isVisible: PropTypes.bool,
   isSpaceOwner: PropTypes.bool,
   canBeDeleted: PropTypes.bool,
+  userHiddenSpaces: PropTypes.arrayOf(PropTypes.string),
   userBadges: PropTypes.arrayOf(PropTypes.string),
   userLinks: PropTypes.arrayOf(PropTypes.string)
 };

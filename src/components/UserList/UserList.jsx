@@ -1,6 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CircularProgress, Typography, Box } from '@mui/material';
+import { CircularProgress, Typography, Box, Checkbox } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Search from '../Search/Search';
 import UserCard from './elements/UserCard';
 import prepareUserData from './helpers/helpers';
@@ -9,20 +11,50 @@ import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 function UserList() {
   const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
   const { currentUser } = useSelector((state) => state.currentUser);
+  const [isVisibleUsers, setUsersVisibility] = useState(true);
   const { user_id: currentUserId } = currentUser ?? {};
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const canBeDeleted = useMemo(
+  const isAdmin = useMemo(
     () => currentUserId === currentSpace?.spaceOwner,
     [currentSpace?.spaceOwner, currentUserId]
   );
 
-  const users = prepareUserData(
-    currentSpace?.spaceUsers,
-    currentSpace?.spaceOwner,
-    canBeDeleted,
-    currentSpace?.spaceId
+  const hiddenUsers = useMemo(() => {
+    if (!currentSpace || !currentSpace.spaceUsers) {
+      return [];
+    }
+    return currentSpace.spaceUsers.filter((user) =>
+      user.userHiddenSpaces.some((space) => space === currentSpace?.spaceId)
+    );
+  }, [currentSpace]);
+
+  const visibleUsers = useMemo(() => {
+    if (!currentSpace || !currentSpace.spaceUsers) {
+      return [];
+    }
+
+    return currentSpace.spaceUsers.filter((user) => {
+      if (!user.userHiddenSpaces) {
+        return true;
+      }
+
+      return user.userHiddenSpaces.every(
+        (space) => space !== currentSpace.spaceId
+      );
+    });
+  }, [currentSpace]);
+
+  const users = useMemo(
+    () =>
+      prepareUserData(
+        isVisibleUsers ? visibleUsers : hiddenUsers,
+        currentSpace?.spaceOwner,
+        isAdmin,
+        currentSpace?.spaceId
+      ),
+    [currentSpace, hiddenUsers, isAdmin, isVisibleUsers, visibleUsers]
   );
 
   const filteredUsers = useMemo(() => {
@@ -52,6 +84,10 @@ function UserList() {
     });
   }, [searchTerm, users]);
 
+  const handleToggleVisibility = useCallback(() => {
+    setUsersVisibility((value) => !value);
+  }, []);
+
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       {isSpacesLoading ? (
@@ -64,7 +100,21 @@ function UserList() {
         />
       ) : (
         <Box sx={{ height: '100%', paddingBottom: '10px' }}>
-          <Search onSearch={setSearchTerm} />
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}
+          >
+            <Search onSearch={setSearchTerm} />
+            <Checkbox
+              onChange={handleToggleVisibility}
+              icon={<VisibilityIcon />}
+              checkedIcon={<VisibilityOffIcon />}
+            />
+          </Box>
           {filteredUsers && filteredUsers.length ? (
             <ScrollableContainer
               style={{
@@ -88,7 +138,7 @@ function UserList() {
               variant="body1"
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
-              No users has been found. Please try to choose other space
+              No users has been found
             </Typography>
           )}
         </Box>
