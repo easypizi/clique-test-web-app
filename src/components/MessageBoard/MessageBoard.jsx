@@ -13,7 +13,7 @@ function MessageBoard() {
   const filtersRef = useRef(null);
 
   const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
-  const { currentUser } = useSelector((state) => state.currentUser);
+  const { currentUser } = useSelector((state) => state.user);
   const { activeFilters } = useSelector((state) => state.messages);
 
   const { spaceMessages, spaceOwner } = currentSpace ?? {};

@@ -9,7 +9,7 @@ import { updateUserData } from '../../store/actions/userActions';
 function SpaceSelector() {
   const dispatch = useDispatch();
   const { userSpaces, currentSpace } = useSelector((state) => state.spaces);
-  const { currentUser } = useSelector((state) => state.currentUser);
+  const { currentUser } = useSelector((state) => state.user);
   const storedLastChosenCommunity = store.session.get('last_opened_space');
   const [choosenSpace, setChoosenSpace] = useState(
     storedLastChosenCommunity ??

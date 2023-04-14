@@ -21,7 +21,7 @@ function ContentPage() {
   const privateId = queryParams.get('private_id') ?? storedPrivateId;
 
   const { currentUser, isUserDataLoading, isAuthorized } = useSelector(
-    (state) => state.currentUser
+    (state) => state.user
   );
   const { userSpaces, isSpacesLoading } = useSelector((state) => state.spaces);
 

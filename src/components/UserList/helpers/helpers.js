@@ -9,7 +9,7 @@ export default function prepareUserData(
   }
 
   return userData.map((user) => ({
-    isHiddenByAdmin: user?.userHiddenSpaces.some((space) => space === spaceId),
+    isHiddenByAdmin: user?.userHiddenSpaces?.some((space) => space === spaceId),
     id: user.userId,
     avatarSrc: user.userImage ?? '',
     firstName: user.userName,

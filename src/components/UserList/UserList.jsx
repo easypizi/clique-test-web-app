@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CircularProgress, Typography, Box, Checkbox } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -10,7 +10,7 @@ import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
 function UserList() {
   const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
-  const { currentUser } = useSelector((state) => state.currentUser);
+  const { currentUser } = useSelector((state) => state.user);
   const [isVisibleUsers, setUsersVisibility] = useState(true);
   const { user_id: currentUserId } = currentUser ?? {};
 
@@ -31,7 +31,7 @@ function UserList() {
   }, [currentSpace]);
 
   const visibleUsers = useMemo(() => {
-    if (!currentSpace || !currentSpace.spaceUsers) {
+    if (!currentSpace || !currentSpace?.spaceUsers?.length) {
       return [];
     }
 
@@ -87,6 +87,10 @@ function UserList() {
   const handleToggleVisibility = useCallback(() => {
     setUsersVisibility((value) => !value);
   }, []);
+
+  useEffect(() => {
+    setUsersVisibility(true);
+  }, [isSpacesLoading]);
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>

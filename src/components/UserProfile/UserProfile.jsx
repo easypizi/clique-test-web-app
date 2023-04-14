@@ -36,7 +36,7 @@ function UserProfile({
 }) {
   const dispatch = useDispatch();
   const { isUserDataUpdating, isUserDataUpdated, error, currentUser } =
-    useSelector((state) => state.currentUser);
+    useSelector((state) => state.user);
   const { currentSpace } = useSelector((state) => state.spaces);
 
   const [updateButtonColor, setUpdateButtonColor] = useState('primary');
@@ -50,6 +50,8 @@ function UserProfile({
   const [links, setLinks] = useState(userLinks ?? []);
   const [isVisible, setIsVisible] = useState(userVisibility ?? true);
   const [badges, setNewBadges] = useState(userBadges ?? []);
+
+  const [isFirstRender, setFirstRender] = useState(true);
 
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
@@ -150,6 +152,11 @@ function UserProfile({
   ]);
 
   useEffect(() => {
+    if (isFirstRender) {
+      setFirstRender(false);
+      return;
+    }
+
     if (isUserDataUpdated) {
       setUpdateButtonColor('success');
       setUpdateButtonText('User data Updated');
@@ -174,7 +181,8 @@ function UserProfile({
     dispatch,
     currentSpace,
     userId,
-    currentUser
+    currentUser,
+    isFirstRender
   ]);
 
   return (
