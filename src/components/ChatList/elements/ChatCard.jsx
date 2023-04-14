@@ -136,9 +136,20 @@ function ChatCard({
       </ChatItem>
       {canBeDeleted && (
         <IconButton
-          sx={{ position: 'absolute', right: 0, bottom: 0 }}
+          sx={{
+            border: '1px solid black',
+            width: 60,
+            height: 60,
+            position: 'absolute',
+            right: 0,
+            bottom: -10
+          }}
           color="primary"
-          onClick={isHiddenByAdmin ? handleUnhideGroup : handleHideGroup}
+          onClick={
+            isHiddenByAdmin
+              ? (e) => handleUnhideGroup(e)
+              : (e) => handleHideGroup(e)
+          }
         >
           {isHiddenByAdmin ? <VisibilityIcon /> : <VisibilityOffIcon />}
         </IconButton>

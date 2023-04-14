@@ -16,6 +16,8 @@ function ChatList() {
   const [isVisibleGroups, setGroupsVisibility] = useState(true);
   const groups = currentSpace?.spaceGroups;
 
+  console.log(isVisibleGroups);
+
   const isAdmin = useMemo(
     () => currentUserId === currentSpace?.spaceOwner,
     [currentSpace?.spaceOwner, currentUserId]
@@ -48,8 +50,14 @@ function ChatList() {
     });
   }, [currentSpace, groups]);
 
+  console.log('===============');
+  console.log(visibleGroups);
+
   const formattedData = useMemo(() => {
     const dataGroups = isVisibleGroups ? visibleGroups : hiddenGroups;
+
+    console.log(dataGroups);
+    console.log('===============');
     return prepareGroupData(dataGroups, isAdmin, currentSpace?.spaceId);
   }, [
     currentSpace?.spaceId,
