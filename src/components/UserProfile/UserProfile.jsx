@@ -51,8 +51,6 @@ function UserProfile({
   const [isVisible, setIsVisible] = useState(userVisibility ?? true);
   const [badges, setNewBadges] = useState(userBadges ?? []);
 
-  const [isFirstRender, setFirstRender] = useState(true);
-
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
   }, []);
@@ -152,37 +150,35 @@ function UserProfile({
   ]);
 
   useEffect(() => {
-    if (isFirstRender) {
-      setFirstRender(false);
-      return;
-    }
-
     if (isUserDataUpdated) {
       setUpdateButtonColor('success');
       setUpdateButtonText('User data Updated');
       dispatch(resetUserDataUpdate());
       dispatch(getSpace(currentSpace.spaceId));
       dispatch(getUser(userId, currentUser.user_bot_chat_id));
+      setTimeout(() => {
+        setUpdateButtonDisabled(false);
+        setUpdateButtonColor('primary');
+        setUpdateButtonText('Update');
+      }, 1500);
     } else if (error) {
       setUpdateButtonColor('error');
       setUpdateButtonText('Update Failure!');
       dispatch(resetUserDataUpdate());
+      setTimeout(() => {
+        setUpdateButtonDisabled(false);
+        setUpdateButtonColor('primary');
+        setUpdateButtonText('Update');
+      }, 1500);
     }
-
-    setTimeout(() => {
-      setUpdateButtonDisabled(false);
-      setUpdateButtonColor('primary');
-      setUpdateButtonText('Update');
-    }, 3000);
   }, [
+    currentSpace.spaceId,
+    currentUser.user_bot_chat_id,
+    dispatch,
     error,
     isUserDataUpdated,
-    isAuthorized,
-    dispatch,
-    currentSpace,
-    userId,
-    currentUser,
-    isFirstRender
+    isUserDataUpdating,
+    userId
   ]);
 
   return (
