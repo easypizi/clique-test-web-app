@@ -17,45 +17,34 @@ function Header() {
   const {
     isUserDataLoading,
     isUserDataUpdating,
-    isUserDataUpdated,
     error: userApiError
   } = useSelector((state) => state.user);
 
-  const {
-    isGroupDataUpdating,
-    isGroupDataUpdated,
-    error: groupApiError
-  } = useSelector((state) => state.groups);
+  const { isGroupDataUpdating, error: groupApiError } = useSelector(
+    (state) => state.groups
+  );
 
   const statusMessages = useMemo(() => {
     const messages = [];
 
-    if (isSpacesLoading) {
-      messages.push('Spaces loading...');
-    }
-
     if (isSpaceUpdating) {
       messages.push('Spaces updating...');
-    }
-
-    if (isUserDataLoading) {
-      messages.push('User data loading...');
     }
 
     if (isUserDataUpdating) {
       messages.push('User data updating...');
     }
 
-    if (isUserDataUpdated) {
-      messages.push('User data updated!');
-    }
-
     if (isGroupDataUpdating) {
       messages.push('Groups data updating...');
     }
 
-    if (isGroupDataUpdated) {
-      messages.push('Groups data updated!');
+    if (isSpacesLoading) {
+      messages.push('Spaces loading...');
+    }
+
+    if (isUserDataLoading) {
+      messages.push('User data loading...');
     }
 
     if (spaceApiError) {
@@ -73,12 +62,10 @@ function Header() {
     return messages;
   }, [
     groupApiError,
-    isGroupDataUpdated,
     isGroupDataUpdating,
     isSpaceUpdating,
     isSpacesLoading,
     isUserDataLoading,
-    isUserDataUpdated,
     isUserDataUpdating,
     spaceApiError,
     userApiError
