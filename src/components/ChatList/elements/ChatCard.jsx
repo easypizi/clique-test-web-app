@@ -19,8 +19,7 @@ const ChatItem = styled(Link)`
   color: inherit;
   flex-grow: 1;
   box-shadow: inset 0px 1px 0 0px rgb(0, 0, 0, 0.1),
-    inset 0px -1px 0 0px rgb(0, 0, 0, 0.1),
-    inset 1px 0px 0 0px rgb(0, 0, 0, 0.1);
+    inset 0px -1px 0 0px rgb(0, 0, 0, 0.1);
 `;
 
 function ChatCard({
@@ -31,7 +30,8 @@ function ChatCard({
   isHiddenByAdmin,
   groupHiddenSpaces,
   canBeDeleted,
-  spaceId
+  spaceId,
+  onDelete
 }) {
   const [isButtonLocked, setIsButtonLocked] = useState(false);
 
@@ -54,6 +54,7 @@ function ChatCard({
   const handleHideGroup = useCallback(
     (e) => {
       e.stopPropagation();
+      onDelete();
       if (isButtonLocked) {
         return;
       }
@@ -73,12 +74,13 @@ function ChatCard({
         });
       }
     },
-    [isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
+    [onDelete, isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
   );
 
   const handleUnhideGroup = useCallback(
     (e) => {
       e.stopPropagation();
+      onDelete();
       if (isButtonLocked) {
         return;
       }
@@ -99,7 +101,7 @@ function ChatCard({
         });
       }
     },
-    [isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
+    [onDelete, isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
   );
 
   const color = useCallback(() => {
@@ -109,7 +111,14 @@ function ChatCard({
   }, []);
 
   return (
-    <Box sx={{ position: 'relative', display: 'flex', width: '100%' }}>
+    <Box
+      sx={{
+        position: 'relative',
+        display: 'flex',
+        width: '100%',
+        alignItems: 'center'
+      }}
+    >
       <ChatItem to={groupLink}>
         <Avatar
           sx={{
@@ -137,12 +146,10 @@ function ChatCard({
       {canBeDeleted && (
         <IconButton
           sx={{
-            border: '1px solid black',
-            width: 60,
-            height: 60,
-            position: 'absolute',
-            right: 0,
-            bottom: -10
+            width: 40,
+            height: 40,
+            marginLeft: '10px',
+            flexShrink: 0
           }}
           color="primary"
           onClick={
@@ -166,7 +173,8 @@ ChatCard.propTypes = {
   link: PropTypes.string,
   groupHiddenSpaces: PropTypes.arrayOf(PropTypes.string),
   canBeDeleted: PropTypes.bool,
-  spaceId: PropTypes.string
+  spaceId: PropTypes.string,
+  onDelete: PropTypes.func
 };
 
 export default ChatCard;

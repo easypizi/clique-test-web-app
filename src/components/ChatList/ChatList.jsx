@@ -14,9 +14,13 @@ function ChatList() {
   const { currentUser } = useSelector((state) => state.user);
   const { user_id: currentUserId } = currentUser ?? {};
   const [isVisibleGroups, setGroupsVisibility] = useState(true);
+  const [isVisibilityChanged, setIsVisibilityChanged] = useState(false);
   const groups = currentSpace?.spaceGroups;
 
-  console.log(isVisibleGroups);
+  const isLoading = useMemo(
+    () => isSpacesLoading || isVisibilityChanged,
+    [isSpacesLoading, isVisibilityChanged]
+  );
 
   const isAdmin = useMemo(
     () => currentUserId === currentSpace?.spaceOwner,
@@ -25,6 +29,10 @@ function ChatList() {
 
   const handleToggleVisibility = useCallback(() => {
     setGroupsVisibility((value) => !value);
+  }, []);
+
+  const onDeleteLoadingStart = useCallback(() => {
+    setIsVisibilityChanged(true);
   }, []);
 
   const hiddenGroups = useMemo(() => {
@@ -50,14 +58,9 @@ function ChatList() {
     });
   }, [currentSpace, groups]);
 
-  console.log('===============');
-  console.log(visibleGroups);
-
   const formattedData = useMemo(() => {
     const dataGroups = isVisibleGroups ? visibleGroups : hiddenGroups;
 
-    console.log(dataGroups);
-    console.log('===============');
     return prepareGroupData(dataGroups, isAdmin, currentSpace?.spaceId);
   }, [
     currentSpace?.spaceId,
@@ -78,11 +81,14 @@ function ChatList() {
 
   useEffect(() => {
     setGroupsVisibility(true);
+    return () => {
+      setIsVisibilityChanged(false);
+    };
   }, [isSpacesLoading]);
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {isSpacesLoading ? (
+      {isLoading ? (
         <CircularProgress
           sx={{
             position: 'absolute',
@@ -124,7 +130,11 @@ function ChatList() {
               }}
             >
               {filteredGroups.map((group) => (
-                <ChatCard key={group.id} {...group} />
+                <ChatCard
+                  key={group.id}
+                  {...group}
+                  onDelete={onDeleteLoadingStart}
+                />
               ))}
               {filteredGroups && filteredGroups.length > 5 && (
                 <div
