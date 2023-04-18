@@ -81,6 +81,7 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url }) {
           const fileUrl = URL.createObjectURL(blob);
           const downloadLink = document.createElement('a');
           downloadLink.href = fileUrl;
+          downloadLink.target = '_blank';
           downloadLink.download = name;
           document.body.appendChild(downloadLink);
           downloadLink.click();
@@ -144,7 +145,7 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url }) {
           alignSelf: 'stretch',
           justifyContent: 'center',
           gap: '10px',
-          borderLeft: '0.5px dashed lightgray',
+          borderLeft: '1px dashed lightgray',
           padding: '0 10px',
           flexShrink: '0'
         }}
