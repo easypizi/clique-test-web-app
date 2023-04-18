@@ -25,7 +25,11 @@ function MessagesFilters() {
   const [selectedFilters, setSelectedFilters] = useState(activeFilters);
   const [isModalOpen, setModalOpen] = useState(false);
   const [newTag, setNewTag] = useState('');
-  const { spaceHashtags, spaceOwner, spaceId } = currentSpace ?? {};
+  const { spaceHashtags, spaceOwner, spaceId } = currentSpace ?? {
+    spaceHashtags: [],
+    spaceOwner: null,
+    spaceId: null
+  };
   const [currenthashTags, setCurrentHashtags] = useState(spaceHashtags);
 
   const { user_id: userId } = currentUser;

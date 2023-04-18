@@ -7,19 +7,19 @@ import { useSelector } from 'react-redux';
 import TagIcon from '@mui/icons-material/Tag';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import GroupIcon from '@mui/icons-material/Group';
+import DescriptionIcon from '@mui/icons-material/Description';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TabPanel from './elements/TabPanel';
 import UserList from '../UserList/UserList';
 import UserProfile from '../UserProfile/UserProfile';
 import ChatList from '../ChatList/ChatList';
+import FileList from '../FileList/FileList';
 import MessageBoard from '../MessageBoard/MessageBoard';
 
 // TODO: TINDER
 // import ControlPointIcon from '@mui/icons-material/ControlPoint';
 // TODO: Calendar
 // import EventIcon from '@mui/icons-material/Event';
-// TODO: Files
-// import DescriptionIcon from '@mui/icons-material/Description';
 
 function TabNavigation({ user }) {
   const { isSpacesLoading } = useSelector((state) => state.spaces);
@@ -74,6 +74,11 @@ function TabNavigation({ user }) {
           disabled={isSpacesLoading}
           icon={<TagIcon />}
         />
+        <Tab
+          sx={{ minWidth: 'unset' }}
+          disabled={isSpacesLoading}
+          icon={<DescriptionIcon />}
+        />
       </Tabs>
       <TabPanel value={value} index={0}>
         <ChatList />
@@ -86,6 +91,9 @@ function TabNavigation({ user }) {
       </TabPanel>
       <TabPanel value={value} index={3}>
         <MessageBoard />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <FileList />
       </TabPanel>
     </Box>
   );

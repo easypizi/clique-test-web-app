@@ -14,6 +14,10 @@ function Header() {
     error: spaceApiError
   } = useSelector((state) => state.spaces);
 
+  const { isProcessingFile, isUploadingFile } = useSelector(
+    (state) => state.files
+  );
+
   const {
     isUserDataLoading,
     isUserDataUpdating,
@@ -26,6 +30,14 @@ function Header() {
 
   const statusMessages = useMemo(() => {
     const messages = [];
+
+    if (isProcessingFile) {
+      messages.push('File processing...');
+    }
+
+    if (isUploadingFile) {
+      messages.push('File uploading...');
+    }
 
     if (isSpaceUpdating) {
       messages.push('Spaces updating...');
@@ -63,8 +75,10 @@ function Header() {
   }, [
     groupApiError,
     isGroupDataUpdating,
+    isProcessingFile,
     isSpaceUpdating,
     isSpacesLoading,
+    isUploadingFile,
     isUserDataLoading,
     isUserDataUpdating,
     spaceApiError,

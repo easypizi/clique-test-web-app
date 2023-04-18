@@ -4,15 +4,16 @@ import { Typography, CircularProgress, Box, Checkbox } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
-import ChatCard from './elements/ChatCard';
+
 import Search from '../Search/Search';
-import prepareGroupData from './helpers';
+import ChatCard from './elements/ChatCard';
+import prepareGroupData from './helpers/prepareGroupData';
 
 function ChatList() {
   const [searchTerm, setSearchTerm] = useState('');
   const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
   const { currentUser } = useSelector((state) => state.user);
-  const { user_id: currentUserId } = currentUser ?? {};
+  const { user_id: currentUserId } = currentUser ?? { user_id: null };
   const [isVisibleGroups, setGroupsVisibility] = useState(true);
   const [isVisibilityChanged, setIsVisibilityChanged] = useState(false);
   const groups = currentSpace?.spaceGroups;
