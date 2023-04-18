@@ -2,6 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
+import { saveAs } from 'file-saver';
 
 import { Typography, Avatar, Box, IconButton } from '@mui/material';
 
@@ -68,25 +69,19 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url }) {
   }, [type]);
 
   const handleDeleteFile = useCallback(() => {
+    // TODO: update with file delete api method
     // eslint-disable-next-line no-console
     console.log(`delete: ${id}/${name}`);
   }, [id, name]);
 
+  // TODO: update working download solution for mobile method
   const handleDownloadClick = useCallback(() => {
     dispatch(startProcessingAction());
     try {
       fetch(url)
         .then((response) => response.blob())
         .then((blob) => {
-          const fileUrl = URL.createObjectURL(blob);
-          const downloadLink = document.createElement('a');
-          downloadLink.href = fileUrl;
-          downloadLink.target = '_blank';
-          downloadLink.download = name;
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          document.body.removeChild(downloadLink);
-          URL.revokeObjectURL(fileUrl);
+          saveAs(blob, name);
           dispatch(successProcessingAction());
         });
     } catch (error) {

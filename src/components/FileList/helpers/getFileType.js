@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const getFileType = (extension) => {
   const typesByExtension = {
-    presentation: ['pptx', 'ppt', 'key', 'bin'],
+    presentation: ['pptx', 'ppt', 'key'],
     pdf: ['pdf'],
     document: ['docx', 'doc', 'pages', 'txt'],
     audio: ['mp3', 'wav', 'ogg', 'wma', 'aac', 'm4a', 'flac', 'mpga'],
