@@ -1,10 +1,12 @@
 import {
   fetchFileProcessingStart,
   fetchFileProcessingSuccess,
-  fetchFileProcessingFailure
-  //   fetchFileUploadingStart,
-  //   fetchFileUploadingSuccess,
-  //   fetchFileUploadingFailure
+  fetchFileProcessingFailure,
+  resetFilesProcessingState,
+  fetchFileUploadingStart,
+  fetchFileUploadingSuccess,
+  fetchFileUploadingFailure,
+  setActiveFileFilters
 } from '../reducers/FilesSlice';
 
 import {
@@ -14,8 +16,28 @@ import {
 } from '../reducers/SpaceSlice';
 
 import { fetchSpace } from '../../api/spaceApi';
-import { deleteFile } from '../../api/filesApi';
+import { deleteFile, uploadFile } from '../../api/filesApi';
 import { sendRequestToDownload } from '../../api/botApi';
+
+export const resetFilesStateAction = () => (dispatch) => {
+  dispatch(resetFilesProcessingState());
+};
+
+export const setActiveFileFiltersAction = (filters) => (dispatch) => {
+  dispatch(setActiveFileFilters(filters));
+};
+
+export const uploadFileAction = (data) => async (dispatch) => {
+  dispatch(fetchFileUploadingStart());
+  try {
+    const uploadedFile = await uploadFile(data);
+    if (uploadedFile) {
+      dispatch(fetchFileUploadingSuccess());
+    }
+  } catch (error) {
+    dispatch(fetchFileUploadingFailure(error));
+  }
+};
 
 export const sendFileToUserAction = (data) => async (dispatch) => {
   dispatch(fetchFileProcessingStart());

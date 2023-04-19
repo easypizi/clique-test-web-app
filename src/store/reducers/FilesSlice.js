@@ -5,20 +5,34 @@ export const filesSlice = createSlice({
   name: 'files',
   initialState: {
     isProcessingFile: false,
+    isFileSent: false,
     isUploadingFile: false,
-    error: false
+    error: false,
+    activeFileFilters: []
   },
   reducers: {
+    setActiveFileFilters: (state, { payload }) => {
+      state.activeFileFilters = payload;
+    },
+    resetFilesProcessingState: (state) => {
+      state.isProcessingFile = false;
+      state.isFileSent = false;
+      state.isUploadingFile = false;
+      state.error = null;
+    },
     fetchFileProcessingStart: (state) => {
       state.isProcessingFile = true;
+      state.isFileSent = false;
       state.error = null;
     },
     fetchFileProcessingSuccess: (state) => {
       state.isProcessingFile = false;
+      state.isFileSent = true;
       state.error = null;
     },
     fetchFileProcessingFailure: (state, { payload }) => {
       state.isProcessingFile = false;
+      state.isFileSent = false;
       state.error = payload;
     },
     fetchFileUploadingStart: (state) => {
@@ -40,9 +54,11 @@ export const {
   fetchFileProcessingStart,
   fetchFileProcessingSuccess,
   fetchFileProcessingFailure,
+  resetFilesProcessingState,
   fetchFileUploadingStart,
   fetchFileUploadingSuccess,
-  fetchFileUploadingFailure
+  fetchFileUploadingFailure,
+  setActiveFileFilters
 } = filesSlice.actions;
 
 export default filesSlice.reducer;

@@ -1,4 +1,8 @@
 const compareFilterArrays = (arr1, arr2) => {
+  if (!arr1.length && !arr2.length) {
+    return true;
+  }
+
   if (!arr1.length || !arr2.length) {
     return false;
   }

@@ -3,5 +3,11 @@ export default function prepareFilesData(files, isAdmin, userId) {
     return null;
   }
 
-  return files.map((file) => ({ ...file, canBeDeleted: isAdmin, userId }));
+  const result = files.map((file) => ({
+    ...file,
+    canBeDeleted: isAdmin,
+    userId
+  }));
+
+  return result.sort((a, b) => b.date - a.date);
 }

@@ -8,31 +8,14 @@ import { Typography, Avatar, Box, IconButton } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
-import ImageIcon from '@mui/icons-material/Image';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import SlideshowIcon from '@mui/icons-material/Slideshow';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import getFileType from '../helpers/getFileType';
-import getColorByType from '../helpers/getColorByType';
-
 import {
+  resetFilesStateAction,
   deleteFileAction,
   sendFileToUserAction
 } from '../../../store/actions/filesActions';
-
-const iconByType = {
-  presentation: <SlideshowIcon />,
-  document: <TextSnippetIcon />,
-  audio: <AudiotrackIcon />,
-  image: <ImageIcon />,
-  video: <LocalMoviesIcon />,
-  pdf: <PictureAsPdfIcon />
-};
-
-const getAvatarIcon = (type) => iconByType[type] || <AttachFileIcon />;
+import getFileType from '../helpers/getFileType';
+import getColorByType from '../helpers/getColorByType';
+import getIconByType from '../helpers/getIconByFileType';
 
 function FileCard({
   canBeDeleted,
@@ -71,7 +54,7 @@ function FileCard({
           marginRight: '15px'
         }}
       >
-        {getAvatarIcon(fileType)}
+        {getIconByType(fileType)}
       </Avatar>
     );
   }, [type]);
@@ -88,7 +71,9 @@ function FileCard({
         fileMime: mime,
         chatId: userId
       })
-    );
+    ).then(() => {
+      dispatch(resetFilesStateAction());
+    });
   }, [dispatch, mime, name, url, userId]);
 
   return (
