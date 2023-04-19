@@ -83,7 +83,7 @@ function FileCard({
   const handleDownloadClick = useCallback(() => {
     dispatch(
       sendFileToUserAction({
-        fileurl: url,
+        fileUrl: url,
         fileName: name,
         chatId: userId
       })
