@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useMemo, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -44,7 +43,8 @@ function FileCard({
   type,
   url,
   spaceId,
-  userId
+  userId,
+  mime
 }) {
   const dispatch = useDispatch();
 
@@ -85,10 +85,11 @@ function FileCard({
       sendFileToUserAction({
         fileUrl: url,
         fileName: name,
+        fileMime: mime,
         chatId: userId
       })
     );
-  }, [dispatch, name, url, userId]);
+  }, [dispatch, mime, name, url, userId]);
 
   return (
     <Box
@@ -168,7 +169,8 @@ FileCard.propTypes = {
   size: PropTypes.string,
   spaceId: PropTypes.string,
   type: PropTypes.string,
-  url: PropTypes.string
+  url: PropTypes.string,
+  mime: PropTypes.string
 };
 
 export default FileCard;
