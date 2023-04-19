@@ -79,7 +79,7 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
   const handleDownloadClick = useCallback(async () => {
     dispatch(startProcessingAction());
     try {
-      tg.SendData({ type: 'getFile', data: 'SomeFileUrl' });
+      tg.sendData({ type: 'getFile', data: 'SomeFileUrl' });
       dispatch(successProcessingAction);
       // if (navigator.share) {
       //   await navigator
@@ -96,7 +96,7 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
     } catch (error) {
       dispatch(failureProcessingAction(error));
     }
-  }, [dispatch]);
+  }, [dispatch, tg]);
 
   return (
     <Box
