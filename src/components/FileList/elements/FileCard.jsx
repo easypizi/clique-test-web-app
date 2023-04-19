@@ -19,13 +19,11 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import getFileType from '../helpers/getFileType';
 import getColorByType from '../helpers/getColorByType';
 
-import {
-  startProcessingAction,
-  successProcessingAction,
-  failureProcessingAction,
-  deleteFileAction
-} from '../../../store/actions/filesActions';
 import { useTelegram } from '../../../hooks/useTelegram';
+import {
+  deleteFileAction,
+  sendFileToUserAction
+} from '../../../store/actions/filesActions';
 
 const iconByType = {
   presentation: <SlideshowIcon />,
@@ -38,19 +36,28 @@ const iconByType = {
 
 const getAvatarIcon = (type) => iconByType[type] || <AttachFileIcon />;
 
-function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
+function FileCard({
+  canBeDeleted,
+  date,
+  id,
+  name,
+  size,
+  type,
+  url,
+  spaceId,
+  userId
+}) {
   const dispatch = useDispatch();
-  const { tg } = useTelegram();
-
-  const timestampToDateTime = useCallback(
-    (timestamp, timezone) =>
-      moment(timestamp).tz(timezone).format('DD/MM/YYYY'),
-    []
-  );
+  const { queryId } = useTelegram();
 
   const timezone = useMemo(
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
     []
+  );
+
+  const timestampToDateTime = useCallback(
+    (timestamp) => moment(timestamp).tz(timezone).format('DD/MM/YYYY'),
+    [timezone]
   );
 
   const getAvatar = useCallback(() => {
@@ -75,28 +82,16 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
     dispatch(deleteFileAction(id, spaceId));
   }, [dispatch, id, spaceId]);
 
-  // TODO: update working download solution for mobile method
-  const handleDownloadClick = useCallback(async () => {
-    dispatch(startProcessingAction());
-    try {
-      tg.sendData(JSON.stringify({ type: 'getFile', data: 'SomeFileUrl' }));
-      dispatch(successProcessingAction);
-      // if (navigator.share) {
-      //   await navigator
-      //     .share({
-      //       title: name,
-      //       text: type,
-      //       url
-      //     })
-      //     .then(() => console.log('Данные успешно переданы'))
-      //     .catch((error) => console.log('Ошибка передачи данных:', error));
-      // } else {
-      //   console.log('Функция navigator.share не поддерживается');
-      // }
-    } catch (error) {
-      dispatch(failureProcessingAction(error));
-    }
-  }, [dispatch, tg]);
+  const handleDownloadClick = useCallback(() => {
+    dispatch(
+      sendFileToUserAction({
+        fileurl: url,
+        fileName: name,
+        queryId,
+        chatId: userId
+      })
+    );
+  }, [dispatch, name, queryId, url, userId]);
 
   return (
     <Box
@@ -135,7 +130,7 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
           }}
         >
           <Typography color="gray" variant="caption">
-            {timestampToDateTime(date, timezone)}
+            {timestampToDateTime(date)}
           </Typography>
           <Typography color="gray" variant="caption">
             {size}
@@ -169,6 +164,7 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
 
 FileCard.propTypes = {
   canBeDeleted: PropTypes.bool,
+  userId: PropTypes.string,
   date: PropTypes.number,
   id: PropTypes.string,
   name: PropTypes.string,

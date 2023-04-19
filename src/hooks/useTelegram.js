@@ -3,5 +3,6 @@ const tg = window.Telegram.WebApp;
 
 export const useTelegram = () => ({
   tg,
-  user: tg.initDataUnsafe?.user
+  user: tg.initDataUnsafe?.user,
+  queryId: tg.initDataUnsafe?.query_id
 });

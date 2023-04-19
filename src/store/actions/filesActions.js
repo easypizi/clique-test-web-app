@@ -15,17 +15,18 @@ import {
 
 import { fetchSpace } from '../../api/spaceApi';
 import { deleteFile } from '../../api/filesApi';
+import { sendRequestToDownload } from '../../api/botApi';
 
-export const startProcessingAction = () => (dispatch) => {
+export const sendFileToUserAction = (data) => async (dispatch) => {
   dispatch(fetchFileProcessingStart());
-};
-
-export const successProcessingAction = () => (dispatch) => {
-  dispatch(fetchFileProcessingSuccess());
-};
-
-export const failureProcessingAction = (error) => (dispatch) => {
-  dispatch(fetchFileProcessingFailure(error));
+  try {
+    const requestToFileSend = await sendRequestToDownload(data);
+    if (requestToFileSend) {
+      dispatch(fetchFileProcessingSuccess());
+    }
+  } catch (error) {
+    dispatch(fetchFileProcessingFailure(error));
+  }
 };
 
 export const deleteFileAction = (fileId, spaceId) => async (dispatch) => {

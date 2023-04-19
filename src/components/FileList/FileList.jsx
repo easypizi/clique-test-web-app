@@ -20,8 +20,8 @@ function FileList() {
   );
 
   const formattedData = useMemo(
-    () => prepareFilesData(files, isAdmin),
-    [files, isAdmin]
+    () => prepareFilesData(files, isAdmin, currentUserId),
+    [currentUserId, files, isAdmin]
   );
 
   const filteredFiles = useMemo(() => {
