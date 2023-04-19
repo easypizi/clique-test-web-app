@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useMemo, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { saveAs } from 'file-saver';
 
 import { Typography, Avatar, Box, IconButton } from '@mui/material';
 
@@ -22,8 +22,10 @@ import getColorByType from '../helpers/getColorByType';
 import {
   startProcessingAction,
   successProcessingAction,
-  failureProcessingAction
+  failureProcessingAction,
+  deleteFileAction
 } from '../../../store/actions/filesActions';
+import { useTelegram } from '../../../hooks/useTelegram';
 
 const iconByType = {
   presentation: <SlideshowIcon />,
@@ -36,8 +38,9 @@ const iconByType = {
 
 const getAvatarIcon = (type) => iconByType[type] || <AttachFileIcon />;
 
-function FileCard({ canBeDeleted, date, id, name, size, type, url }) {
+function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
   const dispatch = useDispatch();
+  const { tg } = useTelegram();
 
   const timestampToDateTime = useCallback(
     (timestamp, timezone) =>
@@ -69,25 +72,31 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url }) {
   }, [type]);
 
   const handleDeleteFile = useCallback(() => {
-    // TODO: update with file delete api method
-    // eslint-disable-next-line no-console
-    console.log(`delete: ${id}/${name}`);
-  }, [id, name]);
+    dispatch(deleteFileAction(id, spaceId));
+  }, [dispatch, id, spaceId]);
 
   // TODO: update working download solution for mobile method
-  const handleDownloadClick = useCallback(() => {
+  const handleDownloadClick = useCallback(async () => {
     dispatch(startProcessingAction());
     try {
-      fetch(url)
-        .then((response) => response.blob())
-        .then((blob) => {
-          saveAs(blob, name);
-          dispatch(successProcessingAction());
-        });
+      tg.SendData({ type: 'getFile', data: 'SomeFileUrl' });
+      dispatch(successProcessingAction);
+      // if (navigator.share) {
+      //   await navigator
+      //     .share({
+      //       title: name,
+      //       text: type,
+      //       url
+      //     })
+      //     .then(() => console.log('Данные успешно переданы'))
+      //     .catch((error) => console.log('Ошибка передачи данных:', error));
+      // } else {
+      //   console.log('Функция navigator.share не поддерживается');
+      // }
     } catch (error) {
       dispatch(failureProcessingAction(error));
     }
-  }, [dispatch, name, url]);
+  }, [dispatch]);
 
   return (
     <Box
@@ -164,6 +173,7 @@ FileCard.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string,
   size: PropTypes.string,
+  spaceId: PropTypes.string,
   type: PropTypes.string,
   url: PropTypes.string
 };
