@@ -79,7 +79,7 @@ function FileCard({ canBeDeleted, date, id, name, size, type, url, spaceId }) {
   const handleDownloadClick = useCallback(async () => {
     dispatch(startProcessingAction());
     try {
-      tg.sendData({ type: 'getFile', data: 'SomeFileUrl' });
+      tg.sendData(JSON.stringify({ type: 'getFile', data: 'SomeFileUrl' }));
       dispatch(successProcessingAction);
       // if (navigator.share) {
       //   await navigator
