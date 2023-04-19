@@ -19,7 +19,6 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import getFileType from '../helpers/getFileType';
 import getColorByType from '../helpers/getColorByType';
 
-import { useTelegram } from '../../../hooks/useTelegram';
 import {
   deleteFileAction,
   sendFileToUserAction
@@ -48,7 +47,6 @@ function FileCard({
   userId
 }) {
   const dispatch = useDispatch();
-  const { queryId } = useTelegram();
 
   const timezone = useMemo(
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -87,11 +85,10 @@ function FileCard({
       sendFileToUserAction({
         fileurl: url,
         fileName: name,
-        queryId,
         chatId: userId
       })
     );
-  }, [dispatch, name, queryId, url, userId]);
+  }, [dispatch, name, url, userId]);
 
   return (
     <Box
