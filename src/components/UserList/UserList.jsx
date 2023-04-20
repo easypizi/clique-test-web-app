@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CircularProgress, Typography, Box, Checkbox } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -88,13 +88,9 @@ function UserList() {
     setUsersVisibility((value) => !value);
   }, []);
 
-  useEffect(() => {
-    setUsersVisibility(true);
-  }, [isSpaceLoading]);
-
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {isSpaceLoading ? (
+      {isSpaceLoading && !currentSpace ? (
         <CircularProgress
           sx={{
             position: 'absolute',

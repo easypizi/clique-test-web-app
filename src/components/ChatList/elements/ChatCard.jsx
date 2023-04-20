@@ -35,12 +35,12 @@ function ChatCard({
   name: groupName,
   link: groupLink,
   isHiddenByAdmin,
-  groupHiddenSpaces,
-  onVisibilityChange
+  groupHiddenSpaces
 }) {
   const dispatch = useDispatch();
 
   const [isButtonLocked, setIsButtonLocked] = useState(false);
+  const [isVisible, setVisibility] = useState(true);
 
   const letters = useMemo(() => {
     const groupNameArray = groupName && groupName.length && groupName.split(' ');
@@ -56,7 +56,7 @@ function ChatCard({
   const handleHideGroup = useCallback(
     (e) => {
       e.stopPropagation();
-      onVisibilityChange();
+      setVisibility(false);
       if (isButtonLocked) {
         return;
       }
@@ -73,20 +73,13 @@ function ChatCard({
         dispatch(updateGroupData(updateData, spaceId));
       }
     },
-    [
-      onVisibilityChange,
-      isButtonLocked,
-      spaceId,
-      groupHiddenSpaces,
-      id,
-      dispatch
-    ]
+    [isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
   );
 
   const handleUnhideGroup = useCallback(
     (e) => {
       e.stopPropagation();
-      onVisibilityChange();
+      setVisibility(false);
       if (isButtonLocked) {
         return;
       }
@@ -104,21 +97,14 @@ function ChatCard({
         dispatch(updateGroupData(updateData, spaceId));
       }
     },
-    [
-      onVisibilityChange,
-      isButtonLocked,
-      spaceId,
-      groupHiddenSpaces,
-      id,
-      dispatch
-    ]
+    [isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
   );
 
   return (
     <Box
       sx={{
         position: 'relative',
-        display: 'flex',
+        display: isVisible ? 'flex' : 'none',
         width: '100%',
         alignItems: 'center'
       }}
@@ -177,8 +163,7 @@ ChatCard.propTypes = {
   link: PropTypes.string,
   groupHiddenSpaces: PropTypes.arrayOf(PropTypes.string),
   canBeDeleted: PropTypes.bool,
-  spaceId: PropTypes.string,
-  onVisibilityChange: PropTypes.func
+  spaceId: PropTypes.string
 };
 
 export default ChatCard;

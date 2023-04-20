@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import {
@@ -20,7 +19,6 @@ import LinkIcon from '@mui/icons-material/Link';
 import styled from '@emotion/styled';
 import LazyAvatar from '../../LazyAvatar/LazyAvatar';
 import { updateSpaceUserAction } from '../../../store/actions/userActions';
-import { getSpace } from '../../../store/actions/spaceActions';
 
 const UserDataDescription = styled(Typography)`
   color: #5f6c7b;
@@ -51,6 +49,8 @@ function UserCard({
   spaceId
 }) {
   const dispatch = useDispatch();
+
+  const [hidden, setHidden] = useState(false);
 
   const userCredentials = useMemo(
     () => `${firstName ?? ''} ${lastName ?? ''}`,
@@ -91,6 +91,7 @@ function UserCard({
       };
 
       dispatch(updateSpaceUserAction(updateData, spaceId));
+      setHidden(true);
     }
   }, [dispatch, id, spaceId, userHiddenSpaces]);
 
@@ -106,13 +107,14 @@ function UserCard({
       };
 
       dispatch(updateSpaceUserAction(updateData, spaceId));
+      setHidden(true);
     }
   }, [dispatch, id, spaceId, userHiddenSpaces]);
 
   return (
     <Box
       sx={{
-        display: isVisible ? 'block' : 'none',
+        display: isVisible && !hidden ? 'block' : 'none',
         width: '100%',
         padding: '10px',
         borderRadius: '4px',

@@ -15,15 +15,11 @@ function ChatList() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isVisibleGroups, setGroupsVisibility] = useState(true);
-  const [isVisibilityChanged, setIsVisibilityChanged] = useState(false);
 
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
   const groups = currentSpace?.spaceGroups;
 
-  const isLoading = useMemo(
-    () => isSpaceLoading || isVisibilityChanged,
-    [isSpaceLoading, isVisibilityChanged]
-  );
+  const isLoading = useMemo(() => isSpaceLoading, [isSpaceLoading]);
 
   const isAdmin = useMemo(
     () => currentUserId === currentSpace?.spaceOwner,
@@ -32,10 +28,6 @@ function ChatList() {
 
   const handleToggleVisibility = useCallback(() => {
     setGroupsVisibility((value) => !value);
-  }, []);
-
-  const handleHideGroup = useCallback(() => {
-    setIsVisibilityChanged(true);
   }, []);
 
   const hiddenGroups = useMemo(() => {
@@ -83,9 +75,6 @@ function ChatList() {
 
   useEffect(() => {
     setGroupsVisibility(true);
-    return () => {
-      setIsVisibilityChanged(false);
-    };
   }, [isSpaceLoading]);
 
   return (
@@ -132,11 +121,7 @@ function ChatList() {
               }}
             >
               {filteredGroups.map((group) => (
-                <ChatCard
-                  key={group.id}
-                  onVisibilityChange={handleHideGroup}
-                  {...group}
-                />
+                <ChatCard key={group.id} {...group} />
               ))}
               {filteredGroups && filteredGroups.length > 5 && (
                 <div

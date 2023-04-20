@@ -25,7 +25,10 @@ function MessageBoard() {
 
   const [offsetHeight, setOffset] = useState(0);
 
-  const isLoading = useMemo(() => isSpaceLoading, [isSpaceLoading]);
+  const isLoading = useMemo(
+    () => isSpaceLoading && !currentSpace,
+    [currentSpace, isSpaceLoading]
+  );
 
   const preparedMessages = useMemo(
     () => prepareMessages(spaceMessages, spaceOwner === userId),

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -31,6 +31,7 @@ function MessageCard({
   spaces: messageSpaces
 }) {
   const dispatch = useDispatch();
+  const [isVisible, setVisibility] = useState(true);
 
   const letters = useMemo(() => {
     const groupNameArray = userName && userName.length && userName.split(' ');
@@ -67,18 +68,19 @@ function MessageCard({
         (space) => space !== currentSpace?.spaceId
       );
 
-      if (!filteredSpacesForUpdate.length) {
-        if (currentSpace?.spaceId) {
+      if (currentSpace?.spaceId) {
+        if (!filteredSpacesForUpdate.length) {
           dispatch(deleteMessageAction(groupId, id, currentSpace?.spaceId));
+        } else {
+          const updatedData = {
+            message_id: id,
+            message_group_id: groupId,
+            message_space: filteredSpacesForUpdate
+          };
+          dispatch(updateMessageAction(updatedData, currentSpace?.spaceId));
         }
-      } else if (currentSpace?.spaceId) {
-        const updatedData = {
-          message_id: id,
-          message_group_id: groupId,
-          message_space: filteredSpacesForUpdate
-        };
-        dispatch(updateMessageAction(updatedData, currentSpace?.spaceId));
       }
+      setVisibility(false);
     }
   }, [currentSpace, messageSpaces, dispatch, groupId, id]);
 
@@ -126,7 +128,7 @@ function MessageCard({
     <Box
       sx={{
         position: 'relative',
-        display: 'flex',
+        display: isVisible ? 'flex' : 'none',
         justifyContent: 'space-between',
         width: '100%',
         padding: '10px',
