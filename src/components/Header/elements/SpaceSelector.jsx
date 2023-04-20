@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import store from 'store2';
 import { useDispatch, useSelector } from 'react-redux';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
@@ -8,15 +8,24 @@ import { updateUserData } from '../../../store/actions/userActions';
 
 function SpaceSelector() {
   const dispatch = useDispatch();
-  const { userSpaces, currentSpace } = useSelector((state) => state.spaces);
-  const { currentUser } = useSelector((state) => state.user);
-  const storedLastChosenCommunity = store.session.get('last_opened_space');
+
+  const { userSpaces, currentSpace, isSpaceLoading } = useSelector(
+    ({ spaces }) => spaces
+  );
+  const { currentUser } = useSelector(({ user }) => user);
+
+  const storedLastChosenCommunity = useMemo(
+    () => store.session.get('last_opened_space'),
+    []
+  );
+
   const [choosenSpace, setChoosenSpace] = useState(
     storedLastChosenCommunity ??
       currentUser?.user_last_chosen_space ??
       (userSpaces && userSpaces[0]?.space_id) ??
       ''
   );
+
   const handleChangeSpace = useCallback(
     (event) => {
       const chosenSpace = event.target.value;
@@ -39,10 +48,10 @@ function SpaceSelector() {
   );
 
   useEffect(() => {
-    if (!currentSpace && choosenSpace) {
+    if (!currentSpace && choosenSpace && !isSpaceLoading) {
       dispatch(getSpace(choosenSpace));
     }
-  }, [choosenSpace, currentSpace, dispatch]);
+  }, [choosenSpace, currentSpace, dispatch, isSpaceLoading]);
 
   if (!userSpaces) {
     return null;
