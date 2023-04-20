@@ -28,7 +28,7 @@ function MessageCard({
   userName,
   userPhoto,
   selectedFilters,
-  spaces
+  spaces: messageSpaces
 }) {
   const dispatch = useDispatch();
 
@@ -63,7 +63,7 @@ function MessageCard({
 
   const handleDeleteMessage = useCallback(() => {
     if (currentSpace) {
-      const filteredSpacesForUpdate = spaces.filter(
+      const filteredSpacesForUpdate = messageSpaces.filter(
         (space) => space !== currentSpace?.spaceId
       );
 
@@ -80,7 +80,7 @@ function MessageCard({
         dispatch(updateMessageAction(updatedData, currentSpace?.spaceId));
       }
     }
-  }, [currentSpace, spaces, dispatch, groupId, id]);
+  }, [currentSpace, messageSpaces, dispatch, groupId, id]);
 
   const preparedMessageText = useMemo(() => {
     const hashtaggedFiltersSet = new Set(
