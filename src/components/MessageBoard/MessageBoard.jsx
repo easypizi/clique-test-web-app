@@ -12,7 +12,7 @@ import MessageCard from './elements/MessageCard';
 function MessageBoard() {
   const filtersRef = useRef(null);
 
-  const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
+  const { currentSpace, isSpaceLoading } = useSelector((state) => state.spaces);
   const { currentUser } = useSelector((state) => state.user);
   const { activeFilters } = useSelector((state) => state.messages);
 
@@ -24,7 +24,7 @@ function MessageBoard() {
 
   const [offsetHeight, setOffset] = useState(0);
 
-  const isLoading = useMemo(() => isSpacesLoading, [isSpacesLoading]);
+  const isLoading = useMemo(() => isSpaceLoading, [isSpaceLoading]);
 
   const preparedMessages = useMemo(
     () => prepareMessages(spaceMessages, spaceOwner === userId),

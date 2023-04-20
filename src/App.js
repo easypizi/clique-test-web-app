@@ -12,32 +12,13 @@ function App() {
   }, [tg]);
 
   // TODO: https://core.telegram.org/bots/webapps#events-available-for-web-apps
-  // Prevent accident closing of the window. Probably we should use height Change event and track this changes.
-  // const thereAreUnsavedChanges = () => true;
-
-  // const onBeforeUnload = useCallback((e) => {
-  //   if (thereAreUnsavedChanges()) {
-  //     e.preventDefault();
-  //     e.returnValue = '';
-  //     return;
-  //   }
-
-  //   delete e.returnValue;
-  // }, []);
-
-  // useEffect(() => {
-  //   window.addEventListener('beforeunload', onBeforeUnload);
-  // return () => {
-  //   window.removeEventListener('beforeunload', onBeforeUnload);
-  // };
-  // }, [onBeforeUnload]);
+  // Made prevent for closing the window
 
   return (
     <div className="App">
       <Routes>
         <Route index element={<ContentPage />} />
         {/* <Route path="/store" element={<StorePage />} /> */}
-        {/* <Route path="/settings" element={<SettingsPage />} /> */}
       </Routes>
     </div>
   );

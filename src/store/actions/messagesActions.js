@@ -1,9 +1,9 @@
 import { setActiveFilters } from '../reducers/MessagesSlice';
 
 import {
-  fetchSpacesStart,
+  fetchSpaceStart,
   fetchSpaceSuccess,
-  fetchSpacesFailure
+  fetchSpaceFailure
 } from '../reducers/SpaceSlice';
 
 import { updateMessage, deleteMessage } from '../../api/messagesApi';
@@ -15,7 +15,7 @@ export const setActiveFiltersAction = (filter) => (dispatch) => {
 
 export const deleteMessageAction =
   (groupId, id, spaceId) => async (dispatch) => {
-    dispatch(fetchSpacesStart());
+    dispatch(fetchSpaceStart());
     try {
       const deletedMessage = await deleteMessage(groupId, id);
       if (deletedMessage) {
@@ -23,12 +23,12 @@ export const deleteMessageAction =
         dispatch(fetchSpaceSuccess({ spaceData: space }));
       }
     } catch (error) {
-      dispatch(fetchSpacesFailure(error.message));
+      dispatch(fetchSpaceFailure(error.message));
     }
   };
 
 export const updateMessageAction = (data, spaceId) => async (dispatch) => {
-  dispatch(fetchSpacesStart());
+  dispatch(fetchSpaceStart());
   try {
     const updatedMessage = await updateMessage(data);
     if (updatedMessage) {
@@ -36,6 +36,6 @@ export const updateMessageAction = (data, spaceId) => async (dispatch) => {
       dispatch(fetchSpaceSuccess({ spaceData: space }));
     }
   } catch (error) {
-    dispatch(fetchSpacesFailure(error.message));
+    dispatch(fetchSpaceFailure(error.message));
   }
 };

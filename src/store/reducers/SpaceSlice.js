@@ -6,7 +6,10 @@ export const spaceSlice = createSlice({
   initialState: {
     userSpaces: null,
     currentSpace: null,
-    isSpacesLoading: false,
+
+    isSpaceLoading: false,
+    isUserSpacesLoading: false,
+
     isSpaceUpdating: false,
     error: null
   },
@@ -16,43 +19,54 @@ export const spaceSlice = createSlice({
       state.error = null;
     },
     fetchSpaceUpdateSuccess: (state, { payload }) => {
-      state.currentSpace = payload.spaceData;
       state.isSpaceUpdating = false;
+      state.currentSpace = payload.spaceData;
     },
     fetchSpaceUpdateFailure: (state, { payload }) => {
       state.isSpaceUpdating = false;
       state.error = payload;
     },
 
-    fetchSpacesStart: (state) => {
-      state.isSpacesLoading = true;
+    fetchUserSpacesStart: (state) => {
+      state.isUserSpacesLoading = true;
       state.error = null;
     },
-
     fetchUserSpacesSuccess: (state, { payload }) => {
+      state.isUserSpacesLoading = false;
       state.userSpaces = payload.spaces;
-      state.isSpacesLoading = false;
+    },
+    fetchUserSpacesFailure: (state, { payload }) => {
+      state.isUserSpacesLoading = false;
+      state.error = payload;
     },
 
-    fetchSpaceSuccess: (state, { payload }) => {
-      state.currentSpace = payload.spaceData;
-      state.isSpacesLoading = false;
+    fetchSpaceStart: (state) => {
+      state.isSpaceLoading = true;
+      state.error = null;
     },
-    fetchSpacesFailure: (state, { payload }) => {
-      state.isSpacesLoading = false;
+    fetchSpaceSuccess: (state, { payload }) => {
+      state.isSpaceLoading = false;
+      state.currentSpace = payload.spaceData;
+    },
+    fetchSpaceFailure: (state, { payload }) => {
+      state.isSpaceLoading = false;
       state.error = payload;
     }
   }
 });
 
 export const {
-  fetchSpacesStart,
-  fetchUserSpacesSuccess,
-  fetchSpaceSuccess,
-  fetchSpacesFailure,
   fetchSpaceUpdateStart,
   fetchSpaceUpdateSuccess,
-  fetchSpaceUpdateFailure
+  fetchSpaceUpdateFailure,
+
+  fetchSpaceStart,
+  fetchSpaceSuccess,
+  fetchSpaceFailure,
+
+  fetchUserSpacesStart,
+  fetchUserSpacesSuccess,
+  fetchUserSpacesFailure
 } = spaceSlice.actions;
 
 export default spaceSlice.reducer;

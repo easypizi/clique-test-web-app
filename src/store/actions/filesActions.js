@@ -10,9 +10,9 @@ import {
 } from '../reducers/FilesSlice';
 
 import {
-  fetchSpacesStart,
+  fetchSpaceStart,
   fetchSpaceSuccess,
-  fetchSpacesFailure
+  fetchSpaceFailure
 } from '../reducers/SpaceSlice';
 
 import { fetchSpace } from '../../api/spaceApi';
@@ -52,7 +52,7 @@ export const sendFileToUserAction = (data) => async (dispatch) => {
 };
 
 export const deleteFileAction = (fileId, spaceId) => async (dispatch) => {
-  dispatch(fetchSpacesStart());
+  dispatch(fetchSpaceStart());
   try {
     const deletedMessage = await deleteFile(fileId);
     if (deletedMessage) {
@@ -60,6 +60,6 @@ export const deleteFileAction = (fileId, spaceId) => async (dispatch) => {
       dispatch(fetchSpaceSuccess({ spaceData: space }));
     }
   } catch (error) {
-    dispatch(fetchSpacesFailure(error.message));
+    dispatch(fetchSpaceFailure(error.message));
   }
 };

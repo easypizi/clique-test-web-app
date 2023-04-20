@@ -2,30 +2,31 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Box } from '@mui/material';
-import SpaceSelector from '../SpaceSelector/SpaceSelector';
-import Status from './Status';
+import SpaceSelector from './elements/SpaceSelector';
+import Status from './elements/Status';
 
 function Header() {
   const [statusIndex, setStatusIndex] = useState(0);
 
   const {
-    isSpacesLoading,
+    isSpaceLoading,
+    isUserSpacesLoading,
     isSpaceUpdating,
     error: spaceApiError
-  } = useSelector((state) => state.spaces);
+  } = useSelector(({ spaces }) => spaces);
 
   const { isProcessingFile, isUploadingFile } = useSelector(
-    (state) => state.files
+    ({ files }) => files
   );
 
   const {
     isUserDataLoading,
     isUserDataUpdating,
     error: userApiError
-  } = useSelector((state) => state.user);
+  } = useSelector(({ user }) => user);
 
   const { isGroupDataUpdating, error: groupApiError } = useSelector(
-    (state) => state.groups
+    ({ groups }) => groups
   );
 
   const statusMessages = useMemo(() => {
@@ -51,8 +52,12 @@ function Header() {
       messages.push('Groups data updating...');
     }
 
-    if (isSpacesLoading) {
-      messages.push('Spaces loading...');
+    if (isSpaceLoading) {
+      messages.push('Space loading...');
+    }
+
+    if (isUserSpacesLoading) {
+      messages.push('User spaces loading...');
     }
 
     if (isUserDataLoading) {
@@ -73,15 +78,16 @@ function Header() {
 
     return messages;
   }, [
-    groupApiError,
-    isGroupDataUpdating,
     isProcessingFile,
-    isSpaceUpdating,
-    isSpacesLoading,
     isUploadingFile,
-    isUserDataLoading,
+    isSpaceUpdating,
     isUserDataUpdating,
+    isGroupDataUpdating,
+    isSpaceLoading,
+    isUserSpacesLoading,
+    isUserDataLoading,
     spaceApiError,
+    groupApiError,
     userApiError
   ]);
 

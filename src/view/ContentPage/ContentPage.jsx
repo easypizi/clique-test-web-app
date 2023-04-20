@@ -13,29 +13,57 @@ import Header from '../../components/Header/Header';
 function ContentPage() {
   const dispatch = useDispatch();
   const location = useLocation();
-
-  const queryParams = new URLSearchParams(location.search);
   const storedUserId = store.session.get('userId');
   const storedPrivateId = store.session.get('privateId');
-  const userId = queryParams.get('user_id') ?? storedUserId;
-  const privateId = queryParams.get('private_id') ?? storedPrivateId;
 
   const { currentUser, isUserDataLoading, isAuthorized } = useSelector(
-    (state) => state.user
+    ({ user }) => user
   );
-  const { userSpaces, isSpacesLoading } = useSelector((state) => state.spaces);
+  const { userSpaces, isUserSpacesLoading } = useSelector(
+    ({ spaces }) => spaces
+  );
 
+  const queryParams = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search]
+  );
+  const userId = useMemo(
+    () => queryParams.get('user_id') ?? storedUserId,
+    [queryParams, storedUserId]
+  );
+  const privateId = useMemo(
+    () => queryParams.get('private_id') ?? storedPrivateId,
+    [queryParams, storedPrivateId]
+  );
   const userSpacesIds = useMemo(
-    () => currentUser && currentUser.user_spaces,
-    [currentUser]
+    () => currentUser?.user_spaces || [],
+    [currentUser?.user_spaces]
   );
-
   const isLoading = useMemo(
-    () => isUserDataLoading || isSpacesLoading,
-    [isSpacesLoading, isUserDataLoading]
+    () => isUserDataLoading || isUserSpacesLoading,
+    [isUserSpacesLoading, isUserDataLoading]
   );
 
-  // Effects
+  useEffect(() => {
+    const fetchUser = () => {
+      if (!currentUser && !isUserDataLoading) {
+        dispatch(getUser(userId, privateId));
+      }
+    };
+
+    fetchUser();
+  }, [currentUser, dispatch, isLoading, isUserDataLoading, privateId, userId]);
+
+  useEffect(() => {
+    const fetchUserSpaces = () => {
+      if (userSpacesIds?.length > 0 && !userSpaces && !isUserSpacesLoading) {
+        dispatch(getUserSpaces(userSpacesIds));
+      }
+    };
+
+    fetchUserSpaces();
+  }, [dispatch, isLoading, isUserSpacesLoading, userSpaces, userSpacesIds]);
+
   useEffect(() => {
     if (!storedUserId && userId) {
       store.session.set('userId', userId);
@@ -45,18 +73,6 @@ function ContentPage() {
       store.session.set('privateId', privateId);
     }
   }, [privateId, storedPrivateId, storedUserId, userId]);
-
-  useEffect(() => {
-    if (!currentUser) {
-      dispatch(getUser(userId, privateId));
-    }
-  }, [currentUser, dispatch, privateId, userId]);
-
-  useEffect(() => {
-    if (userSpacesIds && userSpacesIds.length > 0 && !userSpaces) {
-      dispatch(getUserSpaces(userSpacesIds));
-    }
-  }, [dispatch, userSpaces, userSpacesIds]);
 
   return (
     <Container sx={{ height: '100%' }}>

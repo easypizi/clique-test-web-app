@@ -1,11 +1,13 @@
 import {
-  fetchSpacesStart,
+  fetchSpaceStart,
   fetchSpaceSuccess,
-  fetchUserSpacesSuccess,
-  fetchSpacesFailure,
+  fetchSpaceFailure,
   fetchSpaceUpdateStart,
   fetchSpaceUpdateSuccess,
-  fetchSpaceUpdateFailure
+  fetchSpaceUpdateFailure,
+  fetchUserSpacesStart,
+  fetchUserSpacesSuccess,
+  fetchUserSpacesFailure
 } from '../reducers/SpaceSlice';
 import {
   fetchSpace,
@@ -27,21 +29,21 @@ export const updateSpaceAction = (data) => async (dispatch) => {
 };
 
 export const getUserSpaces = (ids) => async (dispatch) => {
-  dispatch(fetchSpacesStart());
+  dispatch(fetchUserSpacesStart());
   try {
     const spaces = await fetchUserSpaces(ids);
     dispatch(fetchUserSpacesSuccess({ spaces }));
   } catch (error) {
-    dispatch(fetchSpacesFailure(error.message));
+    dispatch(fetchUserSpacesFailure(error.message));
   }
 };
 
 export const getSpace = (id) => async (dispatch) => {
-  dispatch(fetchSpacesStart());
+  dispatch(fetchSpaceStart());
   try {
     const space = await fetchSpace(id);
     dispatch(fetchSpaceSuccess({ spaceData: space }));
   } catch (error) {
-    dispatch(fetchSpacesFailure(error.message));
+    dispatch(fetchSpaceFailure(error.message));
   }
 };

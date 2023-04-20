@@ -41,7 +41,7 @@ function FileList() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const { isFileSent } = useSelector((state) => state.files);
-  const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
+  const { currentSpace, isSpaceLoading } = useSelector((state) => state.spaces);
   const { activeFileFilters } = useSelector((state) => state.files);
   const { currentUser } = useSelector((state) => state.user);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
@@ -51,7 +51,7 @@ function FileList() {
     [currentSpace?.spaceFiles]
   );
   const spaceId = useMemo(() => currentSpace?.spaceId, [currentSpace?.spaceId]);
-  const isLoading = useMemo(() => isSpacesLoading, [isSpacesLoading]);
+  const isLoading = useMemo(() => isSpaceLoading, [isSpaceLoading]);
   const isAdmin = useMemo(
     () => currentUserId === currentSpace?.spaceOwner,
     [currentSpace?.spaceOwner, currentUserId]

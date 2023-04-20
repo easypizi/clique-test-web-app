@@ -22,7 +22,7 @@ import MessageBoard from '../MessageBoard/MessageBoard';
 // import EventIcon from '@mui/icons-material/Event';
 
 function TabNavigation({ user }) {
-  const { isSpacesLoading } = useSelector((state) => state.spaces);
+  const { isSpaceLoading } = useSelector((state) => state.spaces);
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -56,27 +56,27 @@ function TabNavigation({ user }) {
       >
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpacesLoading}
+          disabled={isSpaceLoading}
           icon={<QuestionAnswerIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpacesLoading}
+          disabled={isSpaceLoading}
           icon={<GroupIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpacesLoading}
+          disabled={isSpaceLoading}
           icon={<AccountCircleIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpacesLoading}
+          disabled={isSpaceLoading}
           icon={<TagIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpacesLoading}
+          disabled={isSpaceLoading}
           icon={<DescriptionIcon />}
         />
       </Tabs>

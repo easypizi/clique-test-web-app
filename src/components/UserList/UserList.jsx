@@ -9,7 +9,7 @@ import prepareUserData from './helpers/prepareUserData';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
 function UserList() {
-  const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
+  const { currentSpace, isSpaceLoading } = useSelector((state) => state.spaces);
   const { currentUser } = useSelector((state) => state.user);
   const [isVisibleUsers, setUsersVisibility] = useState(true);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
@@ -90,11 +90,11 @@ function UserList() {
 
   useEffect(() => {
     setUsersVisibility(true);
-  }, [isSpacesLoading]);
+  }, [isSpaceLoading]);
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {isSpacesLoading ? (
+      {isSpaceLoading ? (
         <CircularProgress
           sx={{
             position: 'absolute',

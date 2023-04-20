@@ -3,8 +3,8 @@ import store from 'store2';
 import { useDispatch, useSelector } from 'react-redux';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 
-import { getSpace } from '../../store/actions/spaceActions';
-import { updateUserData } from '../../store/actions/userActions';
+import { getSpace } from '../../../store/actions/spaceActions';
+import { updateUserData } from '../../../store/actions/userActions';
 
 function SpaceSelector() {
   const dispatch = useDispatch();

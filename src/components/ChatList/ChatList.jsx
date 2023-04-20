@@ -11,7 +11,7 @@ import prepareGroupData from './helpers/prepareGroupData';
 
 function ChatList() {
   const [searchTerm, setSearchTerm] = useState('');
-  const { currentSpace, isSpacesLoading } = useSelector((state) => state.spaces);
+  const { currentSpace, isSpaceLoading } = useSelector((state) => state.spaces);
   const { currentUser } = useSelector((state) => state.user);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
   const [isVisibleGroups, setGroupsVisibility] = useState(true);
@@ -19,8 +19,8 @@ function ChatList() {
   const groups = currentSpace?.spaceGroups;
 
   const isLoading = useMemo(
-    () => isSpacesLoading || isVisibilityChanged,
-    [isSpacesLoading, isVisibilityChanged]
+    () => isSpaceLoading || isVisibilityChanged,
+    [isSpaceLoading, isVisibilityChanged]
   );
 
   const isAdmin = useMemo(
@@ -85,7 +85,7 @@ function ChatList() {
     return () => {
       setIsVisibilityChanged(false);
     };
-  }, [isSpacesLoading]);
+  }, [isSpaceLoading]);
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
