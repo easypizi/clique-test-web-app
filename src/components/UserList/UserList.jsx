@@ -9,8 +9,8 @@ import prepareUserData from './helpers/prepareUserData';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
 function UserList() {
-  const { currentSpace, isSpaceLoading } = useSelector((state) => state.spaces);
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentSpace, isSpaceLoading } = useSelector(({ spaces }) => spaces);
+  const { currentUser } = useSelector(({ user }) => user);
   const [isVisibleUsers, setUsersVisibility] = useState(true);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
 

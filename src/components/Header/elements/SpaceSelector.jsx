@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 
 import { getSpace } from '../../../store/actions/spaceActions';
-import { updateUserData } from '../../../store/actions/userActions';
+import { updateCurrentUserData } from '../../../store/actions/userActions';
 
 function SpaceSelector() {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ function SpaceSelector() {
 
   const updateLastChosenSpace = useCallback(
     (updateData) => {
-      dispatch(updateUserData(updateData));
+      dispatch(updateCurrentUserData(updateData));
     },
     [dispatch]
   );
@@ -38,7 +38,11 @@ function SpaceSelector() {
   const updateChosenSpace = useCallback(
     (newChosenSpace) => {
       setChosenSpace(newChosenSpace);
-      if (currentUser && newChosenSpace) {
+      if (
+        currentUser &&
+        newChosenSpace &&
+        currentUser.user_last_chosen_space !== newChosenSpace
+      ) {
         const updateData = createUpdateData(currentUser.user_id, newChosenSpace);
         updateLastChosenSpace(updateData);
       }

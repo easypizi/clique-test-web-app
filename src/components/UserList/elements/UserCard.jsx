@@ -19,7 +19,7 @@ import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import LinkIcon from '@mui/icons-material/Link';
 import styled from '@emotion/styled';
 import LazyAvatar from '../../LazyAvatar/LazyAvatar';
-import { updateUserData } from '../../../store/actions/userActions';
+import { updateSpaceUserAction } from '../../../store/actions/userActions';
 import { getSpace } from '../../../store/actions/spaceActions';
 
 const UserDataDescription = styled(Typography)`
@@ -90,9 +90,7 @@ function UserCard({
         user_last_chosen_space: ''
       };
 
-      dispatch(updateUserData(updateData)).then(() => {
-        dispatch(getSpace(spaceId));
-      });
+      dispatch(updateSpaceUserAction(updateData, spaceId));
     }
   }, [dispatch, id, spaceId, userHiddenSpaces]);
 
@@ -107,9 +105,7 @@ function UserCard({
         user_hidden_spaces: updatedHiddenSpace
       };
 
-      dispatch(updateUserData(updateData)).then(() => {
-        dispatch(getSpace(spaceId));
-      });
+      dispatch(updateSpaceUserAction(updateData, spaceId));
     }
   }, [dispatch, id, spaceId, userHiddenSpaces]);
 

@@ -59,7 +59,7 @@ function MessageCard({
     []
   );
 
-  const { currentSpace } = useSelector((state) => state.spaces);
+  const { currentSpace } = useSelector(({ spaces }) => spaces);
 
   const handleDeleteMessage = useCallback(() => {
     if (currentSpace) {

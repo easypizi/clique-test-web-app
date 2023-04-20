@@ -1,4 +1,7 @@
 import { updateGroup } from '../../api/groupsApi';
+import { fetchSpace } from '../../api/spaceApi';
+
+import { fetchSpaceSuccess } from '../reducers/SpaceSlice';
 
 import {
   fetchGroupUpdateStart,
@@ -7,11 +10,15 @@ import {
 } from '../reducers/GroupsSlice';
 
 // eslint-disable-next-line import/prefer-default-export
-export const updateGroupData = (groupData) => async (dispatch) => {
+export const updateGroupData = (groupData, spaceId) => async (dispatch) => {
   dispatch(fetchGroupUpdateStart());
   try {
-    await updateGroup(groupData);
-    dispatch(fetchGroupUpdateSuccess());
+    const result = await updateGroup(groupData);
+    if (result) {
+      const space = await fetchSpace(spaceId);
+      dispatch(fetchSpaceSuccess({ spaceData: space }));
+      dispatch(fetchGroupUpdateSuccess());
+    }
   } catch (error) {
     dispatch(fetchGroupUpdateFailure(error.message));
   }

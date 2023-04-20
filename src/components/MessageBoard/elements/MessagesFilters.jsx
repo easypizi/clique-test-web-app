@@ -19,9 +19,9 @@ import compareFilterArrays from '../helpers/compareFilters';
 
 function MessagesFilters() {
   const dispatch = useDispatch();
-  const { currentSpace } = useSelector((state) => state.spaces);
-  const { activeFilters } = useSelector((state) => state.messages);
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentSpace } = useSelector(({ spaces }) => spaces);
+  const { activeFilters } = useSelector(({ messages }) => messages);
+  const { currentUser } = useSelector(({ user }) => user);
   const [selectedFilters, setSelectedFilters] = useState(activeFilters);
   const [isModalOpen, setModalOpen] = useState(false);
   const [newTag, setNewTag] = useState('');

@@ -8,7 +8,6 @@ import { Typography, Avatar, Box, IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { getSpace } from '../../../store/actions/spaceActions';
 import { updateGroupData } from '../../../store/actions/groupsActions';
 
 const ChatItem = styled(Link)`
@@ -22,43 +21,45 @@ const ChatItem = styled(Link)`
     inset 0px -1px 0 0px rgb(0, 0, 0, 0.1);
 `;
 
+const color = () => {
+  const values = [green, pink, blue, orange];
+  const randomIndex = Math.floor(Math.random() * values.length);
+  return values[randomIndex];
+};
+
 function ChatCard({
+  id,
+  spaceId,
+  canBeDeleted,
   type: groupType,
   name: groupName,
   link: groupLink,
-  id,
   isHiddenByAdmin,
   groupHiddenSpaces,
-  canBeDeleted,
-  spaceId,
-  onDelete
+  onVisibilityChange
 }) {
-  const [isButtonLocked, setIsButtonLocked] = useState(false);
-
   const dispatch = useDispatch();
+
+  const [isButtonLocked, setIsButtonLocked] = useState(false);
 
   const letters = useMemo(() => {
     const groupNameArray = groupName && groupName.length && groupName.split(' ');
-
     const result = groupNameArray.map((part, index) => {
       if (index <= 1) {
         return part[0].toUpperCase();
       }
-
       return '';
     });
-
     return result.join('');
   }, [groupName]);
 
   const handleHideGroup = useCallback(
     (e) => {
       e.stopPropagation();
-      onDelete();
+      onVisibilityChange();
       if (isButtonLocked) {
         return;
       }
-
       if (spaceId) {
         setIsButtonLocked(true);
         const updatedArray = new Set(groupHiddenSpaces);
@@ -69,22 +70,26 @@ function ChatCard({
           group_hidden_spaces: [...updatedArray]
         };
 
-        dispatch(updateGroupData(updateData)).then(() => {
-          dispatch(getSpace(spaceId));
-        });
+        dispatch(updateGroupData(updateData, spaceId));
       }
     },
-    [onDelete, isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
+    [
+      onVisibilityChange,
+      isButtonLocked,
+      spaceId,
+      groupHiddenSpaces,
+      id,
+      dispatch
+    ]
   );
 
   const handleUnhideGroup = useCallback(
     (e) => {
       e.stopPropagation();
-      onDelete();
+      onVisibilityChange();
       if (isButtonLocked) {
         return;
       }
-
       if (spaceId) {
         setIsButtonLocked(true);
         const updatedHiddenSpace = groupHiddenSpaces.filter(
@@ -96,19 +101,18 @@ function ChatCard({
           group_hidden_spaces: updatedHiddenSpace
         };
 
-        dispatch(updateGroupData(updateData)).then(() => {
-          dispatch(getSpace(spaceId));
-        });
+        dispatch(updateGroupData(updateData, spaceId));
       }
     },
-    [onDelete, isButtonLocked, spaceId, groupHiddenSpaces, id, dispatch]
+    [
+      onVisibilityChange,
+      isButtonLocked,
+      spaceId,
+      groupHiddenSpaces,
+      id,
+      dispatch
+    ]
   );
-
-  const color = useCallback(() => {
-    const values = [green, pink, blue, orange];
-    const randomIndex = Math.floor(Math.random() * values.length);
-    return values[randomIndex];
-  }, []);
 
   return (
     <Box
@@ -174,7 +178,7 @@ ChatCard.propTypes = {
   groupHiddenSpaces: PropTypes.arrayOf(PropTypes.string),
   canBeDeleted: PropTypes.bool,
   spaceId: PropTypes.string,
-  onDelete: PropTypes.func
+  onVisibilityChange: PropTypes.func
 };
 
 export default ChatCard;

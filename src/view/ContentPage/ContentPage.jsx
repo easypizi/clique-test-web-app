@@ -12,9 +12,7 @@ import Header from '../../components/Header/Header';
 function ContentPage() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { currentUser, isUserDataLoading, isAuthorized } = useSelector(
-    ({ user }) => user
-  );
+  const { currentUser, isUserDataLoading } = useSelector(({ user }) => user);
   const { userSpaces, isUserSpacesLoading } = useSelector(
     ({ spaces }) => spaces
   );
@@ -67,9 +65,7 @@ function ContentPage() {
       ) : (
         <Box sx={{ widht: '100%', height: '100%' }}>
           <Header />
-          <TabNavigation
-            user={{ ...currentUser, is_authorized: isAuthorized }}
-          />
+          <TabNavigation />
         </Box>
       )}
     </Container>

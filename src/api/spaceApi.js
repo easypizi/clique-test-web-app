@@ -11,22 +11,16 @@ export const fetchSpace = async (id) => {
   }
 };
 
-export const fetchUserSpaces = (id) => {
-  if (id && id.length > 0) {
-    const stringIds = id.join(',');
-
+export const fetchUserSpaces = async (idsArray) => {
+  if (idsArray && idsArray.length > 0) {
+    const stringIds = idsArray.join(',');
     try {
-      return axios
-        .get(`${baseURL}/user-spaces?id=${stringIds}`)
-        .then((response) => response && response.data)
-        .catch((error) => {
-          throw error;
-        });
+      const response = await axios.get(`${baseURL}/user-spaces?id=${stringIds}`);
+      return response && response.data;
     } catch (error) {
       throw new Error(error);
     }
   }
-
   return null;
 };
 

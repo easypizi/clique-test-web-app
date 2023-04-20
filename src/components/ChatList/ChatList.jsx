@@ -10,12 +10,14 @@ import ChatCard from './elements/ChatCard';
 import prepareGroupData from './helpers/prepareGroupData';
 
 function ChatList() {
+  const { currentSpace, isSpaceLoading } = useSelector(({ spaces }) => spaces);
+  const { currentUser } = useSelector(({ user }) => user);
+
   const [searchTerm, setSearchTerm] = useState('');
-  const { currentSpace, isSpaceLoading } = useSelector((state) => state.spaces);
-  const { currentUser } = useSelector((state) => state.user);
-  const { user_id: currentUserId } = currentUser ?? { user_id: null };
   const [isVisibleGroups, setGroupsVisibility] = useState(true);
   const [isVisibilityChanged, setIsVisibilityChanged] = useState(false);
+
+  const { user_id: currentUserId } = currentUser ?? { user_id: null };
   const groups = currentSpace?.spaceGroups;
 
   const isLoading = useMemo(
@@ -32,7 +34,7 @@ function ChatList() {
     setGroupsVisibility((value) => !value);
   }, []);
 
-  const onDeleteLoadingStart = useCallback(() => {
+  const handleHideGroup = useCallback(() => {
     setIsVisibilityChanged(true);
   }, []);
 
@@ -54,7 +56,6 @@ function ChatList() {
       if (!group.hiddenSpaces) {
         return true;
       }
-
       return group.hiddenSpaces.every((space) => space !== currentSpace.spaceId);
     });
   }, [currentSpace, groups]);
@@ -133,8 +134,8 @@ function ChatList() {
               {filteredGroups.map((group) => (
                 <ChatCard
                   key={group.id}
+                  onVisibilityChange={handleHideGroup}
                   {...group}
-                  onDelete={onDeleteLoadingStart}
                 />
               ))}
               {filteredGroups && filteredGroups.length > 5 && (

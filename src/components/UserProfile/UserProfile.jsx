@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Stack,
@@ -15,7 +14,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {
   getUser,
-  updateUserData,
+  updateCurrentUserData,
   resetUserDataUpdate,
   uploadNewUserPhotoAction
 } from '../../store/actions/userActions';
@@ -23,21 +22,52 @@ import { getSpace } from '../../store/actions/spaceActions';
 import LazyAvatar from '../LazyAvatar/LazyAvatar';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
-function UserProfile({
-  userId,
-  isAuthorized,
-  userName,
-  userSurname,
-  userDescription,
-  userLinks,
-  userVisibility,
-  userAvatar,
-  userBadges = []
-}) {
+function UserProfile() {
   const dispatch = useDispatch();
-  const { isUserDataUpdating, isUserDataUpdated, error, currentUser } =
-    useSelector((state) => state.user);
-  const { currentSpace } = useSelector((state) => state.spaces);
+
+  const {
+    isUserDataUpdating,
+    isUserDataUpdated,
+    currentUser,
+    isAuthorized,
+    error
+  } = useSelector(({ user }) => user);
+
+  const { currentSpace } = useSelector(({ spaces }) => spaces);
+
+  const userData = useMemo(
+    () => ({
+      userId: currentUser?.user_id,
+      userName: currentUser?.user_name,
+      userSurname: currentUser?.user_last_name,
+      userDescription: currentUser?.user_description,
+      userVisibility: currentUser?.is_visible,
+      userAvatar: currentUser?.user_image,
+      userLinks: currentUser?.user_links,
+      userBadges: currentUser?.user_badges
+    }),
+    [
+      currentUser?.is_visible,
+      currentUser?.user_badges,
+      currentUser?.user_description,
+      currentUser?.user_id,
+      currentUser?.user_image,
+      currentUser?.user_last_name,
+      currentUser?.user_links,
+      currentUser?.user_name
+    ]
+  );
+
+  const {
+    userId,
+    userName,
+    userSurname,
+    userDescription,
+    userVisibility,
+    userAvatar,
+    userLinks,
+    userBadges
+  } = userData;
 
   const [updateButtonColor, setUpdateButtonColor] = useState('primary');
   const [updateButtonText, setUpdateButtonText] = useState('Update');
@@ -133,7 +163,7 @@ function UserProfile({
       user_badges: badges
     };
 
-    dispatch(updateUserData(updateData));
+    dispatch(updateCurrentUserData(updateData));
     setUpdateButtonDisabled(true);
     setUpdateButtonText('Updating...');
   }, [
@@ -346,17 +376,5 @@ function UserProfile({
     </ScrollableContainer>
   );
 }
-
-UserProfile.propTypes = {
-  userId: PropTypes.string,
-  isAuthorized: PropTypes.bool,
-  userName: PropTypes.string,
-  userSurname: PropTypes.string,
-  userDescription: PropTypes.string,
-  userLinks: PropTypes.arrayOf(PropTypes.string),
-  userVisibility: PropTypes.bool,
-  userAvatar: PropTypes.string,
-  userBadges: PropTypes.arrayOf(PropTypes.string)
-};
 
 export default UserProfile;

@@ -19,14 +19,18 @@ import {
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
+import {
+  uploadFileAction,
+  resetFilesStateAction
+} from '../../store/actions/filesActions';
+
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 import Search from '../Search/Search';
-import prepareFilesData from './helpers/prepareFilesData';
+
 import FileCard from './elements/FileCard';
 import FileFilters from './elements/FileFilters';
 
-import { uploadFileAction } from '../../store/actions/filesActions';
-import { getSpace } from '../../store/actions/spaceActions';
+import prepareFilesData from './helpers/prepareFilesData';
 import getFileType from './helpers/getFileType';
 
 function SlideTransition(props) {
@@ -40,10 +44,10 @@ function FileList() {
   const [offsetHeight, setOffset] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { isFileSent } = useSelector((state) => state.files);
-  const { currentSpace, isSpaceLoading } = useSelector((state) => state.spaces);
-  const { activeFileFilters } = useSelector((state) => state.files);
-  const { currentUser } = useSelector((state) => state.user);
+  const { isFileSent } = useSelector(({ files }) => files);
+  const { currentSpace, isSpaceLoading } = useSelector(({ spaces }) => spaces);
+  const { activeFileFilters } = useSelector(({ files }) => files);
+  const { currentUser } = useSelector(({ user }) => user);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
 
   const files = useMemo(
@@ -90,8 +94,8 @@ function FileList() {
         formData.append('space_id', spaceId);
         formData.append('file', file);
 
-        dispatch(uploadFileAction(formData)).then(() => {
-          dispatch(getSpace(spaceId));
+        dispatch(uploadFileAction(formData, spaceId)).then(() => {
+          dispatch(resetFilesStateAction());
         });
       }
     },
