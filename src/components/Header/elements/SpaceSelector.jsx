@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import store from 'store2';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 
@@ -14,44 +13,58 @@ function SpaceSelector() {
   );
   const { currentUser } = useSelector(({ user }) => user);
 
-  const storedLastChosenCommunity = useMemo(
-    () => store.session.get('last_opened_space'),
+  const lastChosenSpace = currentUser?.user_last_chosen_space;
+  const firstUserSpaceId = userSpaces?.[0]?.space_id ?? '';
+
+  const [chosenSpace, setChosenSpace] = useState(
+    lastChosenSpace || firstUserSpaceId
+  );
+
+  const createUpdateData = useCallback(
+    (userId, selectedSpaceId) => ({
+      user_id: userId,
+      user_last_chosen_space: selectedSpaceId
+    }),
     []
   );
 
-  const [choosenSpace, setChoosenSpace] = useState(
-    storedLastChosenCommunity ??
-      currentUser?.user_last_chosen_space ??
-      (userSpaces && userSpaces[0]?.space_id) ??
-      ''
+  const updateLastChosenSpace = useCallback(
+    (updateData) => {
+      dispatch(updateUserData(updateData));
+    },
+    [dispatch]
   );
 
-  const handleChangeSpace = useCallback(
-    (event) => {
-      const chosenSpace = event.target.value;
-      setChoosenSpace(chosenSpace);
-      dispatch(getSpace(chosenSpace));
-      if (chosenSpace !== '') {
-        store.session.set('last_opened_space', chosenSpace);
+  const updateChosenSpace = useCallback(
+    (newChosenSpace) => {
+      setChosenSpace(newChosenSpace);
+      if (currentUser && newChosenSpace) {
+        const updateData = createUpdateData(currentUser.user_id, newChosenSpace);
+        updateLastChosenSpace(updateData);
       }
-
-      if (currentUser && chosenSpace !== '') {
-        const updateData = {
-          user_id: currentUser.user_id,
-          user_last_chosen_space: chosenSpace
-        };
-
-        dispatch(updateUserData(updateData));
-      }
+      dispatch(getSpace(newChosenSpace));
     },
-    [currentUser, dispatch]
+    [currentUser, dispatch, createUpdateData, updateLastChosenSpace]
+  );
+
+  const handleSpaceChange = useCallback(
+    (event) => {
+      const newChosenSpace = event.target.value;
+      if (!currentUser || !newChosenSpace) {
+        setChosenSpace(newChosenSpace);
+        dispatch(getSpace(newChosenSpace));
+        return;
+      }
+      updateChosenSpace(newChosenSpace);
+    },
+    [currentUser, dispatch, updateChosenSpace]
   );
 
   useEffect(() => {
-    if (!currentSpace && choosenSpace && !isSpaceLoading) {
-      dispatch(getSpace(choosenSpace));
+    if (!currentSpace && chosenSpace && !isSpaceLoading) {
+      dispatch(getSpace(chosenSpace));
     }
-  }, [choosenSpace, currentSpace, dispatch, isSpaceLoading]);
+  }, [chosenSpace, currentSpace, dispatch, isSpaceLoading]);
 
   if (!userSpaces) {
     return null;
@@ -63,9 +76,9 @@ function SpaceSelector() {
       <Select
         labelId="space-choose-select-label"
         id="space-choose-select"
-        value={choosenSpace}
+        value={chosenSpace}
         label="Space"
-        onChange={handleChangeSpace}
+        onChange={handleSpaceChange}
       >
         <MenuItem value="">
           <em>None</em>

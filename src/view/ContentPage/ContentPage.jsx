@@ -1,5 +1,4 @@
 import React, { useMemo, useEffect } from 'react';
-import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, CircularProgress, Box } from '@mui/material';
@@ -20,25 +19,12 @@ function ContentPage() {
     ({ spaces }) => spaces
   );
 
-  const storedUserId = useMemo(() => {
-    store.session.get('userId');
-  }, []);
-  const storedPrivateId = useMemo(() => {
-    store.session.get('privateId');
-  }, []);
-
   const queryParams = useMemo(
     () => new URLSearchParams(location.search),
     [location.search]
   );
-  const userId = useMemo(
-    () => queryParams.get('user_id') ?? storedUserId,
-    [queryParams, storedUserId]
-  );
-  const privateId = useMemo(
-    () => queryParams.get('private_id') ?? storedPrivateId,
-    [queryParams, storedPrivateId]
-  );
+  const userId = useMemo(() => queryParams.get('user_id'), [queryParams]);
+  const privateId = useMemo(() => queryParams.get('private_id'), [queryParams]);
   const userSpacesIds = useMemo(
     () => currentUser?.user_spaces || [],
     [currentUser?.user_spaces]
@@ -52,25 +38,11 @@ function ContentPage() {
     const fetchUserData = () => {
       if (!currentUser && !isLoading) {
         dispatch(getUser(userId, privateId));
-        if (!storedUserId && userId) {
-          store.session.set('userId', userId);
-        }
-        if (!storedPrivateId && privateId) {
-          store.session.set('privateId', privateId);
-        }
       }
     };
 
     fetchUserData();
-  }, [
-    currentUser,
-    dispatch,
-    isLoading,
-    privateId,
-    storedPrivateId,
-    storedUserId,
-    userId
-  ]);
+  }, [currentUser, dispatch, isLoading, privateId, userId]);
 
   useEffect(() => {
     const fetchUserSpaces = () => {
@@ -84,7 +56,7 @@ function ContentPage() {
 
   return (
     <Container sx={{ height: '100%' }}>
-      {isLoading || !userSpaces ? (
+      {isLoading && !userSpaces ? (
         <CircularProgress
           sx={{
             position: 'absolute',
