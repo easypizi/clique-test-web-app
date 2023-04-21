@@ -31,7 +31,14 @@ function FileFilters() {
     }
 
     return filtersList.map((value) => (
-      <ToggleButton key={value} value={value} aria-label={value}>
+      <ToggleButton
+        sx={{ border: '1px solid rgba(100, 0, 0, 0.12)' }}
+        disableRipple
+        disableFocusRipple
+        key={value}
+        value={value}
+        aria-label={value}
+      >
         {getIconByType(value)}
       </ToggleButton>
     ));
@@ -50,6 +57,7 @@ function FileFilters() {
   return (
     <Box sx={{ paddingTop: '5px' }}>
       <ToggleButtonGroup
+        color="info"
         fullWidth
         disabled={isSpaceLoading}
         size="small"
