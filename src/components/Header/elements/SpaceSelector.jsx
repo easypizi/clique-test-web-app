@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 
@@ -12,6 +12,31 @@ function SpaceSelector() {
     ({ spaces }) => spaces
   );
   const { currentUser } = useSelector(({ user }) => user);
+
+  const { isSpaceUpdating } = useSelector(({ spaces }) => spaces);
+  const { isProcessingFile, isUploadingFile } = useSelector(
+    ({ files }) => files
+  );
+  const { isGroupDataUpdating } = useSelector(({ groups }) => groups);
+  const { isUserDataUpdating } = useSelector(({ user }) => user);
+
+  const isSelectorDisabled = useMemo(
+    () =>
+      isSpaceUpdating ||
+      isProcessingFile ||
+      isUploadingFile ||
+      isGroupDataUpdating ||
+      isUserDataUpdating ||
+      isSpaceLoading,
+    [
+      isGroupDataUpdating,
+      isProcessingFile,
+      isSpaceLoading,
+      isSpaceUpdating,
+      isUploadingFile,
+      isUserDataUpdating
+    ]
+  );
 
   const lastChosenSpace = currentUser?.user_last_chosen_space;
   const firstUserSpaceId = userSpaces?.[0]?.space_id ?? '';
@@ -78,6 +103,7 @@ function SpaceSelector() {
     <FormControl sx={{ minWidth: 120 }} size="small">
       <InputLabel id="space-choose-select-label">Space</InputLabel>
       <Select
+        disabled={isSelectorDisabled}
         labelId="space-choose-select-label"
         id="space-choose-select"
         value={chosenSpace}

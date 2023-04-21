@@ -12,7 +12,7 @@ import Header from '../../components/Header/Header';
 function ContentPage() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { currentUser, isUserDataLoading } = useSelector(({ user }) => user);
+  const { currentUser } = useSelector(({ user }) => user);
   const { userSpaces, isUserSpacesLoading } = useSelector(
     ({ spaces }) => spaces
   );
@@ -27,34 +27,30 @@ function ContentPage() {
     () => currentUser?.user_spaces || [],
     [currentUser?.user_spaces]
   );
-  const isLoading = useMemo(
-    () => isUserDataLoading || isUserSpacesLoading,
-    [isUserSpacesLoading, isUserDataLoading]
-  );
 
   useEffect(() => {
     const fetchUserData = () => {
-      if (!currentUser && !isLoading) {
+      if (!currentUser && !isUserSpacesLoading) {
         dispatch(getUser(userId, privateId));
       }
     };
 
     fetchUserData();
-  }, [currentUser, dispatch, isLoading, privateId, userId]);
+  }, [currentUser, dispatch, isUserSpacesLoading, privateId, userId]);
 
   useEffect(() => {
     const fetchUserSpaces = () => {
-      if (userSpacesIds?.length > 0 && !userSpaces && !isLoading) {
+      if (userSpacesIds?.length > 0 && !userSpaces && !isUserSpacesLoading) {
         dispatch(getUserSpaces(userSpacesIds));
       }
     };
 
     fetchUserSpaces();
-  }, [dispatch, isLoading, userSpaces, userSpacesIds]);
+  }, [dispatch, isUserSpacesLoading, userSpaces, userSpacesIds]);
 
   return (
     <Container sx={{ height: '100%' }}>
-      {isLoading && !userSpaces ? (
+      {!userSpaces || isUserSpacesLoading ? (
         <CircularProgress
           sx={{
             position: 'absolute',

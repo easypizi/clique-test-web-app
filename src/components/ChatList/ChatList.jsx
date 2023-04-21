@@ -74,12 +74,14 @@ function ChatList() {
   }, [formattedData, searchTerm]);
 
   useEffect(() => {
-    setGroupsVisibility(true);
-  }, [isSpaceLoading]);
+    if (!isAdmin) {
+      setGroupsVisibility(true);
+    }
+  }, [isAdmin]);
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {isLoading ? (
+      {isLoading && !currentSpace ? (
         <CircularProgress
           sx={{
             position: 'absolute',
@@ -134,8 +136,9 @@ function ChatList() {
               variant="body1"
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
-              No groups or channels has been found. Please try to choose other
-              space
+              {isVisibleGroups
+                ? 'No groups or channels has been found. Please try to choose other space'
+                : "You don't have any hidden groups"}
             </Typography>
           )}
         </Box>

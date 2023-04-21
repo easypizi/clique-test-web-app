@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { CircularProgress, Typography, Box, Checkbox } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -88,6 +88,12 @@ function UserList() {
     setUsersVisibility((value) => !value);
   }, []);
 
+  useEffect(() => {
+    if (!isAdmin) {
+      setUsersVisibility(true);
+    }
+  }, [isAdmin]);
+
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       {isSpaceLoading && !currentSpace ? (
@@ -140,7 +146,9 @@ function UserList() {
               variant="body1"
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
-              No users has been found
+              {isVisibleUsers
+                ? 'No users has been found'
+                : "You don't have any hidden users"}
             </Typography>
           )}
         </Box>

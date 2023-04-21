@@ -29,13 +29,12 @@ export const setActiveFileFiltersAction = (filters) => (dispatch) => {
 
 export const uploadFileAction = (data, spaceId) => async (dispatch) => {
   dispatch(fetchFileUploadingStart());
-  dispatch(fetchSpaceStart());
   try {
     const uploadedFile = await uploadFile(data);
     if (uploadedFile) {
-      dispatch(fetchFileUploadingSuccess());
       const space = await fetchSpace(spaceId);
       dispatch(fetchSpaceSuccess({ spaceData: space }));
+      dispatch(fetchFileUploadingSuccess());
     }
   } catch (error) {
     dispatch(fetchFileUploadingFailure(error));
