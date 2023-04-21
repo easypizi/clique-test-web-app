@@ -73,7 +73,7 @@ function MessageBoard() {
             <ScrollableContainer
               style={{
                 padding: '20px 2px 0 2px',
-                height: `calc(100% - ${offsetHeight + 5}px)`,
+                height: `calc(100% - ${offsetHeight - 2}px)`,
                 gap: '10px',
                 marginTop: '5px'
               }}

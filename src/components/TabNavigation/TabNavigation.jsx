@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Box } from '@mui/material';
@@ -22,6 +22,12 @@ import MessageBoard from '../MessageBoard/MessageBoard';
 
 function TabNavigation() {
   const { isSpaceLoading } = useSelector(({ spaces }) => spaces);
+  const { isGroupDataUpdating } = useSelector(({ groups }) => groups);
+
+  const isLoading = useMemo(
+    () => isSpaceLoading || isGroupDataUpdating,
+    [isGroupDataUpdating, isSpaceLoading]
+  );
 
   const [value, setValue] = useState(0);
 
@@ -44,27 +50,27 @@ function TabNavigation() {
       >
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpaceLoading}
+          disabled={isLoading}
           icon={<QuestionAnswerIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpaceLoading}
+          disabled={isLoading}
           icon={<GroupIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpaceLoading}
+          disabled={isLoading}
           icon={<AccountCircleIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpaceLoading}
+          disabled={isLoading}
           icon={<TagIcon />}
         />
         <Tab
           sx={{ minWidth: 'unset' }}
-          disabled={isSpaceLoading}
+          disabled={isLoading}
           icon={<DescriptionIcon />}
         />
       </Tabs>

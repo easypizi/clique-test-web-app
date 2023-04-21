@@ -12,7 +12,7 @@ import compareFilterArrays from '../../MessageBoard/helpers/compareFilters';
 
 function FileFilters() {
   const dispatch = useDispatch();
-  const { currentSpace } = useSelector((state) => state?.spaces);
+  const { currentSpace, isSpaceLoading } = useSelector((state) => state?.spaces);
   const { activeFileFilters } = useSelector((state) => state?.files);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const files = useMemo(() => currentSpace?.spaceFiles, [currentSpace]);
@@ -26,7 +26,7 @@ function FileFilters() {
   }, [files]);
 
   const renderFiltersGroups = useCallback(() => {
-    if (!filtersList?.length) {
+    if (!filtersList?.length || filtersList.length < 2) {
       return null;
     }
 
@@ -50,6 +50,8 @@ function FileFilters() {
   return (
     <Box sx={{ paddingTop: '5px' }}>
       <ToggleButtonGroup
+        fullWidth
+        disabled={isSpaceLoading}
         size="small"
         value={selectedFilters}
         onChange={handleToggle}

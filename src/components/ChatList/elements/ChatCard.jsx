@@ -3,12 +3,13 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-import { green, pink, blue, orange } from '@mui/material/colors';
+
 import { Typography, Avatar, Box, IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import { updateGroupData } from '../../../store/actions/groupsActions';
+import getColorByType from '../helpers/getColorByType';
 
 const ChatItem = styled(Link)`
   display: flex;
@@ -20,12 +21,6 @@ const ChatItem = styled(Link)`
   box-shadow: inset 0px 1px 0 0px rgb(0, 0, 0, 0.1),
     inset 0px -1px 0 0px rgb(0, 0, 0, 0.1);
 `;
-
-const color = () => {
-  const values = [green, pink, blue, orange];
-  const randomIndex = Math.floor(Math.random() * values.length);
-  return values[randomIndex];
-};
 
 function ChatCard({
   id,
@@ -41,6 +36,8 @@ function ChatCard({
 
   const [isButtonLocked, setIsButtonLocked] = useState(false);
   const [isVisible, setVisibility] = useState(true);
+
+  const color = useMemo(() => getColorByType(groupType), [groupType]);
 
   const letters = useMemo(() => {
     const groupNameArray = groupName && groupName.length && groupName.split(' ');
@@ -112,7 +109,7 @@ function ChatCard({
       <ChatItem to={groupLink}>
         <Avatar
           sx={{
-            background: color()[500],
+            background: color,
             width: 60,
             height: 60,
             marginRight: '10px'

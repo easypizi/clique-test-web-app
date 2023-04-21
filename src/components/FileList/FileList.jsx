@@ -124,7 +124,7 @@ function FileList() {
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {isLoading ? (
+      {isLoading && !currentSpace ? (
         <CircularProgress
           sx={{
             position: 'absolute',
@@ -169,7 +169,7 @@ function FileList() {
             <ScrollableContainer
               style={{
                 padding: '10px 2px 0 2px',
-                height: `calc(100% - ${offsetHeight + 40}px)`,
+                height: `calc(100% - ${offsetHeight + 38}px)`,
                 gap: '10px',
                 marginTop: '5px'
               }}

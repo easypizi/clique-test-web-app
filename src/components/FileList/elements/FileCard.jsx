@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
@@ -31,6 +31,8 @@ function FileCard({
 }) {
   const dispatch = useDispatch();
 
+  const [isVisible, setVisibility] = useState(true);
+
   const timezone = useMemo(
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
     []
@@ -61,6 +63,7 @@ function FileCard({
 
   const handleDeleteFile = useCallback(() => {
     dispatch(deleteFileAction(id, spaceId));
+    setVisibility(false);
   }, [dispatch, id, spaceId]);
 
   const handleDownloadClick = useCallback(() => {
@@ -80,7 +83,7 @@ function FileCard({
     <Box
       sx={{
         width: '100%',
-        display: 'flex',
+        display: isVisible ? 'flex' : 'none',
         alignItems: 'center',
         padding: '10px 0px 10px 15px',
         boxShadow: '0.5px 0.5px 1px 1px rgba(0, 0, 0, 0.1)'
