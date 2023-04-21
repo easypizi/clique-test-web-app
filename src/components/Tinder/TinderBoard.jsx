@@ -4,7 +4,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards } from 'swiper';
+import { EffectCards, Navigation } from 'swiper';
 
 import { CircularProgress, Box } from '@mui/material';
 
@@ -52,7 +52,13 @@ function TinderBoard() {
         />
       ) : (
         <Box sx={{ height: '100%', width: '100%' }}>
-          <Swiper grabCursor effect="cards" modules={[EffectCards]}>
+          <Swiper
+            navigation
+            grabCursor
+            loop
+            effect="cards"
+            modules={[EffectCards, Navigation]}
+          >
             {renderCards}
           </Swiper>
         </Box>
