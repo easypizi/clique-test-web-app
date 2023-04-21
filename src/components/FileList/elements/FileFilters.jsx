@@ -32,7 +32,10 @@ function FileFilters() {
 
     return filtersList.map((value) => (
       <ToggleButton
-        sx={{ border: '1px solid rgba(100, 0, 0, 0.12)' }}
+        sx={{
+          border: 'none !important',
+          boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)'
+        }}
         disableRipple
         disableFocusRipple
         key={value}
