@@ -1,17 +1,20 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-unresolved */
 
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, Navigation } from 'swiper';
+import { EffectCube, Navigation } from 'swiper';
 
-import { CircularProgress, Box } from '@mui/material';
+import { CircularProgress, Box, IconButton, Typography } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import TinderCard from './elements/TinderCard';
 
 import 'swiper/css';
-import 'swiper/css/effect-cards';
+import 'swiper/css/effect-cube';
 import './TinderBoard.css';
 
 function TinderBoard() {
@@ -40,6 +43,18 @@ function TinderBoard() {
     [tinderUsers]
   );
 
+  const handleBeforeInit = useCallback((swiper) => {
+    swiper.params.touchStartPreventDefault = false;
+    swiper.params.loop = true;
+    swiper.params.navigation = {
+      ...swiper.params.navigation,
+      prevEl: '.swiper-button-prev',
+      nextEl: '.swiper-button-next'
+    };
+  }, []);
+
+  // TODO: допилить расположение кнопок
+
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       {isLoading ? (
@@ -51,16 +66,69 @@ function TinderBoard() {
           }}
         />
       ) : (
-        <Box sx={{ height: '100%', width: '100%' }}>
+        <Box
+          sx={{
+            height: '100%',
+            width: '100%',
+            position: 'relative',
+            padding: '0 2px'
+          }}
+        >
           <Swiper
-            navigation
+            effect="cube"
             grabCursor
-            loop
-            effect="cards"
-            modules={[EffectCards, Navigation]}
+            cubeEffect={{
+              shadow: true,
+              slideShadows: true,
+              shadowOffset: 20,
+              shadowScale: 0.94
+            }}
+            allowTouchMove={false}
+            onBeforeInit={handleBeforeInit}
+            modules={[EffectCube, Navigation]}
           >
             {renderCards}
           </Swiper>
+          <Box
+            sx={{
+              cursor: 'pointer',
+              width: '35px',
+              height: '100px',
+              background: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'absolute',
+              bottom: '100px',
+              left: '-16px',
+              boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)',
+              justifyContent: 'flex-end',
+              borderRadius: '0 50% 50% 0',
+              zIndex: 2
+            }}
+            className="swiper-button-prev"
+          >
+            <ArrowBackIosNewIcon color="info" fontSize="large" />
+          </Box>
+          <Box
+            sx={{
+              cursor: 'pointer',
+              width: '35px',
+              height: '100px',
+              background: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'absolute',
+              bottom: '100px',
+              boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)',
+              right: '-16px',
+              justifyContent: 'flex-start',
+              borderRadius: '50% 0 0  50%',
+              zIndex: 2
+            }}
+            className="swiper-button-next"
+          >
+            <ArrowForwardIosIcon color="info" fontSize="large" />
+          </Box>
         </Box>
       )}
     </Box>
