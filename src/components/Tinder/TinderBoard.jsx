@@ -48,7 +48,7 @@ function TinderBoard() {
   );
 
   const handleBeforeInit = useCallback((swiper) => {
-    swiper.params.touchStartPreventDefault = false;
+    // swiper.params.touchStartPreventDefault = false;
     swiper.params.loop = true;
     swiper.params.navigation = {
       ...swiper.params.navigation,
