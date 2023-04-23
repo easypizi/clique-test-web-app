@@ -83,8 +83,8 @@ function TinderCard({
 
     if (
       currentUserLikedBy &&
-      currentUserLikedBy.includes(userId)
-      // && !connected.includes(currentUserId)
+      currentUserLikedBy.includes(userId) &&
+      !connected.includes(currentUserId)
     ) {
       const updateForCurrentUser = {
         user_id: currentUserId,
