@@ -33,9 +33,9 @@ function TinderCard({
   const [isLiked, setIsLiked] = useState();
   const [isBanned, setIsBanned] = useState();
 
-  // const preventPropagation = useCallback((event) => {
-  //   event.stopPropagation();
-  // }, []);
+  const preventPropagation = useCallback((event) => {
+    event.stopPropagation();
+  }, []);
 
   const handleImageError = useCallback(() => {
     setImageUrl('http://placekitten.com/g/500/500');
@@ -135,13 +135,16 @@ function TinderCard({
         </CardActions>
       </Box>
       <CardContent
-        // onTouchStart={preventPropagation}
-        // onTouchMove={preventPropagation}
-        // onTouchEnd={preventPropagation}
-        // onTouchCancel={preventPropagation}
-        // onWheel={preventPropagation}
+        onTouchStart={preventPropagation}
+        onTouchMove={preventPropagation}
+        onTouchEnd={preventPropagation}
+        onTouchCancel={preventPropagation}
+        onWheel={preventPropagation}
         sx={{
-          overflow: 'scroll'
+          overflow: 'scroll',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          }
         }}
       >
         {userBadges?.length > 0 && renderBadges()}

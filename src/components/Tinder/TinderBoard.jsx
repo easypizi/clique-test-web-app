@@ -80,7 +80,7 @@ function TinderBoard() {
         >
           <Swiper
             effect="cards"
-            grabCursor
+            longSwipes={false}
             cardsEffect={{
               perSlideOffset: 50,
               perSlideRotate: 10,
