@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
   Card,
@@ -16,22 +17,36 @@ import {
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
+import {
+  tinderMatchAction,
+  updateUserTinderAction
+} from '../../../store/actions/userActions';
+
+import '../TinderBoard.css';
+
 function TinderCard({
   userImage,
   userName,
   userDescription,
-  //   userId,
   userBadges,
-  userLastName
+  userLastName,
+  userId,
+  likes,
+  bans,
+  connected
 }) {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector(({ user }) => user);
+  const currentUserId = currentUser?.user_id;
+  const currentUserLikedBy = currentUser?.liked_by;
+  const currentUserConnections = currentUser?.connected;
+
   const [imageUrl, setImageUrl] = useState(
     userImage ?? 'http://placekitten.com/g/500/500'
   );
 
-  //   TODO: parse data from currentUser model
-
-  const [isLiked, setIsLiked] = useState();
-  const [isBanned, setIsBanned] = useState();
+  const [isLiked, setIsLiked] = useState(likes?.includes(currentUserId));
+  const [isBanned, setIsBanned] = useState(bans?.includes(currentUserId));
 
   const preventPropagation = useCallback((event) => {
     event.stopPropagation();
@@ -44,12 +59,61 @@ function TinderCard({
   const handleBanUser = useCallback(() => {
     setIsLiked(false);
     setIsBanned(true);
-  }, []);
+
+    const updatedData = {
+      user_id: userId,
+      liked_by: likes?.filter((id) => id !== currentUserId),
+      banned_by: [...new Set([...bans, currentUserId])]
+    };
+
+    dispatch(updateUserTinderAction(updatedData));
+  }, [bans, currentUserId, dispatch, likes, userId]);
 
   const handleLikeUser = useCallback(() => {
     setIsLiked(true);
     setIsBanned(false);
-  }, []);
+
+    const updatedData = {
+      user_id: userId,
+      liked_by: [...new Set([...likes, currentUserId])],
+      banned_by: bans.filter((id) => id !== currentUserId)
+    };
+
+    dispatch(updateUserTinderAction(updatedData));
+
+    if (
+      currentUserLikedBy &&
+      currentUserLikedBy.includes(userId)
+      // && !connected.includes(currentUserId)
+    ) {
+      const updateForCurrentUser = {
+        user_id: currentUserId,
+        connected: [...new Set([...currentUserConnections, userId])]
+      };
+      dispatch(updateUserTinderAction(updateForCurrentUser));
+
+      const updateForTinderConnectionUser = {
+        user_id: userId,
+        connected: [...new Set([...connected, currentUserId])]
+      };
+      dispatch(updateUserTinderAction(updateForTinderConnectionUser));
+
+      const tinderMatchData = {
+        data: [userId, currentUserId]
+      };
+
+      dispatch(tinderMatchAction(tinderMatchData));
+    }
+  }, [
+    userId,
+    likes,
+    currentUserId,
+    bans,
+    dispatch,
+    currentUserLikedBy,
+    connected,
+    currentUserConnections
+  ]);
 
   const renderBadges = useCallback(
     () => (
@@ -113,10 +177,10 @@ function TinderCard({
                 : 'transparent !important'
             }}
             size="medium"
-            color={isBanned ? 'default' : 'error'}
+            color="error"
             onClick={handleBanUser}
           >
-            <NotInterestedIcon />
+            <NotInterestedIcon className={isBanned ? 'filled' : ''} />
           </IconButton>
           <IconButton
             component="div"
@@ -127,10 +191,10 @@ function TinderCard({
                 : 'transparent !important'
             }}
             size="medium"
-            color={isLiked ? 'default' : 'success'}
+            color="success"
             onClick={handleLikeUser}
           >
-            <FavoriteBorderIcon />
+            <FavoriteBorderIcon className={isLiked ? 'filled' : ''} />
           </IconButton>
         </CardActions>
       </Box>
@@ -141,6 +205,7 @@ function TinderCard({
         onTouchCancel={preventPropagation}
         onWheel={preventPropagation}
         sx={{
+          whiteSpace: 'pre-wrap',
           overflow: 'scroll',
           '&::-webkit-scrollbar': {
             display: 'none'
@@ -165,8 +230,11 @@ TinderCard.propTypes = {
   userName: PropTypes.string,
   userLastName: PropTypes.string,
   userDescription: PropTypes.string,
-  userBadges: PropTypes.arrayOf(PropTypes.string)
-  //   userId: PropTypes.string
+  userBadges: PropTypes.arrayOf(PropTypes.string),
+  connected: PropTypes.arrayOf(PropTypes.string),
+  bans: PropTypes.arrayOf(PropTypes.string),
+  likes: PropTypes.arrayOf(PropTypes.string),
+  userId: PropTypes.string
 };
 
 export default TinderCard;

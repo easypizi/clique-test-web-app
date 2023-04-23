@@ -1,13 +1,11 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
 /* eslint-disable import/no-unresolved */
-
 import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Navigation } from 'swiper';
 
-import { CircularProgress, Box, IconButton, Typography } from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
@@ -27,11 +25,10 @@ function TinderBoard() {
   );
 
   const tinderUsers = currentSpace?.spaceUsers;
-
-  // const filteredUsers = useMemo(
-  //   () => tinderUsers.filter(({ userId }) => userId !== currentUser?.user_id),
-  //   [currentUser?.user_id, tinderUsers]
-  // );
+  const filteredUsers = useMemo(
+    () => tinderUsers.filter(({ userId }) => userId !== currentUser?.user_id),
+    [currentUser?.user_id, tinderUsers]
+  );
 
   const preventPropagation = useCallback((event) => {
     event.stopPropagation();
@@ -39,12 +36,12 @@ function TinderBoard() {
 
   const renderCards = useMemo(
     () =>
-      tinderUsers.map((user) => (
+      filteredUsers.map((user) => (
         <SwiperSlide key={user.userId}>
           <TinderCard {...user} />
         </SwiperSlide>
       )),
-    [tinderUsers]
+    [filteredUsers]
   );
 
   const handleBeforeInit = useCallback((swiper) => {
@@ -56,8 +53,6 @@ function TinderBoard() {
       nextEl: '.swiper-button-next'
     };
   }, []);
-
-  // TODO: допилить расположение кнопок
 
   return (
     <Box sx={{ height: '100%', width: '100%' }}>

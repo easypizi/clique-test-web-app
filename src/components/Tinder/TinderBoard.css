@@ -18,3 +18,7 @@
     overflow: auto;
 }
 
+.filled {
+  fill: #ffffff !important;
+}
+
