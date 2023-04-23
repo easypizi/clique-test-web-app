@@ -79,7 +79,7 @@ function TinderBoard() {
             grabCursor
             cubeEffect={{
               shadow: true,
-              slideShadows: true,
+              slideShadows: false,
               shadowOffset: 20,
               shadowScale: 0.94
             }}
