@@ -78,7 +78,7 @@ function TinderCard({
       sx={{
         width: '100%',
         height: '100%',
-        overflow: 'auto',
+        overflow: 'scroll',
         boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)'
       }}
     >
@@ -141,7 +141,7 @@ function TinderCard({
         onTouchCancel={preventPropagation}
         onWheel={preventPropagation}
         sx={{
-          overflow: 'auto',
+          overflow: 'scroll',
           '&::-webkit-scrollbar': {
             display: 'none'
           }
