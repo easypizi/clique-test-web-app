@@ -33,6 +33,10 @@ function TinderBoard() {
   //   [currentUser?.user_id, tinderUsers]
   // );
 
+  const preventPropagation = useCallback((event) => {
+    event.stopPropagation();
+  }, []);
+
   const renderCards = useMemo(
     () =>
       tinderUsers.map((user) => (
@@ -83,9 +87,13 @@ function TinderBoard() {
               shadowOffset: 20,
               shadowScale: 0.94
             }}
-            allowTouchMove={false}
             onBeforeInit={handleBeforeInit}
             modules={[EffectCube, Navigation]}
+            onTouchStart={preventPropagation}
+            onTouchMove={preventPropagation}
+            onTouchEnd={preventPropagation}
+            onTouchCancel={preventPropagation}
+            onWheel={preventPropagation}
           >
             {renderCards}
           </Swiper>
