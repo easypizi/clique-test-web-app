@@ -5,7 +5,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCube, Navigation } from 'swiper';
+import { EffectCards, Navigation } from 'swiper';
 
 import { CircularProgress, Box, IconButton, Typography } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -14,7 +14,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import TinderCard from './elements/TinderCard';
 
 import 'swiper/css';
-import 'swiper/css/effect-cube';
+import 'swiper/css/effect-cards';
 import './TinderBoard.css';
 
 function TinderBoard() {
@@ -48,7 +48,7 @@ function TinderBoard() {
   );
 
   const handleBeforeInit = useCallback((swiper) => {
-    // swiper.params.touchStartPreventDefault = false;
+    swiper.params.touchStartPreventDefault = false;
     swiper.params.loop = true;
     swiper.params.navigation = {
       ...swiper.params.navigation,
@@ -79,21 +79,20 @@ function TinderBoard() {
           }}
         >
           <Swiper
-            effect="cube"
+            effect="cards"
             grabCursor
-            cubeEffect={{
-              shadow: true,
-              slideShadows: false,
-              shadowOffset: 20,
-              shadowScale: 0.94
+            cardsEffect={{
+              perSlideOffset: 50,
+              perSlideRotate: 10,
+              rotate: false,
+              slideShadows: false
             }}
             onBeforeInit={handleBeforeInit}
-            modules={[EffectCube, Navigation]}
-            onTouchStart={preventPropagation}
-            onTouchMove={preventPropagation}
-            onTouchEnd={preventPropagation}
-            onTouchCancel={preventPropagation}
-            onWheel={preventPropagation}
+            modules={[EffectCards, Navigation]}
+            onTouchStart={(swiper, event) => preventPropagation(event)}
+            onTouchMove={(swiper, event) => preventPropagation(event)}
+            onTouchEnd={(swiper, event) => preventPropagation(event)}
+            onTouchCancel={(swiper, event) => preventPropagation(event)}
           >
             {renderCards}
           </Swiper>

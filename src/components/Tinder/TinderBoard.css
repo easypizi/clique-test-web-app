@@ -15,5 +15,6 @@
 
 .swiper-slide{
     background-color: #ffffff;
+    overflow: auto;
 }
 
