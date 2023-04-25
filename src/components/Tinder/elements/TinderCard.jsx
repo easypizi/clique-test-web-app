@@ -2,6 +2,7 @@ import React, { useCallback, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
+  Fade,
   Card,
   CardHeader,
   CardMedia,
@@ -17,6 +18,7 @@ import {
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import Person4Icon from '@mui/icons-material/Person4';
 
 import {
   tinderMatchAction,
@@ -41,12 +43,16 @@ function TinderCard({
   const currentUserLikedBy = currentUser?.liked_by;
   const currentUserConnections = currentUser?.connected;
 
-  const [imageUrl, setImageUrl] = useState(
-    userImage ?? 'http://placekitten.com/g/500/500'
-  );
+  const [imageUrl, setImageUrl] = useState(userImage);
 
   const [isLiked, setIsLiked] = useState(likes?.includes(currentUserId));
   const [isBanned, setIsBanned] = useState(bans?.includes(currentUserId));
+
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, [setImageLoaded]);
 
   const isConnected = useMemo(
     () => connected.includes(currentUser.user_id),
@@ -54,7 +60,7 @@ function TinderCard({
   );
 
   const handleImageError = useCallback(() => {
-    setImageUrl('http://placekitten.com/g/500/500');
+    setImageUrl(null);
   }, []);
 
   const handleBanUser = useCallback(
@@ -155,13 +161,33 @@ function TinderCard({
         boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)'
       }}
     >
-      <CardMedia
-        sx={{ background: 'lightGrey' }}
-        component="img"
-        height="50%"
-        image={imageUrl}
-        onError={handleImageError}
-      />
+      {imageUrl ? (
+        <Fade
+          in={imageLoaded}
+          style={{ transitionDelay: imageLoaded ? '300ms' : '0ms' }}
+        >
+          <CardMedia
+            onLoad={handleImageLoad}
+            sx={{ background: 'lightGrey' }}
+            component="img"
+            height="50%"
+            image={imageUrl}
+            onError={handleImageError}
+          />
+        </Fade>
+      ) : (
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            height: '50%',
+            alignItems: 'flex-end',
+            justifyContent: 'center'
+          }}
+        >
+          <Person4Icon sx={{ width: '100%', height: '100%', opacity: '0.5' }} />
+        </Box>
+      )}
       <Box
         sx={{
           display: 'flex',
