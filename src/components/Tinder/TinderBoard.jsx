@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import Slider from 'react-slick';
-import { CircularProgress, Box } from '@mui/material';
+import { CircularProgress, Box, Typography } from '@mui/material';
 
 import TinderCard from './elements/TinderCard';
 import sortTinderUsers from './helpers/sortTinderUsers';
@@ -36,12 +36,14 @@ function TinderBoard() {
   const tinderUsers = currentSpace?.spaceUsers;
 
   const filteredUsers = useMemo(() => {
-    const filtered = tinderUsers.filter(
-      ({ userId, userHiddenSpaces, isVisible }) =>
-        userId !== currentUser?.user_id &&
-        !userHiddenSpaces.includes(currentSpace.spaceId) &&
-        isVisible
-    );
+    const filtered =
+      tinderUsers &&
+      tinderUsers.filter(
+        ({ userId, userHiddenSpaces, isVisible }) =>
+          userId !== currentUser?.user_id &&
+          !userHiddenSpaces.includes(currentSpace.spaceId) &&
+          isVisible
+      );
 
     return sortTinderUsers(filtered);
   }, [currentSpace.spaceId, currentUser?.user_id, tinderUsers]);
@@ -70,7 +72,20 @@ function TinderBoard() {
             padding: '0 2px'
           }}
         >
-          <Slider {...settings}>{renderCards}</Slider>
+          {tinderUsers && tinderUsers.length ? (
+            <Slider {...settings}>{renderCards}</Slider>
+          ) : (
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center'
+              }}
+            >
+              <Typography>No users for networking</Typography>
+            </Box>
+          )}
         </Box>
       )}
     </Box>

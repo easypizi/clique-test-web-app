@@ -181,7 +181,7 @@ function TinderCard({
             sx={{
               width: '100%',
               display: 'flex',
-              height: '60%',
+              height: '400px',
               alignItems: 'flex-end',
               justifyContent: 'center'
             }}
