@@ -170,7 +170,7 @@ function TinderCard({
             onLoad={handleImageLoad}
             sx={{ background: 'lightGrey' }}
             component="img"
-            height="60%"
+            height="400px"
             image={imageUrl}
             onError={handleImageError}
           />
