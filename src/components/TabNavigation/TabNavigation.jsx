@@ -11,6 +11,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
+import EventIcon from '@mui/icons-material/Event';
 import TabPanel from './elements/TabPanel';
 import UserList from '../UserList/UserList';
 import UserProfile from '../UserProfile/UserProfile';
@@ -18,9 +19,7 @@ import ChatList from '../ChatList/ChatList';
 import FileList from '../FileList/FileList';
 import MessageBoard from '../MessageBoard/MessageBoard';
 import TinderBoard from '../Tinder/TinderBoard';
-
-// TODO: Calendar
-// import EventIcon from '@mui/icons-material/Event';
+import EventList from '../EventList/EventList';
 
 function TabNavigation() {
   const { isSpaceLoading } = useSelector(({ spaces }) => spaces);
@@ -83,6 +82,11 @@ function TabNavigation() {
           disabled={isLoading}
           icon={<DescriptionIcon />}
         />
+        <Tab
+          sx={{ minWidth: 'unset' }}
+          disabled={isLoading}
+          icon={<EventIcon />}
+        />
       </Tabs>
       <TabPanel withPadding value={value} index={0}>
         <ChatList />
@@ -101,6 +105,9 @@ function TabNavigation() {
       </TabPanel>
       <TabPanel withPadding value={value} index={5}>
         <FileList />
+      </TabPanel>
+      <TabPanel withPadding value={value} index={6}>
+        <EventList />
       </TabPanel>
     </Box>
   );

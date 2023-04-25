@@ -144,11 +144,10 @@ function FileList() {
             <Search onSearch={setSearchTerm} />
             {isAdmin && (
               <IconButton
-                color="primary"
                 aria-label="upload file"
                 component="label"
                 sx={{
-                  background: 'lightBlue'
+                  background: '#03a9f4'
                 }}
               >
                 <input
@@ -158,7 +157,7 @@ function FileList() {
                   multiple
                   type="file"
                 />
-                <AddCircleOutlineIcon color="action" />
+                <AddCircleOutlineIcon color="action" sx={{ fill: '#ffffff' }} />
               </IconButton>
             )}
           </Box>
