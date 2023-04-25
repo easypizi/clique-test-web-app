@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
@@ -16,13 +16,12 @@ import {
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 
 import {
   tinderMatchAction,
-  updateUserTinderAction
+  updateSpaceUserAction
 } from '../../../store/actions/userActions';
-
-import '../TinderBoard.css';
 
 function TinderCard({
   userImage,
@@ -37,6 +36,7 @@ function TinderCard({
 }) {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(({ user }) => user);
+  const { currentSpace } = useSelector(({ spaces }) => spaces);
   const currentUserId = currentUser?.user_id;
   const currentUserLikedBy = currentUser?.liked_by;
   const currentUserConnections = currentUser?.connected;
@@ -47,6 +47,11 @@ function TinderCard({
 
   const [isLiked, setIsLiked] = useState(likes?.includes(currentUserId));
   const [isBanned, setIsBanned] = useState(bans?.includes(currentUserId));
+
+  const isConnected = useMemo(
+    () => connected.includes(currentUser.user_id),
+    [connected, currentUser.user_id]
+  );
 
   const preventPropagation = useCallback((event) => {
     event.stopPropagation();
@@ -66,8 +71,8 @@ function TinderCard({
       banned_by: [...new Set([...bans, currentUserId])]
     };
 
-    dispatch(updateUserTinderAction(updatedData));
-  }, [bans, currentUserId, dispatch, likes, userId]);
+    dispatch(updateSpaceUserAction(updatedData, currentSpace?.spaceId));
+  }, [bans, currentSpace?.spaceId, currentUserId, dispatch, likes, userId]);
 
   const handleLikeUser = useCallback(() => {
     setIsLiked(true);
@@ -79,8 +84,6 @@ function TinderCard({
       banned_by: bans.filter((id) => id !== currentUserId)
     };
 
-    dispatch(updateUserTinderAction(updatedData));
-
     if (
       currentUserLikedBy &&
       currentUserLikedBy.includes(userId) &&
@@ -90,26 +93,26 @@ function TinderCard({
         user_id: currentUserId,
         connected: [...new Set([...currentUserConnections, userId])]
       };
-      dispatch(updateUserTinderAction(updateForCurrentUser));
-
-      const updateForTinderConnectionUser = {
-        user_id: userId,
-        connected: [...new Set([...connected, currentUserId])]
-      };
-      dispatch(updateUserTinderAction(updateForTinderConnectionUser));
+      dispatch(
+        updateSpaceUserAction(updateForCurrentUser, currentSpace?.spaceId)
+      );
 
       const tinderMatchData = {
         data: [userId, currentUserId]
       };
 
       dispatch(tinderMatchAction(tinderMatchData));
+      updatedData.connected = [...new Set([...connected, currentUserId])];
     }
+
+    dispatch(updateSpaceUserAction(updatedData, currentSpace?.spaceId));
   }, [
     userId,
     likes,
     currentUserId,
     bans,
     dispatch,
+    currentSpace?.spaceId,
     currentUserLikedBy,
     connected,
     currentUserConnections
@@ -154,10 +157,26 @@ function TinderCard({
         alt={userName}
         onError={handleImageError}
       />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}
+      >
         <CardHeader
+          sx={{ marginRight: 'auto' }}
           title={`${userName || 'Anonymous'} ${userLastName || ''}`}
         />
+        {isConnected && (
+          <Box sx={{ marginRight: '10px' }}>
+            <ConnectWithoutContactIcon
+              sx={{ width: 30, height: 30 }}
+              color="warning"
+              fontSize="40px"
+            />
+          </Box>
+        )}
         <CardActions
           sx={{
             display: 'flex',

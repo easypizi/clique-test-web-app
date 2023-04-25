@@ -9,7 +9,7 @@ function Header() {
     <Box
       sx={{
         width: '100%',
-        padding: '5px 0 10px 0',
+        padding: '5px 16px 10px 16px',
         height: '50px',
         borderBottom: '0.5px solid lightgrey'
       }}

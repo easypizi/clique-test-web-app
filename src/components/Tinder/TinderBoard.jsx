@@ -1,19 +1,28 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable import/no-unresolved */
-import React, { useCallback, useMemo } from 'react';
+/* eslint-disable import/no-extraneous-dependencies */
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, Navigation } from 'swiper';
 
+import Slider from 'react-slick';
 import { CircularProgress, Box } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import TinderCard from './elements/TinderCard';
+import sortTinderUsers from './helpers/sortTinderUsers';
 
-import 'swiper/css';
-import 'swiper/css/effect-cards';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import './TinderBoard.css';
+
+const settings = {
+  className: 'slider',
+  centerMode: true,
+  infinite: true,
+  centerPadding: '20px',
+  lazyLoad: true,
+  speed: 300,
+  slidesToShow: 1,
+  touchThreshold: 20
+};
 
 function TinderBoard() {
   const { currentSpace, isSpaceLoading } = useSelector(({ spaces }) => spaces);
@@ -25,38 +34,27 @@ function TinderBoard() {
   );
 
   const tinderUsers = currentSpace?.spaceUsers;
-  const filteredUsers = useMemo(
-    () => tinderUsers.filter(({ userId }) => userId !== currentUser?.user_id),
-    [currentUser?.user_id, tinderUsers]
-  );
 
-  const preventPropagation = useCallback((event) => {
-    event.stopPropagation();
-  }, []);
+  const filteredUsers = useMemo(() => {
+    const filtered = tinderUsers.filter(
+      ({ userId, userHiddenSpaces, isVisible }) =>
+        userId !== currentUser?.user_id &&
+        !userHiddenSpaces.includes(currentSpace.spaceId) &&
+        isVisible
+    );
+
+    return sortTinderUsers(filtered);
+  }, [currentSpace.spaceId, currentUser?.user_id, tinderUsers]);
 
   const renderCards = useMemo(
     () =>
-      filteredUsers.map((user) => (
-        <SwiperSlide key={user.userId}>
-          <TinderCard {...user} />
-        </SwiperSlide>
-      )),
+      filteredUsers.map((user) => <TinderCard key={user.userId} {...user} />),
     [filteredUsers]
   );
 
-  const handleBeforeInit = useCallback((swiper) => {
-    swiper.params.touchStartPreventDefault = false;
-    swiper.params.loop = true;
-    swiper.params.navigation = {
-      ...swiper.params.navigation,
-      prevEl: '.swiper-button-prev',
-      nextEl: '.swiper-button-next'
-    };
-  }, []);
-
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {isLoading ? (
+      {isLoading && !currentSpace ? (
         <CircularProgress
           sx={{
             position: 'absolute',
@@ -69,68 +67,10 @@ function TinderBoard() {
           sx={{
             height: '100%',
             width: '100%',
-            position: 'relative',
             padding: '0 2px'
           }}
         >
-          <Swiper
-            effect="cards"
-            longSwipes={false}
-            cardsEffect={{
-              perSlideOffset: 50,
-              perSlideRotate: 10,
-              rotate: false,
-              slideShadows: false
-            }}
-            onBeforeInit={handleBeforeInit}
-            modules={[EffectCards, Navigation]}
-            onTouchStart={(swiper, event) => preventPropagation(event)}
-            onTouchMove={(swiper, event) => preventPropagation(event)}
-            onTouchEnd={(swiper, event) => preventPropagation(event)}
-            onTouchCancel={(swiper, event) => preventPropagation(event)}
-          >
-            {renderCards}
-          </Swiper>
-          <Box
-            sx={{
-              cursor: 'pointer',
-              width: '35px',
-              height: '100px',
-              background: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              position: 'absolute',
-              bottom: '100px',
-              left: '-16px',
-              boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)',
-              justifyContent: 'flex-end',
-              borderRadius: '0 50% 50% 0',
-              zIndex: 2
-            }}
-            className="swiper-button-prev"
-          >
-            <ArrowBackIosNewIcon color="info" fontSize="large" />
-          </Box>
-          <Box
-            sx={{
-              cursor: 'pointer',
-              width: '35px',
-              height: '100px',
-              background: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              position: 'absolute',
-              bottom: '100px',
-              boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)',
-              right: '-16px',
-              justifyContent: 'flex-start',
-              borderRadius: '50% 0 0  50%',
-              zIndex: 2
-            }}
-            className="swiper-button-next"
-          >
-            <ArrowForwardIosIcon color="info" fontSize="large" />
-          </Box>
+          <Slider {...settings}>{renderCards}</Slider>
         </Box>
       )}
     </Box>

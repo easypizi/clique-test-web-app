@@ -48,19 +48,6 @@ export const updateCurrentUserData = (userData) => async (dispatch) => {
   }
 };
 
-export const updateUserTinderAction = (userData) => async (dispatch) => {
-  dispatch(fetchCurrentUserUpdateStart());
-  try {
-    const result = await updateUser(userData);
-    if (result) {
-      // Dropping result, because we don't need any state to be saved
-      dispatch(resetCurrentUserUpdateStates());
-    }
-  } catch (error) {
-    dispatch(fetchCurrentUserUpdateFailure(error.message));
-  }
-};
-
 export const updateSpaceUserAction =
   (userData, spaceId) => async (dispatch) => {
     dispatch(fetchSpaceStart());

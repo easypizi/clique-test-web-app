@@ -1,24 +1,40 @@
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 18px;
-  font-size: 22px;
-  font-weight: bold;
-  color: #fff;
-}
-
-.swiper-slide{
-    background-color: #ffffff;
-    overflow: auto;
-}
-
 .filled {
   fill: #ffffff !important;
 }
+
+.slider, .slider > div {
+  height: 100% !important;
+}
+
+.slick-track{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 100%;
+}
+
+
+
+.slick-slide > div {
+  height: 100%;
+  width: 100%;
+}
+
+.slick-slide {
+  height: 100%;
+  width: 100%;
+  max-height: 90%;
+  transition: max-height 0.3s ease-in-out;
+  
+}
+
+.slick-active, .slick-center, .slick-current {
+  height: 100%;
+  max-height: 100%;
+  transition: max-height 0.3s ease-in-out;
+}
+
+
+
+
 

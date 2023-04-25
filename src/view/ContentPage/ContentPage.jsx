@@ -49,7 +49,7 @@ function ContentPage() {
   }, [dispatch, isUserSpacesLoading, userSpaces, userSpacesIds]);
 
   return (
-    <Container sx={{ height: '100%' }}>
+    <Container sx={{ height: '100%', padding: '0' }}>
       {!userSpaces || isUserSpacesLoading ? (
         <CircularProgress
           sx={{

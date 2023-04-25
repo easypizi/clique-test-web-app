@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const { children, value, index, withPadding, ...other } = props;
 
   return (
     <Box
       sx={{
         maxHeight: 'calc(100% - 50px)',
         background: '#fffffe',
-        flexGrow: 1
+        flexGrow: 1,
+        padding: withPadding ? '0 16px' : '0'
       }}
       role="tabpanel"
       hidden={value !== index}
@@ -27,6 +28,7 @@ function TabPanel(props) {
 
 TabPanel.propTypes = {
   children: PropTypes.node,
+  withPadding: PropTypes.bool,
   value: PropTypes.number,
   index: PropTypes.number
 };

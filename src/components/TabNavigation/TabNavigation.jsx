@@ -49,7 +49,7 @@ function TabNavigation() {
     >
       <Tabs
         variant="fullWidth"
-        sx={{ width: '100%', padding: '0' }}
+        sx={{ width: '100%', padding: '0 16px' }}
         value={value}
         onChange={handleChange}
       >
@@ -84,22 +84,22 @@ function TabNavigation() {
           icon={<DescriptionIcon />}
         />
       </Tabs>
-      <TabPanel value={value} index={0}>
+      <TabPanel withPadding value={value} index={0}>
         <ChatList />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel withPadding value={value} index={1}>
         <UserList />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel withPadding value={value} index={2}>
         <UserProfile />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <TinderBoard />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel withPadding value={value} index={4}>
         <MessageBoard />
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel withPadding value={value} index={5}>
         <FileList />
       </TabPanel>
     </Box>
