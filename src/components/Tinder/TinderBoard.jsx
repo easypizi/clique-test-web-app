@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -39,12 +38,13 @@ function TinderBoard() {
   const filteredUsers = useMemo(() => {
     const filtered = tinderUsers.filter(
       ({ userId, userHiddenSpaces, isVisible }) =>
-        // userId !== currentUser?.user_id &&
-        !userHiddenSpaces.includes(currentSpace.spaceId) && isVisible
+        userId !== currentUser?.user_id &&
+        !userHiddenSpaces.includes(currentSpace.spaceId) &&
+        isVisible
     );
 
     return sortTinderUsers(filtered);
-  }, [currentSpace.spaceId, tinderUsers]);
+  }, [currentSpace.spaceId, currentUser?.user_id, tinderUsers]);
 
   const renderCards = useMemo(
     () =>

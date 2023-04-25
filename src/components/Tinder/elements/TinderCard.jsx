@@ -132,21 +132,20 @@ function TinderCard({
 
   const renderBadges = useCallback(
     () => (
-      <>
-        <Box
-          sx={{
-            display: 'flex',
-            width: '100%',
-            flexWrap: 'wrap',
-            gap: '10px'
-          }}
-        >
-          {userBadges.map((item) => (
+      <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          flexWrap: 'wrap',
+          gap: '10px',
+          flexShrink: 0
+        }}
+      >
+        {userBadges &&
+          userBadges.map((item) => (
             <Chip key={item} label={item} size="small" variant="outlined" />
           ))}
-        </Box>
-        <Divider sx={{ margin: '10px 0' }} />
-      </>
+      </Box>
     ),
     [userBadges]
   );
@@ -157,8 +156,9 @@ function TinderCard({
       sx={{
         width: '100%',
         height: '100%',
-        overflow: 'scroll',
-        boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)'
+        boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.12)',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       {imageUrl ? (
@@ -170,23 +170,27 @@ function TinderCard({
             onLoad={handleImageLoad}
             sx={{ background: 'lightGrey' }}
             component="img"
-            height="50%"
+            height="60%"
             image={imageUrl}
             onError={handleImageError}
           />
         </Fade>
       ) : (
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            height: '50%',
-            alignItems: 'flex-end',
-            justifyContent: 'center'
-          }}
-        >
-          <Person4Icon sx={{ width: '100%', height: '100%', opacity: '0.5' }} />
-        </Box>
+        <Fade in style={{ transitionDelay: '300ms' }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              height: '60%',
+              alignItems: 'flex-end',
+              justifyContent: 'center'
+            }}
+          >
+            <Person4Icon
+              sx={{ width: '100%', height: '100%', opacity: '0.5' }}
+            />
+          </Box>
+        </Fade>
       )}
       <Box
         sx={{
@@ -248,10 +252,18 @@ function TinderCard({
           </IconButton>
         </CardActions>
       </Box>
-      <CardContent>
-        {userBadges?.length > 0 && renderBadges()}
+      <CardContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+          height: '100%',
+          maxHeight: '30%'
+        }}
+      >
         <Typography
           sx={{
+            marginBottom: 'auto',
             whiteSpace: 'pre-wrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -266,6 +278,8 @@ function TinderCard({
         >
           {userDescription}
         </Typography>
+        {userBadges?.length > 0 && <Divider sx={{ margin: '10px 0' }} />}
+        {userBadges?.length > 0 && renderBadges()}
       </CardContent>
     </Card>
   );

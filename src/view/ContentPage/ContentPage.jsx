@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Container, CircularProgress, Box } from '@mui/material';
+import { Container, CircularProgress, Box, Typography } from '@mui/material';
 
 import { getUser } from '../../store/actions/userActions';
 import { getUserSpaces } from '../../store/actions/spaceActions';
@@ -47,6 +47,24 @@ function ContentPage() {
 
     fetchUserSpaces();
   }, [dispatch, isUserSpacesLoading, userSpaces, userSpacesIds]);
+
+  if (currentUser && !userSpacesIds.length) {
+    return (
+      <Container
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <Typography variant="h2">404</Typography>
+        <Typography>You have not any space to participate</Typography>
+      </Container>
+    );
+  }
 
   return (
     <Container sx={{ height: '100%', padding: '0' }}>
