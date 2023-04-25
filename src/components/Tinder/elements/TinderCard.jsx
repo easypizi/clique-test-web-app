@@ -53,70 +53,76 @@ function TinderCard({
     [connected, currentUser.user_id]
   );
 
-  const preventPropagation = useCallback((event) => {
-    event.stopPropagation();
-  }, []);
-
   const handleImageError = useCallback(() => {
     setImageUrl('http://placekitten.com/g/500/500');
   }, []);
 
-  const handleBanUser = useCallback(() => {
-    setIsLiked(false);
-    setIsBanned(true);
+  const handleBanUser = useCallback(
+    (event) => {
+      event.stopPropagation();
 
-    const updatedData = {
-      user_id: userId,
-      liked_by: likes?.filter((id) => id !== currentUserId),
-      banned_by: [...new Set([...bans, currentUserId])]
-    };
+      setIsLiked(false);
+      setIsBanned(true);
 
-    dispatch(updateSpaceUserAction(updatedData, currentSpace?.spaceId));
-  }, [bans, currentSpace?.spaceId, currentUserId, dispatch, likes, userId]);
-
-  const handleLikeUser = useCallback(() => {
-    setIsLiked(true);
-    setIsBanned(false);
-
-    const updatedData = {
-      user_id: userId,
-      liked_by: [...new Set([...likes, currentUserId])],
-      banned_by: bans.filter((id) => id !== currentUserId)
-    };
-
-    if (
-      currentUserLikedBy &&
-      currentUserLikedBy.includes(userId) &&
-      !connected.includes(currentUserId)
-    ) {
-      const updateForCurrentUser = {
-        user_id: currentUserId,
-        connected: [...new Set([...currentUserConnections, userId])]
-      };
-      dispatch(
-        updateSpaceUserAction(updateForCurrentUser, currentSpace?.spaceId)
-      );
-
-      const tinderMatchData = {
-        data: [userId, currentUserId]
+      const updatedData = {
+        user_id: userId,
+        liked_by: likes?.filter((id) => id !== currentUserId),
+        banned_by: [...new Set([...bans, currentUserId])]
       };
 
-      dispatch(tinderMatchAction(tinderMatchData));
-      updatedData.connected = [...new Set([...connected, currentUserId])];
-    }
+      dispatch(updateSpaceUserAction(updatedData, currentSpace?.spaceId));
+    },
+    [bans, currentSpace?.spaceId, currentUserId, dispatch, likes, userId]
+  );
 
-    dispatch(updateSpaceUserAction(updatedData, currentSpace?.spaceId));
-  }, [
-    userId,
-    likes,
-    currentUserId,
-    bans,
-    dispatch,
-    currentSpace?.spaceId,
-    currentUserLikedBy,
-    connected,
-    currentUserConnections
-  ]);
+  const handleLikeUser = useCallback(
+    (event) => {
+      event.stopPropagation();
+
+      setIsLiked(true);
+      setIsBanned(false);
+
+      const updatedData = {
+        user_id: userId,
+        liked_by: [...new Set([...likes, currentUserId])],
+        banned_by: bans.filter((id) => id !== currentUserId)
+      };
+
+      if (
+        currentUserLikedBy &&
+        currentUserLikedBy.includes(userId) &&
+        !connected.includes(currentUserId)
+      ) {
+        const updateForCurrentUser = {
+          user_id: currentUserId,
+          connected: [...new Set([...currentUserConnections, userId])]
+        };
+        dispatch(
+          updateSpaceUserAction(updateForCurrentUser, currentSpace?.spaceId)
+        );
+
+        const tinderMatchData = {
+          data: [userId, currentUserId]
+        };
+
+        dispatch(tinderMatchAction(tinderMatchData));
+        updatedData.connected = [...new Set([...connected, currentUserId])];
+      }
+
+      dispatch(updateSpaceUserAction(updatedData, currentSpace?.spaceId));
+    },
+    [
+      userId,
+      likes,
+      currentUserId,
+      bans,
+      dispatch,
+      currentSpace?.spaceId,
+      currentUserLikedBy,
+      connected,
+      currentUserConnections
+    ]
+  );
 
   const renderBadges = useCallback(
     () => (
@@ -154,7 +160,6 @@ function TinderCard({
         component="img"
         height="50%"
         image={imageUrl}
-        alt={userName}
         onError={handleImageError}
       />
       <Box
@@ -217,23 +222,19 @@ function TinderCard({
           </IconButton>
         </CardActions>
       </Box>
-      <CardContent
-        onTouchStart={preventPropagation}
-        onTouchMove={preventPropagation}
-        onTouchEnd={preventPropagation}
-        onTouchCancel={preventPropagation}
-        onWheel={preventPropagation}
-        sx={{
-          whiteSpace: 'pre-wrap',
-          overflow: 'scroll',
-          '&::-webkit-scrollbar': {
-            display: 'none'
-          }
-        }}
-      >
+      <CardContent>
         {userBadges?.length > 0 && renderBadges()}
         <Typography
-          sx={{ padding: '0 10px !important' }}
+          sx={{
+            whiteSpace: 'pre-wrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 6,
+            WebkitBoxOrient: 'vertical',
+            lineHeight: '1.2em !important',
+            maxHeight: 'calc(1.2em * 6)'
+          }}
           variant="body2"
           color="text.secondary"
         >
