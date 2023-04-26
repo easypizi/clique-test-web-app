@@ -7,7 +7,10 @@ import {
   fetchEventSendToVerificationFailure,
   fetchEventDeleteStart,
   fetchEventDeleteSuccess,
-  fetchEventDeleteFailure
+  fetchEventDeleteFailure,
+  setFiltersForEvents,
+  resetFiltersForEvents,
+  togglePopupVisibility
 } from '../reducers/EventsSlice';
 
 import { fetchSpaceSuccess } from '../reducers/SpaceSlice';
@@ -53,4 +56,16 @@ export const deleteEventAction = (id, spaceId) => async (dispatch) => {
   } catch (error) {
     dispatch(fetchEventDeleteFailure(error.message));
   }
+};
+
+export const setEventsFiltersAction = (filters) => (dispatch) => {
+  dispatch(setFiltersForEvents(filters));
+};
+
+export const resetEventsFiltersAction = () => (dispatch) => {
+  dispatch(resetFiltersForEvents());
+};
+
+export const togglePopupVisibilityAction = (visibiltyState) => (dispatch) => {
+  dispatch(togglePopupVisibility(visibiltyState));
 };

@@ -7,6 +7,13 @@ export const eventSlice = createSlice({
     isEventCreating: false,
     isEventVeryficationSending: false,
     isEventDeleting: false,
+    isPopupOpened: false,
+    eventFilters: {
+      isUpcoming: true,
+      timeRange: [],
+      isOffline: null,
+      tags: []
+    },
     error: false
   },
   reducers: {
@@ -45,6 +52,20 @@ export const eventSlice = createSlice({
     fetchEventDeleteFailure: (state, { payload }) => {
       state.isEventDeleting = false;
       state.error = payload;
+    },
+    togglePopupVisibility: (state, { payload }) => {
+      state.isPopupOpened = payload;
+    },
+    setFiltersForEvents: (state, { payload }) => {
+      state.eventFilters = payload;
+    },
+    resetFiltersForEvents: (state) => {
+      state.eventFilters = {
+        isUpcoming: true,
+        timeRange: [],
+        isOffline: null,
+        tags: []
+      };
     }
   }
 });
@@ -58,7 +79,10 @@ export const {
   fetchEventSendToVerificationFailure,
   fetchEventDeleteStart,
   fetchEventDeleteSuccess,
-  fetchEventDeleteFailure
+  fetchEventDeleteFailure,
+  setFiltersForEvents,
+  resetFiltersForEvents,
+  togglePopupVisibility
 } = eventSlice.actions;
 
 export default eventSlice.reducer;
