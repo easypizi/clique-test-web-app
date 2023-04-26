@@ -7,6 +7,8 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
 import { togglePopupVisibilityAction } from '../../store/actions/eventsActions';
+import EventFilters from './elements/EventFilters';
+import EventCreationModal from './elements/EventCreationModal';
 
 function EventList() {
   const dispatch = useDispatch();
@@ -16,7 +18,7 @@ function EventList() {
 
   // TODO: extract events from space
   const events = [];
-  // TODO: filterEvents in dependent of implemented filters
+  // TODO: filterEvents in dependency of implemented filters
   const filteredEvents = events;
 
   const isAdmin = useMemo(
@@ -49,6 +51,8 @@ function EventList() {
             justifyContent: 'flex-end'
           }}
         >
+          <EventFilters />
+          <EventCreationModal />
           {filteredEvents && filteredEvents.length ? (
             <ScrollableContainer
               style={{
