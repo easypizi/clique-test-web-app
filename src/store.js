@@ -4,6 +4,7 @@ import spaceReducer from './store/reducers/SpaceSlice';
 import messagesReducer from './store/reducers/MessagesSlice';
 import groupsReducer from './store/reducers/GroupsSlice';
 import filesReducer from './store/reducers/FilesSlice';
+import eventReducer from './store/reducers/EventsSlice';
 
 export default configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export default configureStore({
     spaces: spaceReducer,
     messages: messagesReducer,
     groups: groupsReducer,
-    files: filesReducer
+    files: filesReducer,
+    events: eventReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
