@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
-import { shareOnMobile } from 'react-mobile-share';
+// import { useSelector, useDispatch } from 'react-redux';
+import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import {
   Avatar,
   Box,
@@ -10,36 +9,31 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Button,
   IconButton,
   Divider,
   Link
 } from '@mui/material';
 
 import { common } from '@mui/material/colors';
-import { ics } from 'calendar-link';
 
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import DevicesIcon from '@mui/icons-material/Devices';
 import CloseIcon from '@mui/icons-material/Close';
+import moment from 'moment-timezone';
 
 function EventCard({
   date,
   title,
   description,
   timestamp,
-  eventId,
+  // eventId,
   isReal,
   link,
   location,
   organizerName,
   tags
 }) {
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const { currentUser } = useSelector(({ user }) => user);
-
-  const chatId = currentUser?.user_id;
 
   const preparedTags = useMemo(() => {
     if (!tags || !tags.length) {
@@ -69,52 +63,36 @@ function EventCard({
     setOpen(false);
   }, []);
 
-  const addToCalendar = useCallback(() => {
-    const event = {
-      title,
-      description,
-      start: timestamp,
-      duration: [1, 'hour']
-    };
+  const renderCalendarButton = useCallback(() => {
+    const dateFormatted = moment(timestamp).format('YYYY-MM-DD');
+    const locationFormatted = isReal
+      ? `${location.country}, ${location.city}, ${location.address}`
+      : link;
 
-    if (isReal) {
-      const address = `${location.country}, ${location.city}, ${location.address}`;
-      event.location = address;
-      event.url = location.geo ?? '';
-    } else {
-      event.url = link;
-    }
-
-    const calendarLink = ics(event);
-
-    const shareData = {
-      title,
-      text: 'Add to your calendar!',
-      url: calendarLink
-    };
-
-    shareOnMobile(shareData);
-
-    // dispatch(
-    //   addToCalendarAction({
-    //     fileUrl: calendarLink,
-    //     fileName: `${title}.ics`,
-    //     event: {
-    //       date,
-    //       title,
-    //       description,
-    //       timestamp,
-    //       eventId,
-    //       isReal,
-    //       link,
-    //       location,
-    //       organizerName,
-    //       tags
-    //     },
-    //     chatId
-    //   })
-    // );
-  }, [description, isReal, link, location, timestamp, title]);
+    return (
+      <AddToCalendarButton
+        debug
+        label="Add to Calendar"
+        name={title}
+        description={description}
+        startDate={dateFormatted}
+        location={locationFormatted}
+        options={['Apple', 'Google', 'iCal']}
+        inline
+        listStyle="modal"
+        lightMode="bodyScheme"
+      />
+    );
+  }, [
+    timestamp,
+    isReal,
+    location.country,
+    location.city,
+    location.address,
+    link,
+    title,
+    description
+  ]);
 
   return (
     <>
@@ -214,9 +192,7 @@ function EventCard({
                   width: '100%'
                 }}
               >
-                <Button fullWidth variant="outlined" onClick={addToCalendar}>
-                  Save event
-                </Button>
+                {renderCalendarButton()}
               </Box>
             </>
           ) : (
@@ -239,9 +215,7 @@ function EventCard({
               >
                 Go to event!
               </Link>
-              <Button fullWidth variant="outlined" onClick={addToCalendar}>
-                Save event
-              </Button>
+              {renderCalendarButton()}
             </Box>
           )}
         </DialogContent>
@@ -254,7 +228,7 @@ EventCard.propTypes = {
   date: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
-  eventId: PropTypes.string,
+  // eventId: PropTypes.string,
   isReal: PropTypes.bool,
   link: PropTypes.string,
   timestamp: PropTypes.number,
