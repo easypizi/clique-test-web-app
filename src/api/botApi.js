@@ -37,3 +37,12 @@ export const shareEvent = async (data) => {
     throw new Error(error.message);
   }
 };
+
+export const addToCalendar = async (data) => {
+  try {
+    const response = await axios.post(`${botURL}/add-to-calendar`, data);
+    return response?.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

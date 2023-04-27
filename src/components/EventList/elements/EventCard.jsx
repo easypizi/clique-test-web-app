@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Avatar,
   Box,
@@ -19,20 +21,25 @@ import { ics } from 'calendar-link';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import DevicesIcon from '@mui/icons-material/Devices';
 import CloseIcon from '@mui/icons-material/Close';
+import { addToCalendarAction } from '../../../store/actions/eventsActions';
 
 function EventCard({
   date,
   title,
   description,
   timestamp,
-  //   eventId,
+  eventId,
   isReal,
   link,
   location,
   organizerName,
   tags
 }) {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const { currentUser } = useSelector(({ user }) => user);
+
+  const chatId = currentUser?.user_id;
 
   const preparedTags = useMemo(() => {
     if (!tags || !tags.length) {
@@ -79,13 +86,40 @@ function EventCard({
     }
 
     const calendarLink = ics(event);
-    const activeLink = document.createElement('a');
-    activeLink.href = calendarLink;
-    activeLink.download = `${title}.ics`;
-    document.body.appendChild(activeLink);
-    activeLink.click();
-    document.body.removeChild(activeLink);
-  }, [description, isReal, link, location, timestamp, title]);
+
+    dispatch(
+      addToCalendarAction({
+        fileUrl: calendarLink,
+        fileName: `${title}.ics`,
+        event: {
+          date,
+          title,
+          description,
+          timestamp,
+          eventId,
+          isReal,
+          link,
+          location,
+          organizerName,
+          tags
+        },
+        chatId
+      })
+    );
+  }, [
+    chatId,
+    date,
+    description,
+    dispatch,
+    eventId,
+    isReal,
+    link,
+    location,
+    organizerName,
+    tags,
+    timestamp,
+    title
+  ]);
 
   return (
     <>
@@ -186,7 +220,7 @@ function EventCard({
                 }}
               >
                 <Button fullWidth variant="outlined" onClick={addToCalendar}>
-                  Add to calendar
+                  Save event
                 </Button>
               </Box>
             </>
@@ -211,7 +245,7 @@ function EventCard({
                 Go to event!
               </Link>
               <Button fullWidth variant="outlined" onClick={addToCalendar}>
-                Add to calendar
+                Save event
               </Button>
             </Box>
           )}
@@ -225,7 +259,7 @@ EventCard.propTypes = {
   date: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
-  //   eventId: PropTypes.string,
+  eventId: PropTypes.string,
   isReal: PropTypes.bool,
   link: PropTypes.string,
   timestamp: PropTypes.number,

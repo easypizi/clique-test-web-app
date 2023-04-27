@@ -10,14 +10,17 @@ import {
   fetchEventDeleteFailure,
   setFiltersForEvents,
   resetFiltersForEvents,
-  togglePopupVisibility
+  togglePopupVisibility,
+  fetchEventAddingToCalendarStart,
+  fetchEventAddingToCalendarSuccess,
+  fetchEventAddingToCalendarFailure
 } from '../reducers/EventsSlice';
 
 import { fetchSpaceSuccess } from '../reducers/SpaceSlice';
 
 import { fetchSpace } from '../../api/spaceApi';
 import { createEvent, deleteEvent } from '../../api/eventsApi';
-import { sendEventToVerification } from '../../api/botApi';
+import { sendEventToVerification, addToCalendar } from '../../api/botApi';
 
 export const createNewEventAction = (data) => async (dispatch) => {
   dispatch(fetchEventCreateStart());
@@ -55,6 +58,18 @@ export const deleteEventAction = (id, spaceId) => async (dispatch) => {
     }
   } catch (error) {
     dispatch(fetchEventDeleteFailure(error.message));
+  }
+};
+
+export const addToCalendarAction = (data) => async (dispatch) => {
+  dispatch(fetchEventAddingToCalendarStart());
+  try {
+    const requestToAdddingToCalendar = await addToCalendar(data);
+    if (requestToAdddingToCalendar) {
+      dispatch(fetchEventAddingToCalendarSuccess());
+    }
+  } catch (error) {
+    dispatch(fetchEventAddingToCalendarFailure(error));
   }
 };
 

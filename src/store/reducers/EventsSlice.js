@@ -7,6 +7,7 @@ export const eventSlice = createSlice({
     isEventCreating: false,
     isEventVeryficationSending: false,
     isEventDeleting: false,
+    isAddingToCalendarInProcess: false,
     isPopupOpened: false,
     eventFilters: {
       isUpcoming: true,
@@ -53,6 +54,20 @@ export const eventSlice = createSlice({
       state.isEventDeleting = false;
       state.error = payload;
     },
+
+    fetchEventAddingToCalendarStart: (state) => {
+      state.isAddingToCalendarInProcess = true;
+      state.error = false;
+    },
+    fetchEventAddingToCalendarSuccess: (state) => {
+      state.isAddingToCalendarInProcess = false;
+      state.error = false;
+    },
+    fetchEventAddingToCalendarFailure: (state, { payload }) => {
+      state.isAddingToCalendarInProcess = false;
+      state.error = payload;
+    },
+
     togglePopupVisibility: (state, { payload }) => {
       state.isPopupOpened = payload;
     },
@@ -77,6 +92,9 @@ export const {
   fetchEventSendToVerificationStart,
   fetchEventSendToVerificationSuccess,
   fetchEventSendToVerificationFailure,
+  fetchEventAddingToCalendarStart,
+  fetchEventAddingToCalendarSuccess,
+  fetchEventAddingToCalendarFailure,
   fetchEventDeleteStart,
   fetchEventDeleteSuccess,
   fetchEventDeleteFailure,
