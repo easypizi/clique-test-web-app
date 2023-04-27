@@ -28,3 +28,12 @@ export const sendEventToVerification = async (data) => {
     throw new Error(error.message);
   }
 };
+
+export const shareEvent = async (data) => {
+  try {
+    const response = await axios.post(`${botURL}/share-event`, data);
+    return response?.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

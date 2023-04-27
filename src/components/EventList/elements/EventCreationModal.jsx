@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useCallback,
   useEffect,
@@ -136,8 +138,10 @@ function EventCreationModal() {
         event_space_id: currentSpace.spaceId,
         event_name: eventName,
         event_description: eventDescription,
-        event_date: moment(eventDate).valueOf(),
+        event_date: moment(eventDate).format('DD.MM.YYYY, HH:mm'),
+        event_timestamp: moment(eventDate).valueOf(),
         event_is_offline: eventLocationType === 'offline',
+        event_is_verified: isAdmin,
         event_organizer_id: currentUserId,
         event_organizer_telegram_link: `@${currentUser.user_telegram_link}`,
         event_organizer_credentials: `${currentUser.user_name ?? ''} ${
@@ -145,7 +149,7 @@ function EventCreationModal() {
         }`,
         event_tags: eventTags,
         event_location: {
-          contry: eventCountry,
+          country: eventCountry,
           city: eventCity,
           address: eventAddress,
           geo: eventGeoLocation
@@ -153,9 +157,9 @@ function EventCreationModal() {
         event_link: eventLink
       };
 
-      if (isAdmin) {
-        dispatch(createNewEventAction(eventData));
-      } else {
+      dispatch(createNewEventAction(eventData));
+
+      if (!isAdmin) {
         dispatch(sendEventToVerificationAction(eventData));
       }
 
@@ -311,14 +315,17 @@ function EventCreationModal() {
 
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <MobileDateTimePicker
+              ampm={false}
               fullWidth
               size="small"
               required
               label="Event Date"
               value={eventDate}
+              format="DD/MM/YYYY HH:mm"
               onChange={handleEventDateChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
+            >
+              <TextField />
+            </MobileDateTimePicker>
           </LocalizationProvider>
 
           <FormControl component="fieldset">
