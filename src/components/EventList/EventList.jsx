@@ -68,7 +68,12 @@ function EventList() {
             >
               {filteredEvents &&
                 filteredEvents.map((event) => (
-                  <EventCard key={event.eventId} {...event} />
+                  <EventCard
+                    key={event.eventId}
+                    isAdmin={isAdmin}
+                    spaceId={currentSpace.spaceId}
+                    {...event}
+                  />
                 ))}
             </ScrollableContainer>
           ) : (

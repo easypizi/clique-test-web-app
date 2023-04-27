@@ -24,6 +24,8 @@ export const createNewEventAction = (data) => async (dispatch) => {
   try {
     const result = await createEvent(data);
     if (result) {
+      const space = await fetchSpace(data.event_space_id);
+      dispatch(fetchSpaceSuccess({ spaceData: space }));
       dispatch(fetchEventCreateSuccess());
     }
   } catch (error) {

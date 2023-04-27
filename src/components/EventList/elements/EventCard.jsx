@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-// import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment-timezone';
+import { useDispatch } from 'react-redux';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
+
+import { common } from '@mui/material/colors';
 import {
   Avatar,
   Box,
@@ -11,28 +14,32 @@ import {
   DialogContent,
   IconButton,
   Divider,
-  Link
+  Link,
+  Button
 } from '@mui/material';
 
-import { common } from '@mui/material/colors';
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import DevicesIcon from '@mui/icons-material/Devices';
 import CloseIcon from '@mui/icons-material/Close';
-import moment from 'moment-timezone';
+import { deleteEventAction } from '../../../store/actions/eventsActions';
+import EventShareModal from './EventShareModal';
 
 function EventCard({
   date,
   title,
   description,
   timestamp,
-  // eventId,
+  eventId,
   isReal,
   link,
   location,
   organizerName,
-  tags
+  tags,
+  isAdmin,
+  spaceId
 }) {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
   const preparedTags = useMemo(() => {
@@ -63,6 +70,10 @@ function EventCard({
     setOpen(false);
   }, []);
 
+  const handleDeleteEvent = useCallback(() => {
+    dispatch(deleteEventAction(eventId, spaceId));
+  }, [dispatch, eventId, spaceId]);
+
   const renderCalendarButton = useCallback(() => {
     const dateFormatted = moment(timestamp).format('YYYY-MM-DD');
     const locationFormatted = isReal
@@ -70,18 +81,26 @@ function EventCard({
       : link;
 
     return (
-      <AddToCalendarButton
-        debug
-        label="Add to Calendar"
-        name={title}
-        description={description}
-        startDate={dateFormatted}
-        location={locationFormatted}
-        options={['Apple', 'Google', 'iCal']}
-        inline
-        listStyle="modal"
-        lightMode="bodyScheme"
-      />
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '10px 0'
+        }}
+      >
+        <AddToCalendarButton
+          label="Add to Calendar"
+          name={title}
+          description={description}
+          startDate={dateFormatted}
+          location={locationFormatted}
+          options={['Apple', 'Google', 'iCal']}
+          listStyle="modal"
+          lightMode="bodyScheme"
+          inline
+        />
+      </Box>
     );
   }, [
     timestamp,
@@ -125,6 +144,19 @@ function EventCard({
       </Box>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ maxWidth: '90%' }}>{title}</DialogTitle>
+        {!isReal && (
+          <Link
+            sx={{ fontSize: '12px', textAlign: 'center' }}
+            rel="noopener noreferrer"
+            underline="none"
+            color="hotpink"
+            variant="button"
+            href={preparedLink}
+            target="_blank"
+          >
+            Event link
+          </Link>
+        )}
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -180,42 +212,33 @@ function EventCard({
             ))}
           </Box>
           <Divider sx={{ margin: '10px 0' }} />
-          {isReal ? (
+          {isReal && (
             <>
               <Typography variant="body1">Address</Typography>
               <Typography variant="body2">
                 {`${location.country}, ${location.city}, ${location.address}`}
               </Typography>
-              <Box
-                sx={{
-                  marginTop: '10px',
-                  width: '100%'
-                }}
-              >
-                {renderCalendarButton()}
-              </Box>
             </>
-          ) : (
+          )}
+          {renderCalendarButton()}
+          {isAdmin && (
             <Box
               sx={{
                 display: 'flex',
                 width: '100%',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '10px'
+                gap: '10px',
+                marginTop: '20px'
               }}
             >
-              <Link
-                rel="noopener noreferrer"
-                underline="none"
-                color="hotpink"
-                variant="button"
-                href={preparedLink}
-                target="_blank"
+              <EventShareModal />
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<DeleteForeverIcon />}
+                onClick={handleDeleteEvent}
               >
-                Go to event!
-              </Link>
-              {renderCalendarButton()}
+                Delete
+              </Button>
             </Box>
           )}
         </DialogContent>
@@ -225,11 +248,13 @@ function EventCard({
 }
 
 EventCard.propTypes = {
+  spaceId: PropTypes.string,
   date: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
-  // eventId: PropTypes.string,
+  eventId: PropTypes.string,
   isReal: PropTypes.bool,
+  isAdmin: PropTypes.bool,
   link: PropTypes.string,
   timestamp: PropTypes.number,
   location: PropTypes.shape({
