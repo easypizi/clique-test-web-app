@@ -2,6 +2,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { shareOnMobile } from 'react-mobile-share';
 import {
   Avatar,
   Box,
@@ -21,7 +22,6 @@ import { ics } from 'calendar-link';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import DevicesIcon from '@mui/icons-material/Devices';
 import CloseIcon from '@mui/icons-material/Close';
-import { addToCalendarAction } from '../../../store/actions/eventsActions';
 
 function EventCard({
   date,
@@ -87,39 +87,38 @@ function EventCard({
 
     const calendarLink = ics(event);
 
-    dispatch(
-      addToCalendarAction({
-        fileUrl: calendarLink,
-        fileName: `${title}.ics`,
-        event: {
-          date,
-          title,
-          description,
-          timestamp,
-          eventId,
-          isReal,
-          link,
-          location,
-          organizerName,
-          tags
-        },
-        chatId
-      })
-    );
-  }, [
-    chatId,
-    date,
-    description,
-    dispatch,
-    eventId,
-    isReal,
-    link,
-    location,
-    organizerName,
-    tags,
-    timestamp,
-    title
-  ]);
+    const shareData = {
+      title,
+      text: 'Add to your calendar!',
+      url: calendarLink
+    };
+
+    shareOnMobile({
+      text: 'Hey checkout our package react-mobile-share',
+      url: 'https://www.npmjs.com/package/react-mobile-share',
+      title: 'React-Mobile-Share'
+    });
+
+    // dispatch(
+    //   addToCalendarAction({
+    //     fileUrl: calendarLink,
+    //     fileName: `${title}.ics`,
+    //     event: {
+    //       date,
+    //       title,
+    //       description,
+    //       timestamp,
+    //       eventId,
+    //       isReal,
+    //       link,
+    //       location,
+    //       organizerName,
+    //       tags
+    //     },
+    //     chatId
+    //   })
+    // );
+  }, [description, isReal, link, location, timestamp, title]);
 
   return (
     <>
