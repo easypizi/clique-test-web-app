@@ -9,6 +9,7 @@ import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 import { togglePopupVisibilityAction } from '../../store/actions/eventsActions';
 import EventFilters from './elements/EventFilters';
 import EventCreationModal from './elements/EventCreationModal';
+import EventCard from './elements/EventCard';
 
 function EventList() {
   const dispatch = useDispatch();
@@ -16,8 +17,10 @@ function EventList() {
   const { currentUser } = useSelector(({ user }) => user);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
 
-  // TODO: extract events from space
-  const events = [];
+  const events = useMemo(
+    () => currentSpace?.spaceEvents,
+    [currentSpace?.spaceEvents]
+  );
   // TODO: filterEvents in dependency of implemented filters
   const filteredEvents = events;
 
@@ -56,15 +59,17 @@ function EventList() {
           {filteredEvents && filteredEvents.length ? (
             <ScrollableContainer
               style={{
-                border: '1px solid black',
-
-                padding: '20px 2px 0 2px',
+                boxShadow: 'none',
+                padding: '10px 2px 0 2px',
                 height: 'calc(100% - 40px)',
-                gap: '10px',
-                marginTop: '5px'
+                marginTop: '5px',
+                marginBottom: '10px'
               }}
             >
-              Events
+              {filteredEvents &&
+                filteredEvents.map((event) => (
+                  <EventCard key={event.eventId} {...event} />
+                ))}
             </ScrollableContainer>
           ) : (
             <Typography
