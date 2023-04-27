@@ -93,11 +93,7 @@ function EventCard({
       url: calendarLink
     };
 
-    shareOnMobile({
-      text: 'Hey checkout our package react-mobile-share',
-      url: 'https://www.npmjs.com/package/react-mobile-share',
-      title: 'React-Mobile-Share'
-    });
+    shareOnMobile(shareData);
 
     // dispatch(
     //   addToCalendarAction({
