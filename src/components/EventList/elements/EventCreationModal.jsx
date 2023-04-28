@@ -391,7 +391,8 @@ function EventCreationModal() {
                 fullWidth
                 size="small"
                 id="event-geo-location"
-                label="Geo Location"
+                label="Geo link"
+                placeholder="http://...."
                 value={eventGeoLocation}
                 onChange={handleEventGeoLocationChange}
               />
@@ -403,7 +404,7 @@ function EventCreationModal() {
               fullWidth
               size="small"
               id="event-link"
-              label="Geo link"
+              label="Link to event"
               placeholder="http://...."
               value={eventLink}
               onChange={handleEventLinkChange}

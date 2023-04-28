@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -31,7 +31,15 @@ const MenuProps = {
 function EventShareModal({ eventId }) {
   const dispatch = useDispatch();
   const { currentSpace } = useSelector(({ spaces }) => spaces);
-  const groups = currentSpace.spaceGroups;
+  const { spaceGroups: groups, spaceId } = currentSpace ?? {
+    spaceGroups: [],
+    spaceId: null
+  };
+
+  const filteredGroups = useMemo(
+    () => groups.filter((group) => !group.hiddenSpaces.includes(spaceId)),
+    [groups, spaceId]
+  );
 
   const [groupToShare, setGroupsToShare] = useState([]);
   const [openedModal, setModalOpened] = useState(false);
@@ -55,13 +63,13 @@ function EventShareModal({ eventId }) {
   const handleChooseAll = useCallback(
     (event) => {
       if (event.target.checked) {
-        const result = groups.map((group) => group.groupId);
+        const result = filteredGroups.map((group) => group.groupId);
         setGroupsToShare(result);
       } else {
         setGroupsToShare([]);
       }
     },
-    [groups]
+    [filteredGroups]
   );
 
   const handleShareEventToGroups = useCallback(() => {
@@ -96,7 +104,7 @@ function EventShareModal({ eventId }) {
           <Typography align="center" variant="h6">
             Publish events
           </Typography>
-          <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControl sx={{ width: '100%', marginBottom: '10px' }}>
             <InputLabel id="demo-multiple-name-label">
               Groups to share
             </InputLabel>
@@ -109,7 +117,7 @@ function EventShareModal({ eventId }) {
               input={<OutlinedInput label="Group to share" />}
               MenuProps={MenuProps}
             >
-              {groups.map(({ groupName, groupId }) => (
+              {filteredGroups.map(({ groupName, groupId }) => (
                 <MenuItem key={groupId} value={groupId}>
                   {groupName}
                 </MenuItem>

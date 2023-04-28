@@ -140,11 +140,14 @@ function EventCard({
           <Typography color="gray" variant="caption">
             {date}
           </Typography>
+          {preparedTags && preparedTags.length > 0 && (
+            <Typography variant="caption">{preparedTags.join(', ')}</Typography>
+          )}
         </Box>
       </Box>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ maxWidth: '90%' }}>{title}</DialogTitle>
-        {!isReal && (
+        {!isReal && preparedLink && preparedLink !== 'http://' && (
           <Link
             sx={{
               fontSize: '12px',
@@ -160,6 +163,24 @@ function EventCard({
             target="_blank"
           >
             Event link
+          </Link>
+        )}
+        {isReal && location?.geo && location.geo.length && (
+          <Link
+            sx={{
+              fontSize: '12px',
+              textAlign: 'center',
+              paddingBottom: '15px',
+              display: 'block'
+            }}
+            rel="noopener noreferrer"
+            underline="none"
+            color="hotpink"
+            variant="button"
+            href={location?.geo}
+            target="_blank"
+          >
+            Get location
           </Link>
         )}
         <IconButton
