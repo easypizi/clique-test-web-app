@@ -49,6 +49,7 @@ function EventShareModal({ eventId }) {
 
   const handleClose = useCallback(() => {
     setModalOpened(false);
+    setGroupsToShare([]);
   }, []);
 
   const handleChooseAll = useCallback(
@@ -71,6 +72,7 @@ function EventShareModal({ eventId }) {
       })
     );
     setModalOpened(false);
+    setGroupsToShare([]);
   }, [dispatch, eventId, groupToShare]);
 
   return (
