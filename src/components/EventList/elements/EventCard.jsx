@@ -146,7 +146,12 @@ function EventCard({
         <DialogTitle sx={{ maxWidth: '90%' }}>{title}</DialogTitle>
         {!isReal && (
           <Link
-            sx={{ fontSize: '12px', textAlign: 'center' }}
+            sx={{
+              fontSize: '12px',
+              textAlign: 'center',
+              paddingBottom: '15px',
+              display: 'block'
+            }}
             rel="noopener noreferrer"
             underline="none"
             color="hotpink"
