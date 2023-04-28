@@ -403,8 +403,8 @@ function EventCreationModal() {
               fullWidth
               size="small"
               id="event-link"
-              label="Event Link"
-              placeholder="Url to any maps location..."
+              label="Geo link"
+              placeholder="http://...."
               value={eventLink}
               onChange={handleEventLinkChange}
             />
