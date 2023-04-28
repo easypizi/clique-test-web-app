@@ -72,6 +72,7 @@ function EventCard({
 
   const handleDeleteEvent = useCallback(() => {
     dispatch(deleteEventAction(eventId, spaceId));
+    setOpen(false);
   }, [dispatch, eventId, spaceId]);
 
   const renderCalendarButton = useCallback(() => {
