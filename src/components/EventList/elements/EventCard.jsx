@@ -137,12 +137,14 @@ function EventCard({
         </Avatar>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <Typography variant="body1">{title}</Typography>
+          {preparedTags && preparedTags.length > 0 && (
+            <Typography color="CaptionText" variant="caption">
+              {preparedTags.join(', ')}
+            </Typography>
+          )}
           <Typography color="gray" variant="caption">
             {date}
           </Typography>
-          {preparedTags && preparedTags.length > 0 && (
-            <Typography variant="caption">{preparedTags.join(', ')}</Typography>
-          )}
         </Box>
       </Box>
       <Dialog open={open} onClose={handleClose}>

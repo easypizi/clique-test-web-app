@@ -10,19 +10,24 @@ import { togglePopupVisibilityAction } from '../../store/actions/eventsActions';
 import EventFilters from './elements/EventFilters';
 import EventCreationModal from './elements/EventCreationModal';
 import EventCard from './elements/EventCard';
+import filterEvents from './helpers';
 
 function EventList() {
   const dispatch = useDispatch();
   const { currentSpace, isSpaceLoading } = useSelector(({ spaces }) => spaces);
   const { currentUser } = useSelector(({ user }) => user);
+  const { eventFilters } = useSelector(({ events }) => events);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
 
   const events = useMemo(
     () => currentSpace?.spaceEvents,
     [currentSpace?.spaceEvents]
   );
-  // TODO: filterEvents in dependency of implemented filters
-  const filteredEvents = events;
+
+  const filteredEvents = useMemo(
+    () => filterEvents(events, eventFilters),
+    [eventFilters, events]
+  );
 
   const isAdmin = useMemo(
     () => currentUserId === currentSpace?.spaceOwner,
@@ -34,7 +39,7 @@ function EventList() {
   }, [dispatch]);
 
   return (
-    <Box sx={{ height: '100%', width: '100%' }}>
+    <Box sx={{ height: '100%', width: '100%', position: 'relative' }}>
       {isSpaceLoading && !currentSpace ? (
         <CircularProgress
           sx={{
@@ -61,7 +66,7 @@ function EventList() {
               style={{
                 boxShadow: 'none',
                 padding: '10px 2px 0 2px',
-                height: 'calc(100% - 40px)',
+                height: 'calc(100% - 100px)',
                 marginTop: '5px',
                 marginBottom: '10px'
               }}
@@ -80,7 +85,7 @@ function EventList() {
             <Typography
               variant="body1"
               sx={{
-                marginTop: '20px',
+                marginTop: '80px',
                 textAlign: 'center',
                 marginBottom: 'auto'
               }}

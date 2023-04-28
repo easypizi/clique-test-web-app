@@ -13,8 +13,9 @@ export const eventSlice = createSlice({
     isEventPublishing: false,
     isEventsPublished: false,
     eventFilters: {
-      isUpcoming: true,
-      timeRange: [],
+      isUpcoming: null,
+      timeFrom: null,
+      timeTo: null,
       isOffline: null,
       tags: []
     },
@@ -98,8 +99,9 @@ export const eventSlice = createSlice({
     },
     resetFiltersForEvents: (state) => {
       state.eventFilters = {
-        isUpcoming: true,
-        timeRange: [],
+        isUpcoming: null,
+        timeFrom: null,
+        timeTo: null,
         isOffline: null,
         tags: []
       };
