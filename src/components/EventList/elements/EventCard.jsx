@@ -230,7 +230,7 @@ function EventCard({
                 marginTop: '20px'
               }}
             >
-              <EventShareModal />
+              <EventShareModal eventId={eventId} />
               <Button
                 fullWidth
                 variant="outlined"

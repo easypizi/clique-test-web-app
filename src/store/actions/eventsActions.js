@@ -5,19 +5,24 @@ import {
   fetchEventSendToVerificationStart,
   fetchEventSendToVerificationSuccess,
   fetchEventSendToVerificationFailure,
+  resetEventSendToVerificationSending,
   fetchEventDeleteStart,
   fetchEventDeleteSuccess,
   fetchEventDeleteFailure,
   setFiltersForEvents,
   resetFiltersForEvents,
-  togglePopupVisibility
+  togglePopupVisibility,
+  fetchEventPublishStart,
+  fetchEventPublishSuccess,
+  fetchEventPublishFailure,
+  resetEventPublishing
 } from '../reducers/EventsSlice';
 
 import { fetchSpaceSuccess } from '../reducers/SpaceSlice';
 
 import { fetchSpace } from '../../api/spaceApi';
 import { createEvent, deleteEvent } from '../../api/eventsApi';
-import { sendEventToVerification } from '../../api/botApi';
+import { sendEventToVerification, shareEvent } from '../../api/botApi';
 
 export const createNewEventAction = (data) => async (dispatch) => {
   dispatch(fetchEventCreateStart());
@@ -60,14 +65,36 @@ export const deleteEventAction = (id, spaceId) => async (dispatch) => {
   }
 };
 
+export const publishEventsToCommunityGroupsAction =
+  (data) => async (dispatch) => {
+    dispatch(fetchEventPublishStart());
+
+    try {
+      const result = await shareEvent(data);
+      if (result) {
+        dispatch(fetchEventPublishSuccess());
+      }
+    } catch (error) {
+      dispatch(fetchEventPublishFailure(error.message));
+    }
+  };
+
 export const setEventsFiltersAction = (filters) => (dispatch) => {
   dispatch(setFiltersForEvents(filters));
+};
+
+export const togglePopupVisibilityAction = (visibiltyState) => (dispatch) => {
+  dispatch(togglePopupVisibility(visibiltyState));
 };
 
 export const resetEventsFiltersAction = () => (dispatch) => {
   dispatch(resetFiltersForEvents());
 };
 
-export const togglePopupVisibilityAction = (visibiltyState) => (dispatch) => {
-  dispatch(togglePopupVisibility(visibiltyState));
+export const resetEventPublishingAction = () => (dispatch) => {
+  dispatch(resetEventPublishing());
+};
+
+export const resetEventSendToVerificationSendingAction = () => (dispatch) => {
+  dispatch(resetEventSendToVerificationSending());
 };
