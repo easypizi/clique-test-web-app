@@ -87,6 +87,7 @@ function EventShareModal({ eventId }) {
     <>
       <Button
         fullWidth
+        disabled={!groupToShare.length}
         variant="contained"
         startIcon={<ShareIcon />}
         onClick={handleOpenModal}

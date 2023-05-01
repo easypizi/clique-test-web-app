@@ -48,6 +48,8 @@ function EventCard({
     }
 
     return tags
+      .replaceAll('#', '')
+      .replaceAll('-', '_')
       .replaceAll(' ', '')
       .split(',')
       .map((tag) => `#${tag}`);

@@ -196,7 +196,10 @@ function EventCreationModal() {
           setFormValid(false);
         }
       } else {
-        setFormValid(true);
+        if (eventLink) {
+          setFormValid(true);
+        }
+        setFormValid(false);
       }
     } else {
       setFormValid(false);
@@ -207,6 +210,7 @@ function EventCreationModal() {
     eventCountry,
     eventDate,
     eventDescription,
+    eventLink,
     eventLocationType,
     eventName
   ]);

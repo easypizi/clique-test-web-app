@@ -1,22 +1,42 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Box, CircularProgress, Typography, Button } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  Button,
+  Snackbar,
+  Alert,
+  Slide
+} from '@mui/material';
+
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 import ScrollableContainer from '../ScrollableContainer/ScrollableContainer';
 
-import { togglePopupVisibilityAction } from '../../store/actions/eventsActions';
+import {
+  resetEventPublishingAction,
+  togglePopupVisibilityAction,
+  resetEventSendToVerificationSendingAction
+} from '../../store/actions/eventsActions';
 import EventFilters from './elements/EventFilters';
 import EventCreationModal from './elements/EventCreationModal';
 import EventCard from './elements/EventCard';
 import filterEvents from './helpers';
 
+function SlideTransition(props) {
+  return <Slide {...props} direction="up" />;
+}
+
 function EventList() {
   const dispatch = useDispatch();
+  const [alertVisible, setAlertVisibility] = useState(false);
+
   const { currentSpace, isSpaceLoading } = useSelector(({ spaces }) => spaces);
   const { currentUser } = useSelector(({ user }) => user);
-  const { eventFilters } = useSelector(({ events }) => events);
+  const { eventFilters, isEventVeryficationSent, isEventsPublished } =
+    useSelector(({ events }) => events);
   const { user_id: currentUserId } = currentUser ?? { user_id: null };
 
   const events = useMemo(
@@ -24,10 +44,24 @@ function EventList() {
     [currentSpace?.spaceEvents]
   );
 
-  const filteredEvents = useMemo(
-    () => filterEvents(events, eventFilters),
-    [eventFilters, events]
-  );
+  const filteredEvents = useMemo(() => {
+    if (!events || !events.length) {
+      return [];
+    }
+    return filterEvents(events, eventFilters);
+  }, [eventFilters, events]);
+
+  const alertMessage = useMemo(() => {
+    if (isEventVeryficationSent) {
+      return 'Event has been sent to verification';
+    }
+
+    if (isEventsPublished) {
+      return 'Event has been shared to community';
+    }
+
+    return '';
+  }, [isEventVeryficationSent, isEventsPublished]);
 
   const isAdmin = useMemo(
     () => currentUserId === currentSpace?.spaceOwner,
@@ -37,6 +71,24 @@ function EventList() {
   const handlePopupVisibility = useCallback(() => {
     dispatch(togglePopupVisibilityAction(true));
   }, [dispatch]);
+
+  const handleCloseAlert = useCallback((event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertVisibility(false);
+  }, []);
+
+  useEffect(() => {
+    if (isEventVeryficationSent || isEventsPublished) {
+      setAlertVisibility(true);
+
+      setTimeout(() => {
+        dispatch(resetEventPublishingAction());
+        dispatch(resetEventSendToVerificationSendingAction());
+      }, 4000);
+    }
+  }, [dispatch, isEventVeryficationSent, isEventsPublished]);
 
   return (
     <Box sx={{ height: '100%', width: '100%', position: 'relative' }}>
@@ -80,6 +132,23 @@ function EventList() {
                     {...event}
                   />
                 ))}
+
+              <Snackbar
+                open={alertVisible}
+                autoHideDuration={3000}
+                onClose={handleCloseAlert}
+                TransitionComponent={SlideTransition}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              >
+                <Alert
+                  onClose={handleCloseAlert}
+                  severity="success"
+                  elevation={6}
+                  variant="filled"
+                >
+                  {alertMessage}
+                </Alert>
+              </Snackbar>
             </ScrollableContainer>
           ) : (
             <Typography
