@@ -22,12 +22,12 @@ import TinderBoard from '../Tinder/TinderBoard';
 import EventList from '../EventList/EventList';
 
 function TabNavigation() {
-  const { isSpaceLoading } = useSelector(({ spaces }) => spaces);
+  const { isSpaceLoading, currentSpace } = useSelector(({ spaces }) => spaces);
   const { isGroupDataUpdating } = useSelector(({ groups }) => groups);
 
   const isLoading = useMemo(
-    () => isSpaceLoading || isGroupDataUpdating,
-    [isGroupDataUpdating, isSpaceLoading]
+    () => isSpaceLoading || isGroupDataUpdating || !currentSpace,
+    [currentSpace, isGroupDataUpdating, isSpaceLoading]
   );
 
   const [value, setValue] = useState(0);
