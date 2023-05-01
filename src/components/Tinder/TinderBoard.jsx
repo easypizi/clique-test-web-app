@@ -16,7 +16,7 @@ import './TinderBoard.css';
 const settings = {
   className: 'slider',
   centerMode: true,
-  infinite: true,
+  infinite: false,
   centerPadding: '20px',
   lazyLoad: true,
   speed: 300,

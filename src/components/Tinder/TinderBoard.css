@@ -11,6 +11,8 @@
   align-items: center;
   gap: 5px;
   height: 100%;
+  will-change: transform;
+  transition: all 0.3s ease-in-out !important;
 }
 
 
@@ -24,14 +26,14 @@
   height: 100%;
   width: 100%;
   max-height: 90%;
-  /* transition: all 0.3s ease-in-out; */
-  
+  transition: all 0.3s ease-in-out;
 }
 
 .slick-active, .slick-center, .slick-current {
   height: 100%;
   max-height: 100%;
   transition: all 0.3s ease-in-out;
+  will-change: transform;
 }
 
 
