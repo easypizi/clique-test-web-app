@@ -16,10 +16,11 @@ import './TinderBoard.css';
 const settings = {
   className: 'slider',
   centerMode: true,
-  infinite: false,
+  infinite: true,
   centerPadding: '20px',
   lazyLoad: true,
-  speed: 300,
+  speed: 500,
+  cssEase: 'ease-out',
   slidesToShow: 1,
   touchThreshold: 20
 };
