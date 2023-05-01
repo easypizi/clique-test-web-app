@@ -86,7 +86,7 @@ function EventList() {
       setTimeout(() => {
         dispatch(resetEventPublishingAction());
         dispatch(resetEventSendToVerificationSendingAction());
-      }, 4000);
+      }, 6000);
     }
   }, [dispatch, isEventVeryficationSent, isEventsPublished]);
 
