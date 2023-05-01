@@ -198,6 +198,7 @@ function EventCreationModal() {
       } else {
         if (eventLink) {
           setFormValid(true);
+          return;
         }
         setFormValid(false);
       }
@@ -402,6 +403,7 @@ function EventCreationModal() {
           )}
           {eventLocationType === 'online' && (
             <TextField
+              required
               sx={{ marginBottom: '30px' }}
               fullWidth
               size="small"

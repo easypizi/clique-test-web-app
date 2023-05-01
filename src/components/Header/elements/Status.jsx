@@ -17,6 +17,13 @@ function Status() {
 
   const { isGroupDataUpdating } = useSelector(({ groups }) => groups);
 
+  const {
+    isEventCreating,
+    isEventVeryficationSending,
+    isEventDeleting,
+    isEventPublishing
+  } = useSelector(({ events }) => events);
+
   const isLoading = useMemo(
     () =>
       isSpaceLoading ||
@@ -26,8 +33,16 @@ function Status() {
       isUploadingFile ||
       isUserDataLoading ||
       isUserDataUpdating ||
-      isGroupDataUpdating,
+      isGroupDataUpdating ||
+      isEventCreating ||
+      isEventVeryficationSending ||
+      isEventDeleting ||
+      isEventPublishing,
     [
+      isEventCreating,
+      isEventDeleting,
+      isEventPublishing,
+      isEventVeryficationSending,
       isGroupDataUpdating,
       isProcessingFile,
       isSpaceLoading,

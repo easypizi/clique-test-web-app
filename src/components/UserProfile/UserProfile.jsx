@@ -180,18 +180,18 @@ function UserProfile() {
   ]);
 
   useEffect(() => {
-    if (isUserDataUpdated) {
+    if (isUserDataUpdated && currentSpace && currentUser) {
       setUpdateButtonColor('success');
       setUpdateButtonText('User data Updated');
       dispatch(resetUserDataUpdate());
-      dispatch(getSpace(currentSpace.spaceId));
+      dispatch(getSpace(currentSpace?.spaceId));
       dispatch(getUser(userId, currentUser.user_bot_chat_id));
       setTimeout(() => {
         setUpdateButtonDisabled(false);
         setUpdateButtonColor('primary');
         setUpdateButtonText('Update');
       }, 1500);
-    } else if (error) {
+    } else if (error && currentSpace) {
       setUpdateButtonColor('error');
       setUpdateButtonText('Update Failure!');
       dispatch(resetUserDataUpdate());
@@ -201,15 +201,7 @@ function UserProfile() {
         setUpdateButtonText('Update');
       }, 1500);
     }
-  }, [
-    currentSpace.spaceId,
-    currentUser.user_bot_chat_id,
-    dispatch,
-    error,
-    isUserDataUpdated,
-    isUserDataUpdating,
-    userId
-  ]);
+  }, [currentSpace, currentUser, dispatch, error, isUserDataUpdated, userId]);
 
   return (
     <ScrollableContainer

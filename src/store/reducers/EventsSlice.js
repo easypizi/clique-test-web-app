@@ -8,7 +8,6 @@ export const eventSlice = createSlice({
     isEventVeryficationSending: false,
     isEventVeryficationSent: false,
     isEventDeleting: false,
-    isAddingToCalendarInProcess: false,
     isPopupOpened: false,
     isEventPublishing: false,
     isEventsPublished: false,
