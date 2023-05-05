@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -84,7 +86,9 @@ function TinderBoard() {
                 justifyContent: 'center'
               }}
             >
-              <Typography>No users for networking</Typography>
+              <Typography>
+                В сообществе нет людей открытых для новых знакомств
+              </Typography>
             </Box>
           )}
         </Box>

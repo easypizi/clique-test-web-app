@@ -147,7 +147,12 @@ function FileList() {
                 aria-label="upload file"
                 component="label"
                 sx={{
-                  background: '#03a9f4'
+                  background: '#03a9f4',
+                  transition: 'opacity 0.3s',
+                  '&:hover': {
+                    background: '#03a9f4',
+                    opacity: '50%'
+                  }
                 }}
               >
                 <input
@@ -194,7 +199,7 @@ function FileList() {
                   elevation={6}
                   variant="filled"
                 >
-                  File was sent to you. Check dialog with bot.
+                  Документ отправлен в приватный диалог с ботом
                 </Alert>
               </Snackbar>
             </ScrollableContainer>
@@ -203,7 +208,7 @@ function FileList() {
               variant="body1"
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
-              No files has been found. Please try to choose other space.
+              Документов сообщества не найдено
             </Typography>
           )}
         </Box>

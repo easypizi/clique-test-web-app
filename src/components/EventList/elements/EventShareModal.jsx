@@ -91,7 +91,7 @@ function EventShareModal({ eventId }) {
         startIcon={<ShareIcon />}
         onClick={handleOpenModal}
       >
-        Share
+        Анонс
       </Button>
       <Modal
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
@@ -102,12 +102,12 @@ function EventShareModal({ eventId }) {
       >
         <Box sx={{ width: '90%', padding: '20px', background: '#ffffff' }}>
           <Typography align="center" variant="h6">
-            Publish events
+            Опубликовать информацию в:
           </Typography>
-          <FormControl sx={{ width: '100%', marginBottom: '10px' }}>
-            <InputLabel id="demo-multiple-name-label">
-              Groups to share
-            </InputLabel>
+          <FormControl
+            sx={{ width: '100%', marginBottom: '10px', marginTop: '20px' }}
+          >
+            <InputLabel id="demo-multiple-name-label">Чаты</InputLabel>
             <Select
               labelId="demo-multiple-name-label"
               id="demo-multiple-name"
@@ -125,7 +125,7 @@ function EventShareModal({ eventId }) {
             </Select>
             <FormControlLabel
               control={<Switch size="medium" onChange={handleChooseAll} />}
-              label="Choose all groups in community"
+              label="Выбрать все группы и каналы"
             />
           </FormControl>
           <Button
@@ -135,7 +135,7 @@ function EventShareModal({ eventId }) {
             sx={{ marginTop: '20px' }}
             onClick={handleShareEventToGroups}
           >
-            Publish
+            Опубликовать
           </Button>
         </Box>
       </Modal>

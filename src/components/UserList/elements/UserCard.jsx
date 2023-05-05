@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import ReactMarkdown from 'react-markdown';
 import { useDispatch } from 'react-redux';
 import {
   Typography,
@@ -31,7 +32,7 @@ const UserDataDescription = styled(Typography)`
   max-height: calc(1.2em * 3);
 `;
 
-const emptyDescription = 'Участник не добавил описания...';
+const emptyDescription = JSON.stringify('Участник не добавил описания...');
 function UserCard({
   id,
   avatarSrc,
@@ -69,13 +70,22 @@ function UserCard({
 
   const getIconForLink = useCallback((item) => {
     switch (true) {
-      case item.includes('instagram'):
+      case item && item.includes('instagram'):
         return <InstagramIcon />;
-      case item.includes('linkedin'):
+      case item && item.includes('linkedin'):
         return <LinkedInIcon />;
       default:
         return <LinkIcon />;
     }
+  }, []);
+
+  const preparedLink = useCallback((link) => {
+    let url = null;
+
+    if (!/^https?:\/\//i.test(link)) {
+      url = `http://${link}`;
+    }
+    return url ?? link;
   }, []);
 
   const handleHideUser = useCallback(() => {
@@ -138,7 +148,7 @@ function UserCard({
             {userCredentials}
           </Typography>
           <UserDataDescription variant="body2">
-            {userDescription}
+            <ReactMarkdown>{JSON.parse(userDescription)}</ReactMarkdown>
           </UserDataDescription>
         </Box>
       </Box>
@@ -176,16 +186,21 @@ function UserCard({
             <TelegramIcon />
           </IconButton>
           {userLinks &&
-            userLinks.map((link) => (
-              <IconButton
-                key={link}
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {getIconForLink(link)}
-              </IconButton>
-            ))}
+            userLinks.map((link) => {
+              if (!link) {
+                return null;
+              }
+              return (
+                <IconButton
+                  key={link}
+                  href={preparedLink(link)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {getIconForLink(link)}
+                </IconButton>
+              );
+            })}
           {canBeDeleted && !isSpaceOwner && (
             <IconButton
               sx={{ position: 'absolute', right: 0 }}

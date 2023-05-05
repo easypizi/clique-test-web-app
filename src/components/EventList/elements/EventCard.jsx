@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import ReactMarkdown from 'react-markdown';
 import moment from 'moment-timezone';
 import { useDispatch } from 'react-redux';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
@@ -93,7 +94,7 @@ function EventCard({
         }}
       >
         <AddToCalendarButton
-          label="Add to Calendar"
+          label="Добавить в календарь"
           name={title}
           description={description}
           startDate={dateFormatted}
@@ -167,7 +168,7 @@ function EventCard({
             href={preparedLink}
             target="_blank"
           >
-            Event link
+            Ссылка
           </Link>
         )}
         {isReal && location?.geo && location.geo.length && (
@@ -185,7 +186,7 @@ function EventCard({
             href={location?.geo}
             target="_blank"
           >
-            Get location
+            Точка на карте
           </Link>
         )}
         <IconButton
@@ -210,7 +211,7 @@ function EventCard({
             }}
           >
             <Box>
-              <Typography variant="body1">Created by </Typography>
+              <Typography variant="body1">Организатор</Typography>
               <Typography variant="body2">{organizerName}</Typography>
             </Box>
             <Box
@@ -220,13 +221,15 @@ function EventCard({
                 alignItems: 'flex-end'
               }}
             >
-              <Typography variant="body1">Date</Typography>
+              <Typography variant="body1">Дата</Typography>
               <Typography variant="body2">{date}</Typography>
             </Box>
           </Box>
           <Divider sx={{ margin: '10px 0' }} />
-          <Typography variant="body1">Agenda</Typography>
-          <Typography variant="body2">{description}</Typography>
+          <Typography variant="body1">Описание события</Typography>
+          <Typography component="div">
+            <ReactMarkdown>{JSON.parse(description)}</ReactMarkdown>
+          </Typography>
           <Box
             sx={{
               marginTop: '10px',
@@ -268,7 +271,7 @@ function EventCard({
                 startIcon={<DeleteForeverIcon />}
                 onClick={handleDeleteEvent}
               >
-                Delete
+                Удалить
               </Button>
             </Box>
           )}

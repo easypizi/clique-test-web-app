@@ -53,11 +53,11 @@ function EventList() {
 
   const alertMessage = useMemo(() => {
     if (isEventVeryficationSent) {
-      return 'Event has been sent to verification';
+      return 'Событие отправлено на верификацию администратору пространства';
     }
 
     if (isEventsPublished) {
-      return 'Event has been shared to community';
+      return 'Событие проанонсировано!';
     }
 
     return '';
@@ -159,7 +159,7 @@ function EventList() {
                 marginBottom: 'auto'
               }}
             >
-              No events matching current filters
+              Нет событий
             </Typography>
           )}
           <Button
@@ -168,7 +168,7 @@ function EventList() {
             variant="contained"
             startIcon={<AddBoxIcon />}
           >
-            {isAdmin ? 'Create event' : 'Suggest Event'}
+            {isAdmin ? 'Создать событие' : 'Предложить событие'}
           </Button>
         </Box>
       )}

@@ -111,12 +111,12 @@ function EventFilters() {
           id="panel1bh-header"
         >
           <Typography variant="body1" align="center">
-            Filters
+            Фильтровать события
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography color="GrayText" variant="body2">
-            Filter by Date:
+            Время мероприятия:
           </Typography>
           <ToggleButtonGroup
             sx={{ marginTop: '5px' }}
@@ -135,7 +135,7 @@ function EventFilters() {
               }}
               value="past"
             >
-              Past
+              Прошедшие
             </ToggleButton>
             <ToggleButton
               sx={{
@@ -144,7 +144,7 @@ function EventFilters() {
               }}
               value="all"
             >
-              All
+              Все
             </ToggleButton>
             <ToggleButton
               sx={{
@@ -153,7 +153,7 @@ function EventFilters() {
               }}
               value="future"
             >
-              Future
+              Будущие
             </ToggleButton>
           </ToggleButtonGroup>
           <Box
@@ -169,7 +169,7 @@ function EventFilters() {
                 ampm={false}
                 fullWidth
                 size="small"
-                label="From"
+                label="Дата начала"
                 disableFuture
                 value={startTime}
                 format="DD/MM/YYYY HH:mm"
@@ -195,7 +195,7 @@ function EventFilters() {
                 ampm={false}
                 fullWidth
                 size="small"
-                label="To"
+                label="Дата окончания"
                 value={endTime}
                 disablePast
                 format="DD/MM/YYYY HH:mm"
@@ -213,7 +213,7 @@ function EventFilters() {
           <Divider sx={{ margin: '10px 0 ' }} />
           <Box>
             <Typography color="GrayText" variant="body2">
-              Filter by Type:
+              Тип мероприятия:
             </Typography>
             <ToggleButtonGroup
               sx={{ marginTop: '5px' }}
@@ -232,7 +232,7 @@ function EventFilters() {
                 }}
                 value="online"
               >
-                Online
+                Онлайн
               </ToggleButton>
               <ToggleButton
                 sx={{
@@ -241,7 +241,7 @@ function EventFilters() {
                 }}
                 value="all"
               >
-                All
+                Все
               </ToggleButton>
               <ToggleButton
                 sx={{
@@ -250,7 +250,7 @@ function EventFilters() {
                 }}
                 value="offline"
               >
-                Offline
+                Оффлайн
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>
@@ -260,8 +260,8 @@ function EventFilters() {
               sx={{ marginTop: '5px' }}
               fullWidth
               id="tagsBox"
-              label="Tags"
-              placeholder="Tag1, Tag2, Tag3..."
+              label="Теги"
+              placeholder="Тег1, Тег2, Тег3..."
               type="text"
               size="small"
               variant="outlined"
@@ -275,7 +275,7 @@ function EventFilters() {
             fullWidth
             variant="contained"
           >
-            Apply Filters
+            Применить
           </Button>
           <Button
             onClick={handleClearFilters}
@@ -284,7 +284,7 @@ function EventFilters() {
             fullWidth
             variant="outlined"
           >
-            Reset Filters
+            Сбросить фильтры
           </Button>
         </AccordionDetails>
       </Accordion>

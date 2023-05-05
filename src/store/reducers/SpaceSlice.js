@@ -46,7 +46,21 @@ export const spaceSlice = createSlice({
     },
     fetchSpaceSuccess: (state, { payload }) => {
       state.isSpaceLoading = false;
-      state.currentSpace = payload.spaceData;
+      state.currentSpace = JSON.parse(JSON.stringify(payload.spaceData));
+      const serializedEventDescriptions = payload.spaceData.spaceEvents.map(
+        (item) => ({
+          ...item,
+          description: JSON.stringify(item.description)
+        })
+      );
+      const serializedUserDescriptions = payload.spaceData.spaceUsers.map(
+        (user) => ({
+          ...user,
+          userDescription: JSON.stringify(user.userDescription)
+        })
+      );
+      state.currentSpace.spaceEvents = serializedEventDescriptions;
+      state.currentSpace.spaceUsers = serializedUserDescriptions;
     },
     fetchSpaceFailure: (state, { payload }) => {
       state.isSpaceLoading = false;

@@ -108,17 +108,17 @@ function SpaceSelector() {
 
   return (
     <FormControl sx={{ minWidth: 120 }} size="small">
-      <InputLabel id="space-choose-select-label">Space</InputLabel>
+      <InputLabel id="space-choose-select-label">Пространство</InputLabel>
       <Select
         disabled={isSelectorDisabled}
         labelId="space-choose-select-label"
         id="space-choose-select"
         value={chosenSpace}
-        label="Space"
+        label="Пространство"
         onChange={handleSpaceChange}
       >
         <MenuItem value="">
-          <em>None</em>
+          <em>–––</em>
         </MenuItem>
         {userSpaces.map((spaceItem) => (
           <MenuItem key={spaceItem.space_id} value={spaceItem.space_id}>

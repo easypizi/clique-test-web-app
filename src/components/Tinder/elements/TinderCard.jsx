@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useMemo } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import {
@@ -276,7 +277,9 @@ function TinderCard({
           variant="body2"
           color="text.secondary"
         >
-          {userDescription}
+          <ReactMarkdown>
+            {userDescription && JSON.parse(userDescription)}
+          </ReactMarkdown>
         </Typography>
         {userBadges?.length > 0 && <Divider sx={{ margin: '10px 0' }} />}
         {userBadges?.length > 0 && renderBadges()}

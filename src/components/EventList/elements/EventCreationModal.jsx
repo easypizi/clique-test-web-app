@@ -255,7 +255,7 @@ function EventCreationModal() {
             <CloseIcon />
           </IconButton>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Event details
+            Событие
           </Typography>
           <Button
             disabled={!formValid}
@@ -263,7 +263,7 @@ function EventCreationModal() {
             color="inherit"
             onClick={handleSubmit}
           >
-            Send
+            Отправить
           </Button>
         </Toolbar>
       </AppBar>
@@ -288,7 +288,7 @@ function EventCreationModal() {
             size="small"
             required
             id="event-name"
-            label="Event Name"
+            label="Название"
             value={eventName}
             onChange={handleEventNameChange}
           />
@@ -298,8 +298,8 @@ function EventCreationModal() {
             fullWidth
             size="small"
             id="event-description"
-            placeholder="This event about ..."
-            label="Event description"
+            placeholder="О чем это событие ..."
+            label="Описание"
             multiline
             rows={10}
             value={eventDescription}
@@ -310,8 +310,8 @@ function EventCreationModal() {
             fullWidth
             size="small"
             id="event-description"
-            label="Event tags"
-            placeholder="Tag1, Tag2, Tag3 ...."
+            label="Теги"
+            placeholder="Тег1, Тег2, Тег3 ..."
             value={eventTags}
             onChange={handleEventTagsChange}
           />
@@ -322,7 +322,7 @@ function EventCreationModal() {
               fullWidth
               size="small"
               required
-              label="Event Date"
+              label="Дата"
               value={eventDate}
               format="DD/MM/YYYY HH:mm"
               onChange={handleEventDateChange}
@@ -332,7 +332,7 @@ function EventCreationModal() {
           </LocalizationProvider>
 
           <FormControl component="fieldset">
-            <FormLabel component="legend">Event Type</FormLabel>
+            <FormLabel component="legend">Тип события</FormLabel>
             <RadioGroup
               sx={{
                 display: 'flex',
@@ -347,12 +347,12 @@ function EventCreationModal() {
               <FormControlLabel
                 value="offline"
                 control={<Radio />}
-                label="Offline"
+                label="Оффлайн"
               />
               <FormControlLabel
                 value="online"
                 control={<Radio />}
-                label="Online"
+                label="Онлайн"
               />
             </RadioGroup>
           </FormControl>
@@ -364,7 +364,7 @@ function EventCreationModal() {
                 size="small"
                 required
                 id="event-country"
-                label="Country"
+                label="Страна"
                 value={eventCountry}
                 onChange={handleEventCountryChange}
               />
@@ -374,7 +374,7 @@ function EventCreationModal() {
                 size="small"
                 required
                 id="event-city"
-                label="City"
+                label="Город"
                 value={eventCity}
                 onChange={handleEventCityChange}
               />
@@ -384,7 +384,7 @@ function EventCreationModal() {
                 size="small"
                 required
                 id="event-address"
-                label="Address"
+                label="Адрес"
                 value={eventAddress}
                 onChange={handleEventAddressChange}
               />
@@ -394,7 +394,7 @@ function EventCreationModal() {
                 fullWidth
                 size="small"
                 id="event-geo-location"
-                label="Geo link"
+                label="Ссылка на локацию"
                 placeholder="http://...."
                 value={eventGeoLocation}
                 onChange={handleEventGeoLocationChange}
@@ -408,14 +408,14 @@ function EventCreationModal() {
               fullWidth
               size="small"
               id="event-link"
-              label="Link to event"
+              label="Ссылка"
               placeholder="http://...."
               value={eventLink}
               onChange={handleEventLinkChange}
             />
           )}
           <Box sx={{ height: '50px', width: '100%', visibility: 'hidden' }}>
-            Fake
+            ---
           </Box>
         </Box>
       </ScrollableContainer>
