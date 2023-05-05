@@ -126,7 +126,7 @@ function ChatCard({
             variant="caption"
             sx={{ marginTop: '3px' }}
           >
-            {`TYPE: ${groupType}`}
+            {`ТИП: ${groupType}`}
           </Typography>
         </Box>
       </ChatItem>

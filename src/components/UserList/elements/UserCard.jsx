@@ -31,7 +31,7 @@ const UserDataDescription = styled(Typography)`
   max-height: calc(1.2em * 3);
 `;
 
-const emptyDescription = 'User doesnt add any information about himself in bio';
+const emptyDescription = 'Участник не добавил описания...';
 function UserCard({
   id,
   avatarSrc,

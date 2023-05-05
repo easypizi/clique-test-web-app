@@ -23,6 +23,11 @@ function MessageBoard() {
 
   const { user_id: userId } = currentUser ?? { user_id: null };
 
+  const isAdmin = useMemo(
+    () => userId === currentSpace?.spaceOwner,
+    [currentSpace?.spaceOwner, userId]
+  );
+
   const [offsetHeight, setOffset] = useState(0);
 
   const isLoading = useMemo(
@@ -93,12 +98,24 @@ function MessageBoard() {
               )}
             </ScrollableContainer>
           ) : (
-            <Typography
-              variant="body1"
-              sx={{ marginTop: '20px', textAlign: 'center' }}
-            >
-              No messages has been found. Please try to choose other space
-            </Typography>
+            <>
+              <Typography
+                variant="body1"
+                sx={{ marginTop: '20px', textAlign: 'center' }}
+              >
+                Сообщений и публикаций не найдено.
+              </Typography>
+              {isAdmin && (
+                <Typography
+                  variant="body2"
+                  sx={{ marginTop: '20px', textAlign: 'center' }}
+                >
+                  Добавьте теги для парсинга данных. Сообщения из всех групп
+                  сообщества будут публиковаться тут, если в них присутствует
+                  хотя бы один тег, из тех что вы добавили.
+                </Typography>
+              )}
+            </>
           )}
         </Box>
       )}

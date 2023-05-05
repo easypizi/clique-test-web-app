@@ -137,8 +137,8 @@ function ChatList() {
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
               {isVisibleGroups
-                ? 'No groups or channels has been found. Please try to choose other space'
-                : "You don't have any hidden groups"}
+                ? 'Групп или каналов не найдено'
+                : 'У вас нет скрытых групп или каналов'}
             </Typography>
           )}
         </Box>

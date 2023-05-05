@@ -147,8 +147,8 @@ function UserList() {
               sx={{ marginTop: '20px', textAlign: 'center' }}
             >
               {isVisibleUsers
-                ? 'No users has been found'
-                : "You don't have any hidden users"}
+                ? 'Участников сообщества не найдено'
+                : 'У вас нет скрытых участников сообщества'}
             </Typography>
           )}
         </Box>

@@ -32,7 +32,7 @@ function Search({ onSearch }) {
         <TextField
           sx={{ width: '100%' }}
           id="searchBox"
-          label="Search..."
+          label="Поиск"
           type="search"
           size="small"
           variant="outlined"

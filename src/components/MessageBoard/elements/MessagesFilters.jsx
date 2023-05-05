@@ -132,25 +132,37 @@ function MessagesFilters() {
 
   const renderModal = useCallback(
     () => (
-      <Dialog open={isModalOpen} onClose={handleModalClose}>
-        <DialogTitle>Add new hashtag for parsing</DialogTitle>
+      <Dialog
+        maxWidth="xl"
+        sx={{
+          '.MuiDialog-container': {
+            alignItems: 'self-start'
+          },
+          '.MuiDialog-paper': {
+            width: '100%'
+          }
+        }}
+        open={isModalOpen}
+        onClose={handleModalClose}
+      >
+        <DialogTitle>Создать новый тег</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="new-tag-input-field"
-            label="New tag: "
+            label="Тег"
             fullWidth
             value={newTag}
             onChange={handleSettingNewTag}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ padding: '0 24px 20px' }}>
           <Button variant="outlined" onClick={handleModalClose}>
-            Cancel
+            Отмена
           </Button>
           <Button variant="contained" onClick={handleNewTagSend}>
-            Send
+            Добавить
           </Button>
         </DialogActions>
       </Dialog>
@@ -170,7 +182,7 @@ function MessagesFilters() {
       {isSpaceOwner && spaceHashtags.length < 10 ? (
         <Chip
           icon={<AddIcon />}
-          label="Add new hashtag"
+          label="Добавить новый тег"
           variant="outlined"
           size="small"
           onClick={handleModalOpen}
