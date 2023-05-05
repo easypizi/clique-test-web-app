@@ -152,7 +152,6 @@ function TinderCard({
   );
 
   return (
-    // TODO: probably we need much more detailed photo for tinder image
     <Card
       sx={{
         width: '100%',
