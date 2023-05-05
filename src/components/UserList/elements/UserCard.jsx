@@ -41,7 +41,6 @@ function UserCard({
   description,
   userBadges,
   userLinks,
-  isVisible,
   isSpaceOwner,
   canBeDeleted,
   userHiddenSpaces,
@@ -114,7 +113,7 @@ function UserCard({
   return (
     <Box
       sx={{
-        display: isVisible && !hidden ? 'block' : 'none',
+        display: !hidden ? 'block' : 'none',
         width: '100%',
         padding: '10px',
         borderRadius: '4px',
@@ -211,7 +210,6 @@ UserCard.propTypes = {
   description: PropTypes.string,
   spaceId: PropTypes.string,
   isHiddenByAdmin: PropTypes.bool,
-  isVisible: PropTypes.bool,
   isSpaceOwner: PropTypes.bool,
   canBeDeleted: PropTypes.bool,
   userHiddenSpaces: PropTypes.arrayOf(PropTypes.string),

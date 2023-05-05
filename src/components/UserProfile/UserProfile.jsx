@@ -70,7 +70,7 @@ function UserProfile() {
   } = userData;
 
   const [updateButtonColor, setUpdateButtonColor] = useState('primary');
-  const [updateButtonText, setUpdateButtonText] = useState('Update');
+  const [updateButtonText, setUpdateButtonText] = useState('Обновить');
   const [updateButtonDisabled, setUpdateButtonDisabled] = useState(
     !isAuthorized
   );
@@ -142,7 +142,7 @@ function UserProfile() {
         formData.append('picture', file);
 
         dispatch(uploadNewUserPhotoAction(formData));
-        setUpdateButtonText('Updating...');
+        setUpdateButtonText('Обновляем...');
       }
     },
     [dispatch, userId]
@@ -165,7 +165,7 @@ function UserProfile() {
 
     dispatch(updateCurrentUserData(updateData));
     setUpdateButtonDisabled(true);
-    setUpdateButtonText('Updating...');
+    setUpdateButtonText('Обновляем...');
   }, [
     badges,
     description,
@@ -182,23 +182,23 @@ function UserProfile() {
   useEffect(() => {
     if (isUserDataUpdated && currentSpace && currentUser) {
       setUpdateButtonColor('success');
-      setUpdateButtonText('User data Updated');
+      setUpdateButtonText('Данные обновлены!');
       dispatch(resetUserDataUpdate());
       dispatch(getSpace(currentSpace?.spaceId));
       dispatch(getUser(userId, currentUser.user_bot_chat_id));
       setTimeout(() => {
         setUpdateButtonDisabled(false);
         setUpdateButtonColor('primary');
-        setUpdateButtonText('Update');
+        setUpdateButtonText('Обновить');
       }, 1500);
     } else if (error && currentSpace) {
       setUpdateButtonColor('error');
-      setUpdateButtonText('Update Failure!');
+      setUpdateButtonText('Ошибка обновления');
       dispatch(resetUserDataUpdate());
       setTimeout(() => {
         setUpdateButtonDisabled(false);
         setUpdateButtonColor('primary');
-        setUpdateButtonText('Update');
+        setUpdateButtonText('Обновить');
       }, 1500);
     }
   }, [currentSpace, currentUser, dispatch, error, isUserDataUpdated, userId]);
@@ -240,7 +240,7 @@ function UserProfile() {
             fullWidth
             size="small"
             id="userNameInputController"
-            label="Name"
+            label="Имя"
             value={name}
             onChange={handleNameChange}
           />
@@ -248,7 +248,7 @@ function UserProfile() {
             fullWidth
             size="small"
             id="userSurnameInputController"
-            label="Surname"
+            label="Фамилия"
             value={surname}
             onChange={handleSurnameChange}
           />
@@ -259,7 +259,7 @@ function UserProfile() {
           fullWidth
           size="small"
           id="userDescriptionController"
-          label="Description"
+          label="О себе"
           multiline
           rows={3}
           value={description}
@@ -267,7 +267,7 @@ function UserProfile() {
         />
       </Box>
       <Box sx={{ width: '100%', marginTop: '10px' }}>
-        <Typography variant="body1">Additional links: </Typography>
+        <Typography variant="body1">Ссылки: </Typography>
         <Stack spacing={2} sx={{ width: '100%', marginTop: '10px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <LinkIcon />
@@ -276,7 +276,7 @@ function UserProfile() {
               sx={{ marginLeft: '10px' }}
               fullWidth
               size="small"
-              label="Link"
+              label="Ссылка"
               placeholder="https://..."
               value={links[0]}
               onChange={(event) => handleLinkChange(event, 0)}
@@ -289,7 +289,7 @@ function UserProfile() {
               sx={{ marginLeft: '10px' }}
               fullWidth
               size="small"
-              label="Link"
+              label="Ссылка"
               placeholder="https://..."
               value={links[1]}
               onChange={(event) => handleLinkChange(event, 1)}
@@ -302,7 +302,7 @@ function UserProfile() {
               sx={{ marginLeft: '10px' }}
               fullWidth
               size="small"
-              label="Link"
+              label="Ссылка"
               placeholder="https://..."
               value={links[2]}
               onChange={(event) => handleLinkChange(event, 2)}
@@ -324,16 +324,16 @@ function UserProfile() {
           checked={isVisible}
           onChange={handleIsVisibleChange}
         />
-        <Typography variant="body1">Show me in community space</Typography>
+        <Typography variant="body1">Открыт для новых знакомств</Typography>
       </Box>
 
       <Box sx={{ width: '100%', margin: '10px 0 20px 0' }}>
-        <Typography variant="body1">Skills: </Typography>
+        <Typography variant="body1">Навыки: </Typography>
         <TextField
           sx={{ marginTop: '10px' }}
           fullWidth
           size="small"
-          placeholder="Skill 1, Skill 2, Skill 3 ..."
+          placeholder="UX, Менеджмент, Программирование ..."
           onBlur={(event) => handleBadgeChange(event)}
         />
         <Box

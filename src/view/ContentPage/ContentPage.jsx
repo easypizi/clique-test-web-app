@@ -61,7 +61,7 @@ function ContentPage() {
         }}
       >
         <Typography variant="h2">404</Typography>
-        <Typography>You have not any space to participate</Typography>
+        <Typography>Нет пространств сообществ, которые вам доступны</Typography>
       </Container>
     );
   }
