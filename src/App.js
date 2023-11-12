@@ -11,7 +11,6 @@ function App() {
     <div className="App">
       <Routes>
         <Route index element={<ContentPage />} />
-        {/* <Route path="/store" element={<StorePage />} /> */}
       </Routes>
     </div>
   );
